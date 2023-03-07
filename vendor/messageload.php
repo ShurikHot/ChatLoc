@@ -14,7 +14,7 @@ if (mysqli_num_rows($query)>0) {
             <div class="container">
                 <img src="<?= $_SESSION['user']['avatar'] ?>" alt="" class="avatar">
                 <div class="mes_left">
-                    <p> <?= "User " . $name['nickname'] . " says: " . $messagearr['message'] . "" ?> </p>
+                    <p> <?= "User " . $name['nickname'] . " says: " . $messagearr['message'] ?> </p>
                 </div>
                 <?php
                 if($_SESSION['user']['id']==$mes_userid) {

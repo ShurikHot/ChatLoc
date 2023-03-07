@@ -12,16 +12,21 @@
     $gender = $_POST['gender'];
     $country = filter_var(trim($_POST['country']),FILTER_SANITIZE_STRING);
     $language = $_POST['language'];
-    $specialization = implode(',', $_POST['specialization']);
+    if (isset($_POST['specialization'])) {
+        $specialization = implode(',', $_POST['specialization']);
+    } else {
+        $specialization = "";
+    }
     $comment = $_POST['comment'];
 
-    if ($password === $confirm_password) {
+
+    if ($password === $confirm_password && $name != "" && $email != "" && $nickname != "" && $password != "") {
         $password = md5($password);
         mysqli_query($connect, "INSERT INTO `members` (`email`, `name`, `nickname`, `password`, `phone_num`, `gender`, `country`, `language`, `specialization`, `comment`) 
                                       VALUES ('$email', '$name', '$nickname', '$password', '$phone_num', '$gender', '$country', '$language', '$specialization', '$comment')");
-        $_SESSION['message'] = 'Registration completed successfully';
+        $_SESSION['message'] = '<h6 align="center">Registration completed successfully</h6>';
         header('Location: /index.php');
     } else {
-        $_SESSION['message'] = 'The password and confirm password fields do not match';
-        header('Location: /registration.php');
+        $_SESSION['message'] = '<h6 align="center">Some fields do not fill, </br>or the password and confirm password fields do not match</h6>';
+        header('Location: /index.php');
     }

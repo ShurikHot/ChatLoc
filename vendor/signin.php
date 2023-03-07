@@ -13,9 +13,10 @@
             "nickname" => $user['nickname'],
             "email" => $user['email'],
             "language" => $user['language'],
+            "avatar" => $user['avatar'],
         ];
         header('Location: ../profile.php');
     } else {
-        $_SESSION['message'] = 'Incorrect username or password';
+        $_SESSION['message'] = '<h6 align="center">Incorrect username or password</h6>';
         header('Location: /index.php');
     }
