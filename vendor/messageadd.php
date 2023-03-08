@@ -11,4 +11,3 @@ if (isset($_POST['message'])) {
         header('Location: /chatpage.php');
     }*/
 }
-//  var_dump($_POST);

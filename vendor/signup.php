@@ -1,6 +1,11 @@
 <?php
     session_start();
     require_once 'db.php';
+    use PHPMailer\PHPMailer\PHPMailer;
+    /*use PHPMailer\PHPMailer\Exception;*/
+    require 'assets/PHPMailer/src/Exception.php';
+    require 'assets/PHPMailer/src/PHPMailer.php';
+    require 'assets/PHPMailer/src/SMTP.php';
 
 
     $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
@@ -19,12 +24,27 @@
     }
     $comment = $_POST['comment'];
 
-
     if ($password === $confirm_password && $name != "" && $email != "" && $nickname != "" && $password != "") {
         $password = md5($password);
-        mysqli_query($connect, "INSERT INTO `members` (`email`, `name`, `nickname`, `password`, `phone_num`, `gender`, `country`, `language`, `specialization`, `comment`) 
-                                      VALUES ('$email', '$name', '$nickname', '$password', '$phone_num', '$gender', '$country', '$language', '$specialization', '$comment')");
-        $_SESSION['message'] = '<h6 align="center">Registration completed successfully</h6>';
+        $query = mysqli_query($connect, "INSERT INTO `members` (`email`, `name`, `nickname`, `password`, `phone_num`, `gender`, `country`, `language`, `specialization`, `comment`) 
+                                               VALUES ('$email', '$name', '$nickname', '$password', '$phone_num', '$gender', '$country', '$language', '$specialization', '$comment')");
+        if($query) {
+            $mail = new PHPMailer;
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'youremail@gmail.com';
+            $mail->Password = 'yourpassword';
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
+            $mail->setFrom('youremail@gmail.com', 'Your Name');
+            $mail->addAddress("$email");
+            $mail->Subject = '<b>Your registration data: </b><br>';
+            $mail->Body = 'Your Nickname: ' . $nickname . '<br> Your Password: '. $password;
+        } else {
+            echo 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo;
+        }
+        $_SESSION['message'] = '<h6 align="center">Registration completed successfully</h6> <br> Please Check your email!';
         header('Location: /index.php');
     } else {
         $_SESSION['message'] = '<h6 align="center">Some fields do not fill, </br>or the password and confirm password fields do not match</h6>';

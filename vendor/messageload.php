@@ -21,7 +21,7 @@ if (mysqli_num_rows($query)>0) {
                     ?>
                     <div class="mes_right">
                         <a href="../vendor/messagedelete.php?id=<?= $messagearr['id'] ?>">
-                            <img src="../assets/delete_icon2.png" alt="" class="mess_icon">
+                            <img src="../assets/delete_icon.png" alt="" class="mess_icon">
                         </a>
                         <a href="../vendor/messageedit.php?id=<?= $messagearr['id'] ?>">
                             <img src="../assets/edit_icon.png" alt="" class="mess_icon">

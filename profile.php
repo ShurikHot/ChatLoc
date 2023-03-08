@@ -42,8 +42,9 @@
             <?php
         }
     ?>
+    <br><br>
             <div class="container">
-                <h5><?= isset($_SESSION['user']['avatar']) ? "Change Avatar: " : "Add Avatar: " ?></h5>
+                <h6><?= isset($_SESSION['user']['avatar']) ? "Change Avatar: " : "Add Avatar: " ?></h6>
                 <form method="post">
                     <input type="file" name="image" class="image">
                 </form>
@@ -151,12 +152,8 @@
 
             <?php
                 if (isset($_SESSION['user']['edit_nickname'])) { ?>
-                    <input type="text" name="actual_nickname" value="<?php
-                        if (isset($_SESSION['user']['actual_nickname'])) {
-                            echo($_SESSION['user']['actual_nickname']);
-                        } else {
-                            echo($_SESSION['user']['nickname']); }
-                    ?>">
+                    <input type="text" name="actual_nickname" value="
+                    <?= isset($_SESSION['user']['actual_nickname']) ? $_SESSION['user']['actual_nickname'] : $_SESSION['user']['nickname'] ?>  ">
             <?php
                 } else {
                     if (isset($_SESSION['user']['actual_nickname'])) {
@@ -174,3 +171,11 @@
     <a href="chatpage.php">Go to <b>Chat.Loc</b></a>
 </body>
 </html>
+
+
+<?php
+/*if (isset($_SESSION['user']['actual_nickname'])) {
+    echo($_SESSION['user']['actual_nickname']);
+} else {
+    echo($_SESSION['user']['nickname']); }
+*/?>
