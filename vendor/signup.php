@@ -22,7 +22,7 @@
     } else {
         $specialization = "";
     }
-    $comment = $_POST['comment'];
+    $comment = htmlspecialchars($_POST['comment']);
 
     if ($password === $confirm_password && $name != "" && $email != "" && $nickname != "" && $password != "") {
         $password = md5($password);

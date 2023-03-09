@@ -3,6 +3,7 @@
     require_once 'db.php';
     $userid = $_SESSION['user']['id'];
     if (isset($_POST['edit_nickname'])) {
+        $_POST['edit_nickname'] = htmlspecialchars($_POST['edit_nickname']);
         $_SESSION['user']['edit_nickname'] = true;
     }
     if (isset($_POST['actual_nickname'])) {

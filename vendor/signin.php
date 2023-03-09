@@ -15,7 +15,7 @@
             "language" => $user['language'],
             "avatar" => $user['avatar'],
         ];
-        header('Location: ../profile.php');
+        $user['email'] === 'admin@admin.com' ? header('Location: ../admin/index.php') : header('Location: ../profile.php');
     } else {
         $_SESSION['message'] = '<h6 align="center">Incorrect username or password</h6>';
         header('Location: /index.php');

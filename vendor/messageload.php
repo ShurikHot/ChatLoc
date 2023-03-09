@@ -43,5 +43,4 @@ if (mysqli_num_rows($query)>0) {
     <p>Hey! I'm fine. Thanks for asking!</p>
     <span class="time-left">11:01</span>
 </div>
-
 -->

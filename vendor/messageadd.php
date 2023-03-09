@@ -7,7 +7,4 @@ if (isset($_POST['message'])) {
     $userid = $_SESSION['user']['id'];
 
     $query = mysqli_query($connect,"INSERT INTO `messages`(`user_id`, `message`) VALUES ('$userid','$message')");
-    /*if ($query) {
-        header('Location: /chatpage.php');
-    }*/
 }

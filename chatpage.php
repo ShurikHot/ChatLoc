@@ -33,7 +33,7 @@ if(!isset($_SESSION['user'])) {
     ?>
     <form method="post" action="vendor/messageedit.php">
         <textarea class="enter_mess" name="new_message" rows="1"><?= $_SESSION['user']['mess_for_edit'] ?></textarea>
-        <button type="edit">Edit</button> <!--id="edit" name="edit"-->
+        <button type="edit">Edit</button>
         <button type="cancel">Cancel</button>
     </form>
     <?php
