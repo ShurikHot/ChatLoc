@@ -168,7 +168,13 @@
     <h6>Your E-mail adress: <?= $_SESSION['user']['email'] ?></h6>
     <a href="vendor/logout.php">Logout</a>
     <br>
-    <a href="chatpage.php">Go to <b>Chat.Loc</b></a>
+
+    <?php if (isset($_SESSION['user']['blocked']) && !$_SESSION['user']['blocked']): ?>
+        <a href="chatpage.php">Go to <b>Chat.Loc</b></a>
+    <?php elseif (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']): ?>
+        <a href=""><b>Your account is blocked</b></a>
+    <?php endif; ?>
+
 </body>
 </html>
 

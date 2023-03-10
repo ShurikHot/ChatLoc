@@ -251,12 +251,12 @@ session_start();
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="../vendor/admin/admin_content.php?content=messages" class="nav-link <?php if ($_SESSION['user']['admin_category'] == "messages") echo "active"?>">
+              <!--<li class="nav-item">
+                <a href="../vendor/admin/admin_content.php?content=messages" class="nav-link <?php /*if ($_SESSION['user']['admin_category'] == "messages") echo "active"*/?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Messages</p>
                 </a>
-              </li>
+              </li>-->
               <li class="nav-item">
                 <a href="../vendor/admin/admin_content.php?content=blocked" class="nav-link <?php if ($_SESSION['user']['admin_category'] == "blocked") echo "active"?>">
                   <i class="far fa-circle nav-icon"></i>

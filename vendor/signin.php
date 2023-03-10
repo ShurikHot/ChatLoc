@@ -14,6 +14,7 @@
             "email" => $user['email'],
             "language" => $user['language'],
             "avatar" => $user['avatar'],
+            "blocked" => $user['blocked'],
         ];
         $user['email'] === 'admin@admin.com' ? header('Location: ../admin/index.php') : header('Location: ../profile.php');
     } else {

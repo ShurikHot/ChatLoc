@@ -7,17 +7,24 @@ $query = mysqli_query($connect,"SELECT * FROM `messages`"); /* ORDER BY `id` DES
 if (mysqli_num_rows($query)>0) {
     while ($messagearr = mysqli_fetch_assoc($query)) {
         $mes_userid = $messagearr['user_id'];
-        $query_name = mysqli_query($connect, "SELECT `nickname` FROM `members` WHERE `id` = $mes_userid");
-        $name = mysqli_fetch_assoc($query_name);
+        $query_user = mysqli_query($connect, "SELECT * FROM `members` WHERE `id` = $mes_userid");
+        $name = mysqli_fetch_assoc($query_user);
         if (isset($name)) {
             ?>
             <div class="container">
-                <img src="<?= $_SESSION['user']['avatar'] ?>" alt="" class="avatar">
+                <img src="<?= $name['avatar'] ?>" alt="" class="avatar">
                 <div class="mes_left">
-                    <p> <?= "User " . $name['nickname'] . " says: " . $messagearr['message'] ?> </p>
+                    <!--<p> <?/*= "User " . $name['nickname'] . " says: " . $messagearr['message'] */?> </p>-->
+                    <p> <?php
+                        echo "User ";
+                        if ($_SESSION['user']['id']== '1') {
+                            echo("<a href='vendor/admin/admin_member_edit.php?id=" . $name['id'] . "'>" . $name['nickname'] . "</a>" . " says: " . $messagearr['message']);
+                        } else {
+                            echo ($name['nickname'] . " says: " . $messagearr['message']);
+                        }?> </p>
                 </div>
                 <?php
-                if($_SESSION['user']['id']==$mes_userid) {
+                if($_SESSION['user']['id']==$mes_userid || $_SESSION['user']['id']== '1') {
                     ?>
                     <div class="mes_right">
                         <a href="../vendor/messagedelete.php?id=<?= $messagearr['id'] ?>">

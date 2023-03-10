@@ -3,10 +3,24 @@
     <div class="card-body">
 
         <form action="../vendor/admin/admin_member_edit.php" method="post" class="row">
-            <div class="col-md-8">
+            <div class="col-md-2">
                 <div class="form-group">
                     <label for="userid">ID</label>
                     <input type="text" name="userid" class="form-control" id="userid" value="<?= $_SESSION['user']['admin_member_edit']['id'] ?>" readonly>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="blocked">Blocked?</label>
+                    <input type="text" name="blocked" class="form-control" id="blocked" value="<?= $_SESSION['user']['admin_member_edit']['blocked'] ?>" >
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="blocked">0 or 1</label>
+                    <input type="text" class="form-control" value="0 - no, 1 - yes" readonly>
                 </div>
             </div>
 

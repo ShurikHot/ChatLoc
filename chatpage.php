@@ -5,6 +5,9 @@ require_once 'vendor/db.php';
 if(!isset($_SESSION['user'])) {
     header('Location: /index.php');
 }
+if (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']){
+    header('Location: /profile.php');
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -83,7 +86,7 @@ if(!isset($_SESSION['user'])) {
 <script src="assets/js/index.js"></script>
 <script>
     load_mess();
-    setInterval(load_mess,5000);
+    /*setInterval(load_mess,5000);*/
 </script>
 
 </body>
