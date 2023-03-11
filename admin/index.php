@@ -1,5 +1,8 @@
 <?php
 session_start();
+if ($_SESSION['user']['id'] != "1") {
+    header('Location: ../index.php');
+}
 ?>
 
 <!DOCTYPE html>
@@ -17,6 +20,8 @@ session_start();
     <link rel="stylesheet" href="../adminlte/dist/css/adminlte.min.css">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="../adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -213,13 +218,15 @@ session_start();
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="../vendor/admin/admin_content.php?content=members" class="nav-link <?php if ($_SESSION['user']['admin_category'] == "members") echo "active"?>">
+                <a href="../vendor/admin/admin_content.php?content=members" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
+                    $_SESSION['user']['admin_category'] == "members") echo "active"?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Members Manage</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../vendor/admin/admin_content.php?content=statistics" class="nav-link <?php if ($_SESSION['user']['admin_category'] == "statistics") echo "active"?>">
+                <a href="../vendor/admin/admin_content.php?content=statistics" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
+                    $_SESSION['user']['admin_category'] == "statistics") echo "active"?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Statistics</p>
                 </a>
@@ -248,7 +255,8 @@ session_start();
                 </a>
               </li>-->
               <li class="nav-item">
-                <a href="../vendor/admin/admin_content.php?content=blocked" class="nav-link <?php if ($_SESSION['user']['admin_category'] == "blocked") echo "active"?>">
+                <a href="../vendor/admin/admin_content.php?content=blocked" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
+                    $_SESSION['user']['admin_category'] == "blocked") echo "active"?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Blocked Members</p>
                 </a>
@@ -271,7 +279,8 @@ session_start();
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="../vendor/admin/admin_content.php?content=settings" class="nav-link <?php if ($_SESSION['user']['admin_category'] == "settings") echo "active"?>">
+                <a href="../vendor/admin/admin_content.php?content=settings" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
+                    $_SESSION['user']['admin_category'] == "settings") echo "active"?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Design Settings</p>
                 </a>
@@ -306,7 +315,7 @@ session_start();
     <!-- /.content-header -->
 
     <!-- Main content -->
-    <section class="content">
+    <section class="content" id="content">
       <?php
         //key_exists('admin_member_edit', $_SESSION['user']) ? require_once('views/members_edit.php') :
         require_once('content.php');
@@ -924,5 +933,6 @@ session_start();
 <script src="../adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../adminlte/dist/js/adminlte.js"></script>
+
 </body>
 </html>
