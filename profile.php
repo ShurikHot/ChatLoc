@@ -174,14 +174,5 @@
     <?php elseif (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']): ?>
         <a href=""><b>Your account is blocked</b></a>
     <?php endif; ?>
-
 </body>
 </html>
-
-
-<?php
-/*if (isset($_SESSION['user']['actual_nickname'])) {
-    echo($_SESSION['user']['actual_nickname']);
-} else {
-    echo($_SESSION['user']['nickname']); }
-*/?>

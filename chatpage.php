@@ -45,6 +45,11 @@ if (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']){
 
     <a class="mes_right" href="profile.php">Go to your&nbsp;<b>Profile</b></a>
     <br><br>
+    <?php
+        if($_SESSION['user']['id'] == "1") : ?>
+            <a class="mes_right" href="/admin/index.php">Go to &nbsp;<b>Admin Area</b></a>;
+    <?php endif; ?>
+    <br><br>
     <a class="mes_right" href="vendor/logout.php"><b>Logout</b></a>
 
 <script>

@@ -2,7 +2,11 @@
 session_start();
 require_once 'db.php';
 
-$query = mysqli_query($connect,"SELECT * FROM `messages`"); /* ORDER BY `id` DESC LIMIT 20 */
+$result = mysqli_query($connect, "SELECT COUNT(*) as total FROM `messages`");
+$row = mysqli_fetch_assoc($result);
+$total_records = $row['total'];
+$start = $total_records - 50;
+$query = mysqli_query($connect,"SELECT * FROM `messages` LIMIT $start, $total_records");
 
 if (mysqli_num_rows($query)>0) {
     while ($messagearr = mysqli_fetch_assoc($query)) {
@@ -45,9 +49,3 @@ if (mysqli_num_rows($query)>0) {
     }
 }
 ?>
-<!--<div class="container darker">
-    <img src="/w3images/avatar_g2.jpg" alt="Avatar" class="right">
-    <p>Hey! I'm fine. Thanks for asking!</p>
-    <span class="time-left">11:01</span>
-</div>
--->

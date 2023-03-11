@@ -9,7 +9,7 @@ $start = ($current_page - 1) * $records_per_page;
 $users = mysqli_query($connect, "SELECT * FROM `members` LIMIT $start, $records_per_page");
 ?>
 
-<?php if (!empty($users)): ?>
+<?php if (mysqli_num_rows($users)>0): ?>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -100,13 +100,13 @@ $users = mysqli_query($connect, "SELECT * FROM `members` LIMIT $start, $records_
     if ($current_page + 2 <= $total_pages) {
         $page2right = "<li class='page-item'><a class='page-link' href='?page=" . $current_page + 2 . "'>" . $current_page + 2 . "</a></li>";
     }
-    echo ('<nav aria-label="Page navigation"><ul class="pagination">' . $startpage . $back . $page2left . $page1left .
+    if ($total_pages > 1) echo ('<nav aria-label="Page navigation"><ul class="pagination">' . $startpage . $back . $page2left . $page1left .
         '<li class="page-item active"><a class="page-link">' . $current_page . '</a></li>' . $page1right . $page2right . $forward . $endpage . '</ul></nav>');
 
 ?>
 
 <?php else: ?>
-    <p>Пользователей не найдено...</p>
+    <p>Members not found...</p>
 <?php endif; ?>
 
 
