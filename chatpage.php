@@ -48,8 +48,8 @@ if (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']){
     <?php
         if($_SESSION['user']['id'] == "1") : ?>
             <a class="mes_right" href="/admin/index.php">Go to &nbsp;<b>Admin Area</b></a>;
+            <br><br>
     <?php endif; ?>
-    <br><br>
     <a class="mes_right" href="vendor/logout.php"><b>Logout</b></a>
 
 <script>

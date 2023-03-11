@@ -106,7 +106,7 @@ $users = mysqli_query($connect, "SELECT * FROM `members` WHERE `blocked` = '1' L
     ?>
 
 <?php else: ?>
-    <p>Members not found...</p>
+    <p>Blocked members not found...</p>
 <?php endif; ?>
 
 

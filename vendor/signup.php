@@ -1,14 +1,14 @@
 <?php
     session_start();
-    require_once 'db.php';
     use PHPMailer\PHPMailer\PHPMailer;
-    /*use PHPMailer\PHPMailer\Exception;*/
-    require 'assets/PHPMailer/src/Exception.php';
-    require 'assets/PHPMailer/src/PHPMailer.php';
-    require 'assets/PHPMailer/src/SMTP.php';
+    //use PHPMailer\PHPMailer\Exception;
+    require_once '../assets/PHPMailer/src/Exception.php';
+    require_once '../assets/PHPMailer/src/PHPMailer.php';
+    require_once '../assets/PHPMailer/src/SMTP.php';
+    require_once 'db.php';
 
 
-    $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+$email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
     $name = filter_var(trim($_POST['name']),FILTER_SANITIZE_STRING);
     $nickname = filter_var(trim($_POST['nickname']),FILTER_SANITIZE_STRING);
     $password = $_POST['password'];
@@ -26,10 +26,12 @@
 
     if ($password === $confirm_password && $name != "" && $email != "" && $nickname != "" && $password != "") {
         $password = md5($password);
-        $query = mysqli_query($connect, "INSERT INTO `members` (`email`, `name`, `nickname`, `password`, `phone_num`, `gender`, `country`, `language`, `specialization`, `comment`) 
-                                               VALUES ('$email', '$name', '$nickname', '$password', '$phone_num', '$gender', '$country', '$language', '$specialization', '$comment')");
+        $date = date('Y-m-d H:i:s');
+        $query = mysqli_query($connect,
+                    "INSERT INTO `members` (`email`, `name`, `nickname`, `password`, `phone_num`, `gender`, `country`, `language`, `specialization`, `comment`, `created_at`) 
+                           VALUES ('$email', '$name', '$nickname', '$password', '$phone_num', '$gender', '$country', '$language', '$specialization', '$comment', '$date')");
         if($query) {
-            $mail = new PHPMailer;
+            $mail = new PHPMailer();
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
