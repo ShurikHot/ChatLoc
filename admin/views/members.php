@@ -33,13 +33,13 @@ $users = mysqli_query($connect, "SELECT * FROM `members` LIMIT $start, $records_
                 <td><a href="<?= $user['avatar'] ?>"><?= $user['avatar'] ?></a></td>
                 <td>
                     <a class="btn btn-warning btn-sm" href="../../vendor/admin/admin_member_edit.php?id=<?= $user['id'] ?>">
-                    <i class="fas fa-pencil-alt"></i>
+                        <i class="fas fa-pencil-alt"></i>
                     </a>
                 </td>
                 <td>
                     <?php if ($user['blocked']): ?>
                         <a class="btn btn-warning btn-sm" href="../../vendor/admin/admin_member_edit.php?lockid=<?= $user['id'] ?>">
-                        <i class="fas fa-user-lock"></i></a>
+                            <i class="fas fa-user-lock"></i></a>
                     <?php else: ?>
                         <a class="btn btn-sm" href="../../vendor/admin/admin_member_edit.php?lockid=<?= $user['id'] ?>">
                             <i class="fas fa-crosshairs"></i></a>
@@ -47,7 +47,7 @@ $users = mysqli_query($connect, "SELECT * FROM `members` LIMIT $start, $records_
                 </td>
                 <td>
                     <a class="btn btn-sm" href="../../vendor/admin/admin_member_edit.php?delid=<?= $user['id'] ?>">
-                    <i class="fas fa-times"></i></a>
+                        <i class="fas fa-times"></i></a>
                 </td>
             </tr>
         <?php endforeach; ?>
@@ -102,7 +102,6 @@ $users = mysqli_query($connect, "SELECT * FROM `members` LIMIT $start, $records_
     }
     if ($total_pages > 1) echo ('<nav aria-label="Page navigation"><ul class="pagination">' . $startpage . $back . $page2left . $page1left .
         '<li class="page-item active"><a class="page-link">' . $current_page . '</a></li>' . $page1right . $page2right . $forward . $endpage . '</ul></nav>');
-
 ?>
 
 <?php else: ?>

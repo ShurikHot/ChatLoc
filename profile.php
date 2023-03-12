@@ -174,5 +174,9 @@
     <?php elseif (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']): ?>
         <a href=""><b>Your account is blocked</b></a>
     <?php endif; ?>
+    <br>
+    <?php if (isset($_SESSION['user']['email']) && $_SESSION['user']['email'] === 'admin@admin.com'): ?>
+        <a href="admin/index.php"><b>Admin Area</b></a>
+    <?php endif; ?>
 </body>
 </html>

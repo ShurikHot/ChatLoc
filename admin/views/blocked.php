@@ -6,7 +6,7 @@ $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
 
 $start = ($current_page - 1) * $records_per_page;
 
-$users = mysqli_query($connect, "SELECT * FROM `members` WHERE `blocked` = '1' LIMIT $start, $records_per_page");
+$users = mysqli_query($connect, "SELECT * FROM `members` WHERE `blocked` = 1 LIMIT $start, $records_per_page");
 ?>
 
 <?php if (mysqli_num_rows($users)>0): ?>
@@ -53,8 +53,8 @@ $users = mysqli_query($connect, "SELECT * FROM `members` WHERE `blocked` = '1' L
         <?php endforeach; ?>
         </tbody>
     </table>
-    <?php
-    $result = mysqli_query($connect, "SELECT COUNT(*) as total FROM `members`");
+<?php
+    $result = mysqli_query($connect, "SELECT COUNT(*) as total FROM `members` WHERE `blocked` = 1");
     $row = mysqli_fetch_assoc($result);
     $total_records = $row['total'];
     $total_pages = ceil($total_records / $records_per_page);
@@ -102,8 +102,7 @@ $users = mysqli_query($connect, "SELECT * FROM `members` WHERE `blocked` = '1' L
     }
     if ($total_pages > 1) echo ('<nav aria-label="Page navigation"><ul class="pagination">' . $startpage . $back . $page2left . $page1left .
         '<li class="page-item active"><a class="page-link">' . $current_page . '</a></li>' . $page1right . $page2right . $forward . $endpage . '</ul></nav>');
-
-    ?>
+?>
 
 <?php else: ?>
     <p>Blocked members not found...</p>
