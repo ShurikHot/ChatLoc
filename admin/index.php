@@ -1,4 +1,6 @@
 <?php
+require_once '../vendor/admin/params.php';
+session_set_cookie_params($session_lifetime, '/');
 session_start();
 if ($_SESSION['user']['id'] != "1") {
     header('Location: ../index.php');
@@ -358,6 +360,7 @@ if ($_SESSION['user']['id'] != "1") {
 <script src="../adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../adminlte/dist/js/adminlte.js"></script>
+
 
 </body>
 </html>

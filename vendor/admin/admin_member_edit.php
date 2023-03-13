@@ -1,6 +1,8 @@
 <?php
-session_start();
 require_once '../db.php';
+require_once 'params.php';
+session_set_cookie_params($session_lifetime, '/');
+session_start();
 
 /*edit*/
 if (isset($_GET['id']) & is_numeric($_GET['id'])) {
@@ -79,14 +81,11 @@ if(isset($_POST['submit'])) {
                                                             `country` = '$country', 
                                                             `language` = '$language', 
                                                             `specialization` = '$specialization' WHERE `id` = $userid");
-
         $content_path = "../../admin/views/members.php";
         $content_data = file_get_contents($content_path);
         file_put_contents("../../admin/content.php", $content_data);
     }
 }
-
-header('Location: ../../admin/index.php');
-
+header('Location: ../../admin/index.php?page=' . $_SESSION['user']['page_get']);
 
 

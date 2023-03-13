@@ -1,6 +1,8 @@
 <?php
-session_start();
 require_once 'db.php';
+require_once 'admin/params.php';
+session_set_cookie_params($session_lifetime, '/');
+session_start();
 
 $result = mysqli_query($connect, "SELECT COUNT(*) as total FROM `messages`");
 $row = mysqli_fetch_assoc($result);

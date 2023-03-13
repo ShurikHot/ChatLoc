@@ -1,13 +1,14 @@
 <?php
-
-session_start();
-require_once 'vendor/db.php';
-if(!isset($_SESSION['user'])) {
-    header('Location: /index.php');
-}
-if (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']){
-    header('Location: /profile.php');
-}
+    require_once 'vendor/db.php';
+    require_once 'vendor/admin/params.php';
+    session_set_cookie_params($session_lifetime, '/');
+    session_start();
+    if(!isset($_SESSION['user'])) {
+        header('Location: /index.php');
+    }
+    if (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']){
+        header('Location: /profile.php');
+    }
 ?>
 <!doctype html>
 <html lang="en">
@@ -17,6 +18,11 @@ if (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']){
     <title>Signin ChatLoc</title>
     <link href="/assets/css/chatpage.css" rel="stylesheet">
     <script src="/assets/js/jquery3.6.3.min.js"></script>
+    <style>
+        #wrap {
+            background-color: <?= $chat_background_color ?>
+        }
+    </style>
 </head>
 <body>
 

@@ -1,6 +1,8 @@
 <?php
-    session_start();
     require_once 'db.php';
+    require_once 'admin/params.php';
+    session_set_cookie_params($session_lifetime, '/');
+    session_start();
     $userid = $_SESSION['user']['id'];
     if (isset($_POST['edit_nickname'])) {
         $_POST['edit_nickname'] = htmlspecialchars($_POST['edit_nickname']);

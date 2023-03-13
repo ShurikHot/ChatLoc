@@ -1,4 +1,6 @@
 <?php
+    require_once 'vendor/admin/params.php';
+    session_set_cookie_params($session_lifetime, '/');
     session_start();
 
     if(isset($_SESSION['user'])) {

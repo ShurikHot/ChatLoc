@@ -3,7 +3,7 @@ require_once '../vendor/db.php';
 
 $records_per_page = 10;
 $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
-
+$_SESSION['user']['page_get'] = $current_page;
 $start = ($current_page - 1) * $records_per_page;
 
 $users = mysqli_query($connect, "SELECT * FROM `members` LIMIT $start, $records_per_page");

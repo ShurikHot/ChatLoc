@@ -1,11 +1,14 @@
 <?php
+
+    require_once 'db.php';
+    require_once 'admin/params.php';
+    session_set_cookie_params($session_lifetime, '/');
     session_start();
     use PHPMailer\PHPMailer\PHPMailer;
     //use PHPMailer\PHPMailer\Exception;
     require_once '../assets/PHPMailer/src/Exception.php';
     require_once '../assets/PHPMailer/src/PHPMailer.php';
     require_once '../assets/PHPMailer/src/SMTP.php';
-    require_once 'db.php';
 
 
 $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);

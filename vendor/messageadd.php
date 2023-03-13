@@ -1,6 +1,8 @@
 <?php
-session_start();
 require_once 'db.php';
+require_once 'admin/params.php';
+session_set_cookie_params($session_lifetime, '/');
+session_start();
 
 if (isset($_POST['message'])) {
     $message = trim(htmlspecialchars($_POST['message']));
