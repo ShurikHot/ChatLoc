@@ -1,6 +1,9 @@
 <?php
     require_once 'vendor/admin/params.php';
-    session_set_cookie_params($session_lifetime, '/');
+    ini_set('session.gc_maxlifetime', $session_lifetime);
+    ini_set('session.gc_probability', 1);
+    ini_set('session.gc_divisor', 1);
+    //session_set_cookie_params($session_lifetime, '/');
     session_start();
 
     if(!isset($_SESSION['user'])) {
@@ -168,6 +171,9 @@
     </form>
 
     <h6>Your E-mail adress: <?= $_SESSION['user']['email'] ?></h6>
+
+
+
     <a href="vendor/logout.php">Logout</a>
     <br>
 
@@ -180,5 +186,9 @@
     <?php if (isset($_SESSION['user']['email']) && $_SESSION['user']['email'] === 'admin@admin.com'): ?>
         <a href="admin/index.php"><b>Admin Area</b></a>
     <?php endif; ?>
+
+    <?php
+        require_once ('vendor/contacts.php')
+    ?>
 </body>
 </html>

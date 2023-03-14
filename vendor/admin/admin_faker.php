@@ -24,6 +24,3 @@ for ($i=1; $i < $rand_count; $i++) {
                VALUES ('$email', '$name', '$nickname', '$password', '$phone_num', '$gender', '$country', '$language', '$specialization', '$comment', '$date')");
 }
 header('Location: ../../vendor/admin/admin_content.php?content=' . $_SESSION['user']['admin_category']);
-
-
-

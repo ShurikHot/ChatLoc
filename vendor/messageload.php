@@ -1,7 +1,10 @@
 <?php
 require_once 'db.php';
 require_once 'admin/params.php';
-session_set_cookie_params($session_lifetime, '/');
+ini_set('session.gc_maxlifetime', $session_lifetime);
+ini_set('session.gc_probability', 1);
+ini_set('session.gc_divisor', 1);
+//session_set_cookie_params($session_lifetime, '/');
 session_start();
 
 $result = mysqli_query($connect, "SELECT COUNT(*) as total FROM `messages`");
@@ -26,7 +29,7 @@ if (mysqli_num_rows($query)>0) {
                         if ($_SESSION['user']['id']== '1') {
                             echo("<a href='vendor/admin/admin_member_edit.php?id=" . $name['id'] . "'>" . $name['nickname'] . "</a>" . " says: " . $messagearr['message']);
                         } else {
-                            echo ($name['nickname'] . " says: " . $messagearr['message']);
+                            echo ("<a href='vendor/contactprofile.php?id=" . $name['id'] . "'>" . $name['nickname'] . "</a>" . " says: " . $messagearr['message']);
                         }?> </p>
                 </div>
                 <?php

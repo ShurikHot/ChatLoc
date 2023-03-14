@@ -2,7 +2,10 @@
 
     require_once 'db.php';
     require_once 'admin/params.php';
-    session_set_cookie_params($session_lifetime, '/');
+    ini_set('session.gc_maxlifetime', $session_lifetime);
+    ini_set('session.gc_probability', 1);
+    ini_set('session.gc_divisor', 1);
+    //session_set_cookie_params($session_lifetime, '/');
     session_start();
     use PHPMailer\PHPMailer\PHPMailer;
     //use PHPMailer\PHPMailer\Exception;
@@ -11,7 +14,7 @@
     require_once '../assets/PHPMailer/src/SMTP.php';
 
 
-$email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+    $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
     $name = filter_var(trim($_POST['name']),FILTER_SANITIZE_STRING);
     $nickname = filter_var(trim($_POST['nickname']),FILTER_SANITIZE_STRING);
     $password = $_POST['password'];
@@ -27,7 +30,11 @@ $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
     }
     $comment = htmlspecialchars($_POST['comment']);
 
-    if ($password === $confirm_password && $name != "" && $email != "" && $nickname != "" && $password != "") {
+    $query_email = mysqli_query($connect, "SELECT * FROM `members` WHERE `email` = '$email'");
+    if (mysqli_num_rows($query_email) > 1) {
+        $_SESSION['message'] = '<h6 align="center">This email is in use by another user</h6>';
+        header('Location: /index.php');
+    } elseif ($password === $confirm_password && $name != "" && $email != "" && $nickname != "" && $password != "") {
         $password = md5($password);
         $date = date('Y-m-d H:i:s');
         $query = mysqli_query($connect,
