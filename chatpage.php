@@ -1,10 +1,10 @@
 <?php
     require_once 'vendor/db.php';
     require_once 'vendor/admin/params.php';
+
     ini_set('session.gc_maxlifetime', $session_lifetime);
     ini_set('session.gc_probability', 1);
     ini_set('session.gc_divisor', 1);
-    //session_set_cookie_params($session_lifetime, '/');
     session_start();
     if(!isset($_SESSION['user'])) {
         header('Location: /index.php');
@@ -31,7 +31,7 @@
 
 <h1 align="center">ChatLoc Page</h1>
 <div class="wrap" id="wrap">
-
+    <!-- CHAT -->
 </div>
 <br>
     <form method="post" id="sendmess" onsubmit="return false">
@@ -41,7 +41,7 @@
     </form>
 
     <?php
-        if (key_exists('is_edit', $_SESSION['user'])) {
+        if (key_exists('is_edit', $_SESSION['user'])) :
     ?>
     <form method="post" action="vendor/messageedit.php">
         <textarea class="enter_mess" name="new_message" rows="1"><?= $_SESSION['user']['mess_for_edit'] ?></textarea>
@@ -50,7 +50,7 @@
     </form>
     <?php
         unset($_SESSION['user']['is_edit']);
-        } ?>
+    endif; ?>
 
     <a class="mes_right" href="profile.php">Go to your&nbsp;<b>Profile</b></a>
     <br><br>
@@ -65,17 +65,14 @@
     $("document").ready(function(){
         $("#sendmess").on("submit", function (){
             let dataForm = $(this).serialize()
-            /*var dataForm = $("#message").val();*/
             $.ajax({
                 url: 'vendor/messageadd.php',
                 method: 'post',
                 dataType: 'html',
                 data: dataForm,
                 success: function (data){
-                    /*console.log(data);*/
                     load_mess();
                     $("#message").val('');
-                    /*return false;*/
                 }
             });
         })
@@ -100,7 +97,7 @@
 <script src="assets/js/index.js"></script>
 <script>
     load_mess();
-    /*setInterval(load_mess,5000);*/
+    setInterval(load_mess,5000);
 </script>
 
 </body>

@@ -3,9 +3,7 @@ require_once '../vendor/db.php';
 
 $records_per_page = 10;
 $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
-
 $start = ($current_page - 1) * $records_per_page;
-
 $users = mysqli_query($connect, "SELECT * FROM `members` WHERE `blocked` = 1 LIMIT $start, $records_per_page");
 ?>
 
@@ -107,5 +105,3 @@ $users = mysqli_query($connect, "SELECT * FROM `members` WHERE `blocked` = 1 LIM
 <?php else: ?>
     <p>Blocked members not found...</p>
 <?php endif; ?>
-
-

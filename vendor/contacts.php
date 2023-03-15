@@ -6,8 +6,8 @@ require_once 'db.php';
 <h4>
     <b>My Contacts</b>
 </h4>
-<ul class="list-group">
-    <div style="border: #0a0e14 solid 1px">
+<ul class="list-group" style="list-style-type: none;">
+    <div style="border: #0a0e14 solid 1px; width: 500px; margin: auto">
             <?php
                 $user_id = $_SESSION['user']['id'];
                 $query = mysqli_query($connect,"SELECT * FROM `contacts` WHERE `user_id` = $user_id");
@@ -21,7 +21,6 @@ require_once 'db.php';
                                "</a>&nbsp;
                                 <span class='badge bg-primary rounded-pill'>online/offline</span>
                                 </li>"
-
                         );
                     }
                 }

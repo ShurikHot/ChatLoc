@@ -1,10 +1,10 @@
 <?php
 require_once '../db.php';
 require_once 'params.php';
+
 ini_set('session.gc_maxlifetime', $session_lifetime);
 ini_set('session.gc_probability', 1);
 ini_set('session.gc_divisor', 1);
-//session_set_cookie_params($session_lifetime, '/');
 session_start();
 
 /*edit*/
@@ -90,5 +90,3 @@ if(isset($_POST['submit'])) {
     }
 }
 header('Location: ../../admin/index.php?page=' . $_SESSION['user']['page_get']);
-
-

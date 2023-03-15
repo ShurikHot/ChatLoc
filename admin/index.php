@@ -1,11 +1,12 @@
 <?php
 require_once '../vendor/admin/params.php';
+
 ini_set('session.gc_maxlifetime', $session_lifetime);
 ini_set('session.gc_probability', 1);
 ini_set('session.gc_divisor', 1);
-//session_set_cookie_params($session_lifetime, '/');
 session_start();
-if ($_SESSION['user']['id'] != "1") {
+
+if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
     header('Location: ../index.php');
 }
 ?>
@@ -27,6 +28,7 @@ if ($_SESSION['user']['id'] != "1") {
     <link rel="stylesheet" href="../adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
 
     <script src="https://www.gstatic.com/charts/loader.js"></script>
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -91,7 +93,7 @@ if ($_SESSION['user']['id'] != "1") {
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="../adminlte/dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              <img src="#" alt="User Avatar" class="img-size-50 mr-3 img-circle">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Brad Diesel
@@ -107,7 +109,7 @@ if ($_SESSION['user']['id'] != "1") {
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="../adminlte/dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <img src="#" alt="User Avatar" class="img-size-50 img-circle mr-3">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   John Pierce
@@ -123,7 +125,7 @@ if ($_SESSION['user']['id'] != "1") {
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="../adminlte/dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <img src="#" alt="User Avatar" class="img-size-50 img-circle mr-3">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Nora Silvester
@@ -183,7 +185,7 @@ if ($_SESSION['user']['id'] != "1") {
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a href="#" class="brand-link">
       <img src="../assets/logo.png" alt="ChatLocLogo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">Chat Loc</span>
     </a>
@@ -257,12 +259,6 @@ if ($_SESSION['user']['id'] != "1") {
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <!--<li class="nav-item">
-                <a href="../vendor/admin/admin_content.php?content=messages" class="nav-link <?php /*if ($_SESSION['user']['admin_category'] == "messages") echo "active"*/?>">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Messages</p>
-                </a>
-              </li>-->
               <li class="nav-item">
                 <a href="../vendor/admin/admin_content.php?content=blocked" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
                     $_SESSION['user']['admin_category'] == "blocked") echo "active"?>">
@@ -326,10 +322,10 @@ if ($_SESSION['user']['id'] != "1") {
     <!-- Main content -->
     <section class="content" id="content">
       <?php
-        //key_exists('admin_member_edit', $_SESSION['user']) ? require_once('views/members_edit.php') :
         require_once('content.php');
       ?>
     </section>
+
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
@@ -349,20 +345,20 @@ if ($_SESSION['user']['id'] != "1") {
 </div>
 <!-- ./wrapper -->
 
-<!-- jQuery -->
-<script src="../adminlte/plugins/jquery/jquery.min.js"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="../adminlte/plugins/jquery-ui/jquery-ui.min.js"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-  $.widget.bridge('uibutton', $.ui.button)
-</script>
-<!-- Bootstrap 4 -->
-<script src="../adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- overlayScrollbars -->
-<script src="../adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-<!-- AdminLTE App -->
-<script src="../adminlte/dist/js/adminlte.js"></script>
+    <!-- jQuery -->
+    <script src="../adminlte/plugins/jquery/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="../adminlte/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+      $.widget.bridge('uibutton', $.ui.button)
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="../adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- overlayScrollbars -->
+    <script src="../adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../adminlte/dist/js/adminlte.js"></script>
 
 </body>
 </html>

@@ -1,9 +1,9 @@
 <?php
     require_once 'vendor/admin/params.php';
+
     ini_set('session.gc_maxlifetime', $session_lifetime);
     ini_set('session.gc_probability', 1);
     ini_set('session.gc_divisor', 1);
-    //session_set_cookie_params($session_lifetime, '/');
     session_start();
 
     if(!isset($_SESSION['user'])) {
@@ -37,15 +37,15 @@
 <body class="text-center">
     <h1 align="center" class="">Your ChatLoc Profile</h1>
     <?php
-        if(isset($_SESSION['user']['avatar'])) {
+        if(isset($_SESSION['user']['avatar'])) :
     ?>
             <img src="<?= $_SESSION['user']['avatar'] ?>" alt="" style="display: inline">
     <?php
-        } else {
+        else :
     ?>
         <img src="uploads/avatar-uni.png" alt="" style="width: 150px; height: 150px; display: inline">
-            <?php
-        }
+    <?php
+        endif;
     ?>
     <br><br>
             <div class="container">
@@ -156,16 +156,16 @@
         <h6>Your Nickname: <b>
 
             <?php
-                if (isset($_SESSION['user']['edit_nickname'])) { ?>
+                if (isset($_SESSION['user']['edit_nickname'])) : ?>
                     <input type="text" name="actual_nickname" value="
                     <?= isset($_SESSION['user']['actual_nickname']) ? $_SESSION['user']['actual_nickname'] : $_SESSION['user']['nickname'] ?>  ">
             <?php
-                } else {
+                else :
                     if (isset($_SESSION['user']['actual_nickname'])) {
                         echo($_SESSION['user']['actual_nickname']);
                     } else {
                         echo($_SESSION['user']['nickname']); }
-            } ?>
+            endif; ?>
 
             </b>&nbsp;<input type="submit" name="edit_nickname" value="Click to Change"></h6>
     </form>

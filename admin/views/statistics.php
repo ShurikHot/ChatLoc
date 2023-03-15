@@ -2,7 +2,6 @@
 
     require_once '../vendor/db.php';
     $query = mysqli_query($connect, "SELECT DATE_FORMAT(created_at, '%Y-%m-%d %H:00:00') as hour, COUNT(*) as count FROM members GROUP BY hour");
-
     $data = array();
     while ($row = mysqli_fetch_assoc($query)) {
         $datetime = "new Date(" . date('Y, n-1, j, G, i, s', strtotime($row['hour'])) . ")";

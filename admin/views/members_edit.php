@@ -1,7 +1,13 @@
+<?php
+require_once '../vendor/db.php';
+
+if (!isset($_SESSION['user']['admin_member_edit'])) {
+    header('Location: ../index.php');
+}
+?>
+
 <div class="card">
-
     <div class="card-body">
-
         <form action="../vendor/admin/admin_member_edit.php" method="post" class="row">
             <div class="col-md-2">
                 <div class="form-group">
@@ -17,12 +23,40 @@
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div class="form-group">
                     <label for="blocked">0 or 1</label>
                     <input type="text" class="form-control" value="0 - no, 1 - yes" readonly>
                 </div>
             </div>
+
+            <?php
+                $contact_id = $_SESSION['user']['admin_member_edit']['id'];
+                $query = mysqli_query($connect,"SELECT * FROM `contacts` WHERE `user_id` = 1 AND `contact_id` = $contact_id ");
+                if (mysqli_num_rows($query) == 0) :
+            ?>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="contact">Add to Contacts?</label>
+                        <button type="button" name="button" class="btn btn-light form-control">
+                            <a href="../../vendor/contactadd.php?id=<?= $_SESSION['user']['admin_member_edit']['id'] ?>">Add</a>
+                        </button>
+                    </div>
+                </div>
+            <?php
+                else:
+            ?>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="contact">Del from Contacts?</label>
+                        <button type="button" name="button" class="btn btn-light form-control">
+                            <a href="../../vendor/contactadd.php?delid=<?= $_SESSION['user']['admin_member_edit']['id'] ?>">Del</a>
+                        </button>
+                    </div>
+                </div>
+            <?php
+                endif;
+            ?>
 
             <div class="col-md-8">
                 <div class="form-group">
@@ -98,11 +132,6 @@
             <div class="col-md-8">
                 <button type="submit" name="submit" class="btn btn-primary">Save changes</button>
             </div>
-
         </form>
-
     </div>
-
-
 </div>
-
