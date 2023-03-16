@@ -6,6 +6,10 @@
     ini_set('session.gc_probability', 1);
     ini_set('session.gc_divisor', 1);
     session_start();
+
+    $id = $_SESSION['user']['id'];
+    $query_visit = mysqli_query($connect, "UPDATE `members` SET `last_visit` = NOW() WHERE `id` = $id");
+
     if(!isset($_SESSION['user'])) {
         header('Location: /index.php');
     }

@@ -16,10 +16,11 @@ require_once 'db.php';
                     $query2 = mysqli_query($connect,"SELECT * FROM `members` WHERE `id` = $contact_id");
                     if (mysqli_num_rows($query2) > 0) {
                         $contact = mysqli_fetch_assoc($query2);
+                        $contact['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5 minutes'))) ? $status = 'ONLINE' : $status = 'offline';
                         echo ("<a href='vendor/contactprofile.php?id=" . $contact_id . "'> 
                                 <li class='justify-content-between align-items-center'>" . $contact['nickname'] .
                                "</a>&nbsp;
-                                <span class='badge bg-primary rounded-pill'>online/offline</span>
+                                <span class='badge bg-primary rounded-pill'>" . $status . "</span>
                                 </li>"
                         );
                     }
@@ -27,11 +28,3 @@ require_once 'db.php';
             ?>
     </div>
 </ul>
-
-
-
-
-
-
-
-

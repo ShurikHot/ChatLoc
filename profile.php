@@ -1,10 +1,14 @@
 <?php
     require_once 'vendor/admin/params.php';
+    require_once 'vendor/db.php';
 
     ini_set('session.gc_maxlifetime', $session_lifetime);
     ini_set('session.gc_probability', 1);
     ini_set('session.gc_divisor', 1);
     session_start();
+
+    $id = $_SESSION['user']['id'];
+    $query_visit = mysqli_query($connect, "UPDATE `members` SET `last_visit` = NOW() WHERE `id` = $id");
 
     if(!isset($_SESSION['user'])) {
         header('Location: /index.php');
@@ -35,6 +39,9 @@
     <script src="/assets/js/cropper.min.js"></script>
 </head>
 <body class="text-center">
+
+
+
     <h1 align="center" class="">Your ChatLoc Profile</h1>
     <?php
         if(isset($_SESSION['user']['avatar'])) :
@@ -197,10 +204,6 @@
         <button type="submit">Find</button>
     </form>
 
-    <?php
-        require_once 'vendor/db.php';
-    ?>
-
     <ul class="list-group" style="list-style-type: none;">
         <div style="border: #0a0e14 solid 1px; width: 500px; margin: auto">
             <?php
@@ -213,10 +216,11 @@
                     $query2 = mysqli_query($connect, "SELECT * FROM `members` WHERE `id` = $find_id");
                     if (mysqli_num_rows($query2) > 0) {
                         $user = mysqli_fetch_assoc($query2);
+                        $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5 minutes'))) ? $status = 'ONLINE' : $status = 'offline';
                         echo("<a href='vendor/contactprofile.php?id=" . $find_id . "'>
                                     <li class='justify-content-between align-items-center'>" . $user['nickname'] . " - " . $user['email'] .
                             "</a>&nbsp;
-                                    <span class='badge bg-primary rounded-pill'>online/offline</span>
+                                    <span class='badge bg-primary rounded-pill'>" . $status . "</span>
                                     </li>"
                         );
                     }

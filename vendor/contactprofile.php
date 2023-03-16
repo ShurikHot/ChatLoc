@@ -7,11 +7,15 @@ ini_set('session.gc_probability', 1);
 ini_set('session.gc_divisor', 1);
 session_start();
 
-    if (isset($_GET['id']) & is_numeric($_GET['id'])) {
-        $id = $_GET['id'];
-        $query = mysqli_query($connect,"SELECT * FROM `members` WHERE `id` = $id");
-        $user = mysqli_fetch_assoc($query);
-    }
+$id = $_SESSION['user']['id'];
+$query_visit = mysqli_query($connect, "UPDATE `members` SET `last_visit` = NOW() WHERE `id` = $id");
+
+if (isset($_GET['id']) & is_numeric($_GET['id'])) {
+    $id = $_GET['id'];
+    $query = mysqli_query($connect,"SELECT * FROM `members` WHERE `id` = $id");
+    $user = mysqli_fetch_assoc($query);
+}
+$user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5 minutes'))) ? $status = 'ONLINE' : $status = 'offline';
 ?>
 
 <!doctype html>
@@ -40,7 +44,8 @@ session_start();
 
 <script src="../assets/js/bootstrap.min.js"></script>
 
-<h6>Nickname: <b> <?= $user['nickname']?> </b>
+<h6>Nickname: <b> <?= $user['nickname']?> </b> <span class='badge bg-primary rounded-pill'> <?= $status ?></span> </h6>
+
 
 <h6>E-mail adress: <?= $user['email'] ?></h6>
 
