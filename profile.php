@@ -190,5 +190,41 @@
     <?php
         require_once ('vendor/contacts.php')
     ?>
+
+    <br>
+    <form method="post" id="find" action="#"> <!--vendor/find_member.php-->
+        <textarea class="" style="width: 448px;" type="text" name="find_member" id="find_member" placeholder="Do you want find somebody? Enter part of nickname or email" rows="1"></textarea>
+        <button type="submit">Find</button>
+    </form>
+
+    <?php
+        require_once 'vendor/db.php';
+    ?>
+
+    <ul class="list-group" style="list-style-type: none;">
+        <div style="border: #0a0e14 solid 1px; width: 500px; margin: auto">
+            <?php
+            if (isset($_POST['find_member'])) {
+                $search_query = $_POST['find_member'];
+                $query = mysqli_query($connect, "SELECT * FROM `members` WHERE (`nickname` LIKE '%$search_query%') OR (`email` LIKE '%$search_query%')");
+                if (mysqli_num_rows($query) == 0) echo("No match found");
+                while ($find_user = mysqli_fetch_assoc($query)) {
+                    $find_id = $find_user['id'];
+                    $query2 = mysqli_query($connect, "SELECT * FROM `members` WHERE `id` = $find_id");
+                    if (mysqli_num_rows($query2) > 0) {
+                        $user = mysqli_fetch_assoc($query2);
+                        echo("<a href='vendor/contactprofile.php?id=" . $find_id . "'>
+                                    <li class='justify-content-between align-items-center'>" . $user['nickname'] . " - " . $user['email'] .
+                            "</a>&nbsp;
+                                    <span class='badge bg-primary rounded-pill'>online/offline</span>
+                                    </li>"
+                        );
+                    }
+                }
+            }
+            ?>
+        </div>
+    </ul>
+
 </body>
 </html>
