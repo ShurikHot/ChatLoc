@@ -1,4 +1,5 @@
 <?php
+require_once '../vendor/db.php';
 require_once '../vendor/admin/params.php';
 
 ini_set('session.gc_maxlifetime', $session_lifetime);

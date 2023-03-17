@@ -7,6 +7,10 @@ ini_set('session.gc_probability', 1);
 ini_set('session.gc_divisor', 1);
 session_start();
 
+if(!isset($_SESSION['user'])) {
+    header('Location: ../index.php');
+}
+
 $id = $_SESSION['user']['id'];
 $query_visit = mysqli_query($connect, "UPDATE `members` SET `last_visit` = NOW() WHERE `id` = $id");
 
@@ -27,8 +31,33 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
     <link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/css/chatpage.css" rel="stylesheet">
     <script src="../assets/js/jquery3.6.3.min.js"></script>
+
+    <!--<link href="../assets/css/emoji.css" rel="stylesheet">
+    <script src="../assets/js/emoji-picker.js"></script>-->
 </head>
 <body class="text-center">
+
+<ul class="nav justify-content-center">
+    <li class="nav-item">
+        <?php if (isset($_SESSION['user']['blocked']) && !$_SESSION['user']['blocked']): ?>
+            <a class="btn btn-info" aria-current="page" href="../chatpage.php">Go to <b>Chat.Loc</b></a>
+        <?php elseif (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']): ?>
+            <a class="btn btn-warning" aria-current="page"href=""><b>!!Your account is blocked!!</b></a>
+        <?php endif; ?>
+    </li>
+    <li class="nav-item">
+        <a class="btn btn-primary" href="../profile.php">Go to your&nbsp;<b>Profile</b></a>
+    </li>
+    <?php if (isset($_SESSION['user']['email']) && $_SESSION['user']['email'] === 'admin@admin.com'): ?>
+        <li class="nav-item">
+            <a class="btn btn-success" href="../admin/index.php">Admin Area</a>
+        </li>
+    <?php endif; ?>
+    <li class="nav-item">
+        <a class="btn btn-danger" href="../vendor/logout.php">Logout</a>
+    </li>
+</ul>
+
 <h1 align="center" class=""><?= $user['nickname'] ?> | User Profile</h1>
 <?php
     if(isset($user['avatar'])) : ?>
@@ -59,9 +88,10 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
     <br><br>
     <form method="post" id="sendmess" onsubmit="return false">
         <textarea class="enter_mess" type="text" name="personal_message" id="personal_message" placeholder="Enter your message..." rows="1"></textarea>
-        <button type="submit">Send</button>
+        <button type="submit" class="btn btn-primary">Send</button>
     </form>
-    <div class="wrap" id="wrap" style="height: 300px; width: 400px; display: inline-block">
+
+    <div class="wrap" id="wrap" style="height: 300px; width: 600px; display: inline-block">
         <!-- CHAT -->
     </div>
 <?php
@@ -76,12 +106,6 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
 <?php
     endif;
 ?>
-<br>
-<a href="logout.php">Logout</a>
-<br>
-<a href="../profile.php">My Profile</a>
-<br>
-<a href="../chatpage.php">Go to <b>Chat.Loc</b></a>
 
 <script>
     $("document").ready(function(){
@@ -89,17 +113,14 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
             let dataFormArray = $(this).serializeArray();
             dataFormArray.push({name: "contact_id", value: "<?= $user['id'] ?>"});
             let dataForm = $.param(dataFormArray);
-            /*let dataForm = $(this).serialize()*/
             $.ajax({
                 url: 'messageadd.php',
                 method: 'post',
                 dataType: 'html',
                 data: dataForm,
                 success: function (data){
-                    /*console.log(data);*/
                     load_mess();
                     $("#personal_message").val('');
-                    /*return false;*/
                 }
             });
         })
@@ -119,6 +140,15 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
             }
         });
     }
+</script>
+<script>
+    $(document).ready(function(){
+        $("#personal_message").emojiPicker({
+            height: '200px',
+            width: '300px',
+            button: false
+        });
+    });
 </script>
 
     <script>

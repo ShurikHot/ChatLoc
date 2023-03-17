@@ -23,7 +23,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Signin ChatLoc</title>
+    <link href="/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/assets/css/chatpage.css" rel="stylesheet">
+
     <script src="/assets/js/jquery3.6.3.min.js"></script>
     <style>
         #wrap {
@@ -33,14 +35,29 @@
 </head>
 <body>
 
+<ul class="nav justify-content-center">
+    <li class="nav-item">
+        <a class="btn btn-primary" href="profile.php">Go to your&nbsp;<b>Profile</b></a>
+    </li>
+    <?php if (isset($_SESSION['user']['email']) && $_SESSION['user']['email'] === 'admin@admin.com'): ?>
+        <li class="nav-item">
+            <a class="btn btn-success" href="admin/index.php">Admin Area</a>
+        </li>
+    <?php endif; ?>
+    <li class="nav-item">
+        <a class="btn btn-danger" href="vendor/logout.php">Logout</a>
+    </li>
+</ul>
+
+
 <h1 align="center">ChatLoc Page</h1>
-<div class="wrap" id="wrap">
+<div class="wrap" id="wrap" >
     <!-- CHAT -->
 </div>
 <br>
     <form method="post" id="sendmess" onsubmit="return false">
         <textarea class="enter_mess" type="text" name="message" id="message" placeholder="Enter your message..." rows="1"></textarea>
-        <button type="submit">Send</button>
+        <button type="submit" class="btn btn-primary">Send</button>
         <br><br>
     </form>
 
@@ -49,21 +66,12 @@
     ?>
     <form method="post" action="vendor/messageedit.php">
         <textarea class="enter_mess" name="new_message" rows="1"><?= $_SESSION['user']['mess_for_edit'] ?></textarea>
-        <button type="edit">Edit</button>
-        <button type="cancel">Cancel</button>
+        <button type="edit" class="btn btn-success">Edit</button>
+        <button type="cancel" class="btn btn-secondary">Cancel</button>
     </form>
     <?php
         unset($_SESSION['user']['is_edit']);
     endif; ?>
-
-    <a class="mes_right" href="profile.php">Go to your&nbsp;<b>Profile</b></a>
-    <br><br>
-    <?php
-        if($_SESSION['user']['id'] == "1") : ?>
-            <a class="mes_right" href="/admin/index.php">Go to &nbsp;<b>Admin Area</b></a>;
-            <br><br>
-    <?php endif; ?>
-    <a class="mes_right" href="vendor/logout.php"><b>Logout</b></a>
 
 <script>
     $("document").ready(function(){

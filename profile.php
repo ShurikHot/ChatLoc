@@ -7,12 +7,13 @@
     ini_set('session.gc_divisor', 1);
     session_start();
 
-    $id = $_SESSION['user']['id'];
-    $query_visit = mysqli_query($connect, "UPDATE `members` SET `last_visit` = NOW() WHERE `id` = $id");
-
     if(!isset($_SESSION['user'])) {
         header('Location: /index.php');
     }
+
+    $id = $_SESSION['user']['id'];
+    $query_visit = mysqli_query($connect, "UPDATE `members` SET `last_visit` = NOW() WHERE `id` = $id");
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -40,7 +41,23 @@
 </head>
 <body class="text-center">
 
-
+    <ul class="nav justify-content-center">
+        <li class="nav-item">
+            <?php if (isset($_SESSION['user']['blocked']) && !$_SESSION['user']['blocked']): ?>
+                <a class="btn btn-info" aria-current="page" href="chatpage.php">Go to <b>Chat.Loc</b></a>
+            <?php elseif (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']): ?>
+                <a class="btn btn-warning" aria-current="page"href=""><b>!!Your account is blocked!!</b></a>
+            <?php endif; ?>
+        </li>
+        <?php if (isset($_SESSION['user']['email']) && $_SESSION['user']['email'] === 'admin@admin.com'): ?>
+        <li class="nav-item">
+            <a class="btn btn-success" href="admin/index.php">Admin Area</a>
+        </li>
+        <?php endif; ?>
+        <li class="nav-item">
+            <a class="btn btn-danger" href="vendor/logout.php">Logout</a>
+        </li>
+    </ul>
 
     <h1 align="center" class="">Your ChatLoc Profile</h1>
     <?php
@@ -179,21 +196,6 @@
 
     <h6>Your E-mail adress: <?= $_SESSION['user']['email'] ?></h6>
 
-
-
-    <a href="vendor/logout.php">Logout</a>
-    <br>
-
-    <?php if (isset($_SESSION['user']['blocked']) && !$_SESSION['user']['blocked']): ?>
-        <a href="chatpage.php">Go to <b>Chat.Loc</b></a>
-    <?php elseif (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']): ?>
-        <a href=""><b>Your account is blocked</b></a>
-    <?php endif; ?>
-    <br>
-    <?php if (isset($_SESSION['user']['email']) && $_SESSION['user']['email'] === 'admin@admin.com'): ?>
-        <a href="admin/index.php"><b>Admin Area</b></a>
-    <?php endif; ?>
-
     <?php
         require_once ('vendor/contacts.php')
     ?>
@@ -201,7 +203,7 @@
     <br>
     <form method="post" id="find" action="#"> <!--vendor/find_member.php-->
         <textarea class="" style="width: 448px;" type="text" name="find_member" id="find_member" placeholder="Do you want find somebody? Enter part of nickname or email" rows="1"></textarea>
-        <button type="submit">Find</button>
+        <button type="submit" class="btn btn-primary">Find</button>
     </form>
 
     <ul class="list-group" style="list-style-type: none;">

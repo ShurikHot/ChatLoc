@@ -5,7 +5,6 @@ $records_per_page = 10;
 $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
 $_SESSION['user']['page_get'] = $current_page;
 $start = ($current_page - 1) * $records_per_page;
-
 $users = mysqli_query($connect, "SELECT * FROM `members` LIMIT $start, $records_per_page");
 ?>
 
@@ -53,7 +52,7 @@ $users = mysqli_query($connect, "SELECT * FROM `members` LIMIT $start, $records_
         <?php endforeach; ?>
         </tbody>
     </table>
-    <?php
+<?php
     $result = mysqli_query($connect, "SELECT COUNT(*) as total FROM `members`");
     $row = mysqli_fetch_assoc($result);
     $total_records = $row['total'];
@@ -102,10 +101,8 @@ $users = mysqli_query($connect, "SELECT * FROM `members` LIMIT $start, $records_
     }
     if ($total_pages > 1) echo ('<nav aria-label="Page navigation"><ul class="pagination">' . $startpage . $back . $page2left . $page1left .
         '<li class="page-item active"><a class="page-link">' . $current_page . '</a></li>' . $page1right . $page2right . $forward . $endpage . '</ul></nav>');
-    ?>
+?>
 
 <?php else: ?>
     <p>Members not found...</p>
 <?php endif; ?>
-
-

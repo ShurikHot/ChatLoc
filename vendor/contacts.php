@@ -2,7 +2,7 @@
 require_once 'db.php';
 ?>
 
-<br><br>
+<br>
 <h4>
     <b>My Contacts</b>
 </h4>
