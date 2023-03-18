@@ -40,7 +40,6 @@
     <script src="/assets/js/cropper.min.js"></script>
 </head>
 <body class="text-center">
-
     <ul class="nav justify-content-center">
         <li class="nav-item">
             <?php if (isset($_SESSION['user']['blocked']) && !$_SESSION['user']['blocked']): ?>

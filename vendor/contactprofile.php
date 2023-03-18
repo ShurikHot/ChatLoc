@@ -27,7 +27,7 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= $user['nickname'] ?> | User Profile</title>
+    <title><?= $user['nickname'] ?> | Contact Profile</title>
     <link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/css/chatpage.css" rel="stylesheet">
     <script src="../assets/js/jquery3.6.3.min.js"></script>

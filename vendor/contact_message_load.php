@@ -21,6 +21,7 @@ if (mysqli_num_rows($query)>0) {
         $mes_from_id = $messagearr['from_id'];
         $query_user = mysqli_query($connect, "SELECT * FROM `members` WHERE `id` = $mes_from_id");
         $name = mysqli_fetch_assoc($query_user);
+
         if (isset($name)) {
             echo("<div class='container'>
                       <div style='margin-right: 5px; text-align: left;'>
@@ -28,6 +29,10 @@ if (mysqli_num_rows($query)>0) {
                            </p>
                       </div>
                    </div>");
+        }
+        $mess_id = $messagearr['id'];
+        if ($user_id != $mes_from_id) {
+            mysqli_query($connect, "UPDATE `personal_messages` SET `unread` = 0 WHERE `id` = $mess_id");
         }
     }
 }

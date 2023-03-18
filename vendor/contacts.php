@@ -13,14 +13,17 @@ require_once 'db.php';
                 $query = mysqli_query($connect,"SELECT * FROM `contacts` WHERE `user_id` = $user_id");
                 while($user = mysqli_fetch_assoc($query)) {
                     $contact_id = $user['contact_id'];
+                    $query_mess = mysqli_query($connect,"SELECT * FROM `personal_messages` WHERE `from_id` = $contact_id AND `to_id` = $user_id AND `unread` = 1");
+                    $count_unread = mysqli_num_rows($query_mess) > 0 ? "<span class='badge rounded-pill text-bg-success'>" . mysqli_num_rows($query_mess) . " </span>" : '';
                     $query2 = mysqli_query($connect,"SELECT * FROM `members` WHERE `id` = $contact_id");
                     if (mysqli_num_rows($query2) > 0) {
                         $contact = mysqli_fetch_assoc($query2);
                         $contact['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5 minutes'))) ? $status = 'ONLINE' : $status = 'offline';
                         echo ("<a href='vendor/contactprofile.php?id=" . $contact_id . "'> 
                                 <li class='justify-content-between align-items-center'>" . $contact['nickname'] .
-                               "</a>&nbsp;
-                                <span class='badge bg-primary rounded-pill'>" . $status . "</span>
+                                "</a> " .
+                                $count_unread .
+                                " <span class='badge bg-primary rounded-pill'>" . $status . "</span>
                                 </li>"
                         );
                     }
