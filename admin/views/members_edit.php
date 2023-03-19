@@ -39,7 +39,7 @@ if (!isset($_SESSION['user']['admin_member_edit'])) {
                     <div class="form-group">
                         <label for="contact">Add to Contacts?</label>
                         <button type="button" name="button" class="btn btn-light form-control">
-                            <a href="../../vendor/contactadd.php?id=<?= $_SESSION['user']['admin_member_edit']['id'] ?>">Add</a>
+                            <a href="../../vendor/contactadd.php?id=<?= $_SESSION['user']['admin_member_edit']['id'] ?>&admin">Add</a>
                         </button>
                     </div>
                 </div>
@@ -50,7 +50,7 @@ if (!isset($_SESSION['user']['admin_member_edit'])) {
                     <div class="form-group">
                         <label for="contact">Del from Contacts?</label>
                         <button type="button" name="button" class="btn btn-light form-control">
-                            <a href="../../vendor/contactadd.php?delid=<?= $_SESSION['user']['admin_member_edit']['id'] ?>">Del</a>
+                            <a href="../../vendor/contactadd.php?delid=<?= $_SESSION['user']['admin_member_edit']['id'] ?>&admin">Del</a>
                         </button>
                     </div>
                 </div>

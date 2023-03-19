@@ -7,7 +7,7 @@ ini_set('session.gc_probability', 1);
 ini_set('session.gc_divisor', 1);
 session_start();
 
-if(!isset($_SESSION['user'])) {
+if(!isset($_SESSION['user']['id'])) {
     header('Location: ../index.php');
 }
 
@@ -16,7 +16,7 @@ $query_visit = mysqli_query($connect, "UPDATE `members` SET `last_visit` = NOW()
 
 if (isset($_GET['id']) & is_numeric($_GET['id'])) {
     $id = $_GET['id'];
-    $query = mysqli_query($connect,"SELECT * FROM `members` WHERE `id` = $id");
+    $query = mysqli_query($connect,"SELECT `id`, `email`, `nickname`, `avatar`, `last_visit` FROM `members` WHERE `id` = $id");
     $user = mysqli_fetch_assoc($query);
 }
 $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5 minutes'))) ? $status = 'ONLINE' : $status = 'offline';
@@ -31,11 +31,11 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
     <link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/css/chatpage.css" rel="stylesheet">
     <script src="../assets/js/jquery3.6.3.min.js"></script>
-
-    <!--<link href="../assets/css/emoji.css" rel="stylesheet">
-    <script src="../assets/js/emoji-picker.js"></script>-->
+    <script src="../assets/js/emojionearea.js"></script>
+    <link rel="stylesheet" href="../assets/css/emojionearea.css" />
 </head>
 <body class="text-center">
+
 
 <ul class="nav justify-content-center">
     <li class="nav-item">
@@ -58,7 +58,7 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
     </li>
 </ul>
 
-<h1 align="center" class=""><?= $user['nickname'] ?> | User Profile</h1>
+<h1 align="center" class=""><?= $user['nickname'] ?> | Contact Profile</h1>
 <?php
     if(isset($user['avatar'])) : ?>
     <img src="<?= $user['avatar'] ?>" alt="" style="display: inline">
@@ -81,13 +81,13 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
 <?php
     $user_id = $_SESSION['user']['id'];
     $contact_id = $user['id'];
-    $query = mysqli_query($connect,"SELECT * FROM `contacts` WHERE `user_id` = $user_id AND `contact_id` = $contact_id");
+    $query = mysqli_query($connect,"SELECT `id` FROM `contacts` WHERE `user_id` = $user_id AND `contact_id` = $contact_id");
     if (mysqli_num_rows($query) > 0) :
 ?>
     This user is already in your <b>Contact List</b> <a href="contactadd.php?delid=<?= $user['id'] ?>">Delete it?</a>
     <br><br>
     <form method="post" id="sendmess" onsubmit="return false">
-        <textarea class="enter_mess" type="text" name="personal_message" id="personal_message" placeholder="Enter your message..." rows="1"></textarea>
+        <textarea class="" type="text" name="personal_message" id="personal_message" placeholder="Enter your message..." rows="1"></textarea>
         <button type="submit" class="btn btn-primary">Send</button>
     </form>
 
@@ -120,11 +120,15 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
                 data: dataForm,
                 success: function (data){
                     load_mess();
-                    $("#personal_message").val('');
+                    $('.emojionearea-editor').html('');
                 }
             });
         })
     })
+
+    $('#personal_message').emojioneArea({
+        pickerPosition: 'bottom'
+    });
 
     function load_mess()
     {
@@ -141,20 +145,11 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
         });
     }
 </script>
-<script>
-    $(document).ready(function(){
-        $("#personal_message").emojiPicker({
-            height: '200px',
-            width: '300px',
-            button: false
-        });
-    });
-</script>
 
-    <script>
-        load_mess();
-        setInterval(load_mess,10000);
-    </script>
+<script>
+    load_mess();
+    setInterval(load_mess,10000);
+</script>
 
 </body>
 </html>

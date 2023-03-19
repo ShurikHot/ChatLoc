@@ -10,7 +10,7 @@
     $email = $_POST['email'];
     $password = md5($_POST['password']);
 
-    $checkUser = mysqli_query($connect, "SELECT * FROM `members` WHERE `email` = '$email' AND `password` = '$password'");
+    $checkUser = mysqli_query($connect, "SELECT `id`, `nickname`, `email`, `language`, `avatar`, `blocked` FROM `members` WHERE `email` = '$email' AND `password` = '$password'");
     if (mysqli_num_rows($checkUser) > 0) {
         $user = mysqli_fetch_assoc($checkUser);
         $_SESSION['user'] = [

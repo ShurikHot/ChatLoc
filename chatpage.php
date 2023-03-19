@@ -25,8 +25,9 @@
     <title>Signin ChatLoc</title>
     <link href="/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/assets/css/chatpage.css" rel="stylesheet">
-
     <script src="/assets/js/jquery3.6.3.min.js"></script>
+    <script src="/assets/js/emojionearea.js"></script>
+    <link rel="stylesheet" href="/assets/css/emojionearea.css" />
     <style>
         #wrap {
             background-color: <?= $chat_background_color ?>
@@ -84,11 +85,15 @@
                 data: dataForm,
                 success: function (data){
                     load_mess();
-                    $("#message").val('');
+                    $('.emojionearea-editor').html('');
                 }
             });
         })
     })
+
+    $('#message').emojioneArea({
+        pickerPosition: 'bottom'
+    });
 
     function load_mess()
     {

@@ -30,7 +30,7 @@ if (isset($_POST['specialization'])) {
 }
 $comment = htmlspecialchars($_POST['comment']);
 
-$query_email = mysqli_query($connect, "SELECT * FROM `members` WHERE `email` = '$email'");
+$query_email = mysqli_query($connect, "SELECT `id` FROM `members` WHERE `email` = '$email'");
 if (mysqli_num_rows($query_email) > 1) {
     $_SESSION['message'] = '<h6 align="center">This email is in use by another user</h6>';
     header('Location: /index.php');

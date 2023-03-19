@@ -17,5 +17,5 @@ if (isset($_POST['personal_message']) && $_POST['personal_message'] != '') {
     $message = trim(htmlspecialchars($_POST['personal_message']));
     $user_id = $_SESSION['user']['id'];
     $contact_id = $_POST['contact_id'];
-    $query = mysqli_query($connect,"INSERT INTO `personal_messages`(`from_id`, `to_id`, `message`, `unread`) VALUES ('$user_id','$contact_id','$message', 1)");
+    $query = mysqli_query($connect,"INSERT INTO `personal_messages`(`from_id`, `to_id`, `message`) VALUES ('$user_id','$contact_id','$message')");
 }

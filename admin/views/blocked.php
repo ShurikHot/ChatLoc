@@ -4,7 +4,7 @@ require_once '../vendor/db.php';
 $records_per_page = 10;
 $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
 $start = ($current_page - 1) * $records_per_page;
-$users = mysqli_query($connect, "SELECT * FROM `members` WHERE `blocked` = 1 LIMIT $start, $records_per_page");
+$users = mysqli_query($connect, "SELECT `id`, `name`, `nickname`, `email`, `avatar`, `blocked` FROM `members` WHERE `blocked` = 1 LIMIT $start, $records_per_page");
 ?>
 
 <?php if (mysqli_num_rows($users)>0): ?>
@@ -52,7 +52,7 @@ $users = mysqli_query($connect, "SELECT * FROM `members` WHERE `blocked` = 1 LIM
         </tbody>
     </table>
 <?php
-    $result = mysqli_query($connect, "SELECT COUNT(*) as total FROM `members` WHERE `blocked` = 1");
+    $result = mysqli_query($connect, "SELECT COUNT(`id`) as total FROM `members` WHERE `blocked` = 1");
     $row = mysqli_fetch_assoc($result);
     $total_records = $row['total'];
     $total_pages = ceil($total_records / $records_per_page);

@@ -35,7 +35,7 @@ if (isset($_GET['id']) & is_numeric($_GET['id'])) {
 /*block*/
 if (isset($_GET['lockid']) & is_numeric($_GET['lockid'])) {
     $lockid = $_GET['lockid'];
-    $query = mysqli_query($connect,"SELECT * FROM `members` WHERE `id` = $lockid");
+    $query = mysqli_query($connect,"SELECT `id`, `blocked` FROM `members` WHERE `id` = $lockid");
     if (mysqli_num_rows($query) > 0) {
         $user = mysqli_fetch_assoc($query);
         if ($user['blocked']) {

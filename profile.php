@@ -7,7 +7,7 @@
     ini_set('session.gc_divisor', 1);
     session_start();
 
-    if(!isset($_SESSION['user'])) {
+    if(!isset($_SESSION['user']['id'])) {
         header('Location: /index.php');
     }
 
@@ -200,7 +200,7 @@
     ?>
 
     <br>
-    <form method="post" id="find" action="#"> <!--vendor/find_member.php-->
+    <form method="post" id="find" action="#">
         <textarea class="" style="width: 448px;" type="text" name="find_member" id="find_member" placeholder="Do you want find somebody? Enter part of nickname or email" rows="1"></textarea>
         <button type="submit" class="btn btn-primary">Find</button>
     </form>
@@ -210,20 +210,23 @@
             <?php
             if (isset($_POST['find_member'])) {
                 $search_query = $_POST['find_member'];
-                $query = mysqli_query($connect, "SELECT * FROM `members` WHERE (`nickname` LIKE '%$search_query%') OR (`email` LIKE '%$search_query%')");
-                if (mysqli_num_rows($query) == 0) echo("No match found");
-                while ($find_user = mysqli_fetch_assoc($query)) {
-                    $find_id = $find_user['id'];
-                    $query2 = mysqli_query($connect, "SELECT * FROM `members` WHERE `id` = $find_id");
-                    if (mysqli_num_rows($query2) > 0) {
-                        $user = mysqli_fetch_assoc($query2);
-                        $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5 minutes'))) ? $status = 'ONLINE' : $status = 'offline';
-                        echo("<a href='vendor/contactprofile.php?id=" . $find_id . "'>
-                                    <li class='justify-content-between align-items-center'>" . $user['nickname'] . " - " . $user['email'] .
-                            "</a>&nbsp;
-                                    <span class='badge bg-primary rounded-pill'>" . $status . "</span>
-                                    </li>"
-                        );
+                $query = mysqli_query($connect, "SELECT `id` FROM `members` WHERE (`nickname` LIKE '%$search_query%') OR (`email` LIKE '%$search_query%')");
+                if (mysqli_num_rows($query) == 0) {
+                    echo("No match found");
+                } else {
+                    while ($find_user = mysqli_fetch_assoc($query)) {
+                        $find_id = $find_user['id'];
+                        $query2 = mysqli_query($connect, "SELECT `nickname`, `email`, `last_visit` FROM `members` WHERE `id` = $find_id");
+                        if (mysqli_num_rows($query2) > 0) {
+                            $user = mysqli_fetch_assoc($query2);
+                            $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5 minutes'))) ? $status = 'ONLINE' : $status = 'offline';
+                            echo("<a href='vendor/contactprofile.php?id=" . $find_id . "'>
+                                        <li class='justify-content-between align-items-center'>" . $user['nickname'] . " - " . $user['email'] .
+                                "</a>&nbsp;
+                                        <span class='badge bg-primary rounded-pill'>" . $status . "</span>
+                                        </li>"
+                            );
+                        }
                     }
                 }
             }

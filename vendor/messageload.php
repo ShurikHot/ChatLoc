@@ -7,7 +7,7 @@ ini_set('session.gc_probability', 1);
 ini_set('session.gc_divisor', 1);
 session_start();
 
-$result = mysqli_query($connect, "SELECT COUNT(*) as total FROM `messages`");
+$result = mysqli_query($connect, "SELECT COUNT(`id`) as total FROM `messages`");
 $row = mysqli_fetch_assoc($result);
 $total_records = $row['total'];
 $total_records > 50 ? $start = $total_records - 50 : $start = $total_records;
@@ -17,7 +17,7 @@ $query = mysqli_query($connect,"SELECT * FROM `messages` LIMIT $start, $total_re
 if (mysqli_num_rows($query)>0) {
     while ($messagearr = mysqli_fetch_assoc($query)) {
         $mes_userid = $messagearr['user_id'];
-        $query_user = mysqli_query($connect, "SELECT * FROM `members` WHERE `id` = $mes_userid");
+        $query_user = mysqli_query($connect, "SELECT `id`, `nickname`, `avatar` FROM `members` WHERE `id` = $mes_userid");
         $name = mysqli_fetch_assoc($query_user);
         if (isset($name)) :
             ?>
