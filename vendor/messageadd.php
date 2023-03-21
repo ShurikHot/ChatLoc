@@ -10,7 +10,8 @@ session_start();
 if (isset($_POST['message']) && $_POST['message'] != '') {
     $message = trim(htmlspecialchars($_POST['message']));
     $userid = $_SESSION['user']['id'];
-    $query = mysqli_query($connect,"INSERT INTO `messages`(`user_id`, `message`) VALUES ('$userid','$message')");
+    $chat_id = $_POST['chat_id'];
+    $query = mysqli_query($connect,"INSERT INTO `messages`(`user_id`, `message`, `chat_id`) VALUES ('$userid','$message', '$chat_id')");
 }
 
 if (isset($_POST['personal_message']) && $_POST['personal_message'] != '') {

@@ -50,7 +50,7 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="../chatpage.php" class="nav-link">Go to <b>ChatLoc</b></a>
+        <a href="../chatlist.php" class="nav-link">Go to <b>ChatList</b></a>
       </li>
 
       <li class="nav-item d-none d-sm-inline-block">

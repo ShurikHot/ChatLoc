@@ -54,6 +54,13 @@
     border-color: #0f5132;
     border: solid 1px;
     overflow-y: scroll;
+    vertical-align: top;
+}
+
+.members_online {
+    width: 25%;
+    height: 500px;
+    border: solid black 1px;
 }
 
 .mes_left {

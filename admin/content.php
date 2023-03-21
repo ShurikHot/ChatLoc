@@ -3,8 +3,9 @@ require_once '../vendor/db.php';
 
 $records_per_page = 10;
 $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
+$_SESSION['user']['page_get'] = $current_page;
 $start = ($current_page - 1) * $records_per_page;
-$users = mysqli_query($connect, "SELECT `id`, `name`, `nickname`, `email`, `avatar`, `blocked` FROM `members` WHERE `blocked` = 1 LIMIT $start, $records_per_page");
+$users = mysqli_query($connect, "SELECT `id`, `name`, `nickname`, `email`, `avatar`, `blocked` FROM `members` LIMIT $start, $records_per_page");
 ?>
 
 <?php if (mysqli_num_rows($users)>0): ?>
@@ -52,7 +53,7 @@ $users = mysqli_query($connect, "SELECT `id`, `name`, `nickname`, `email`, `avat
         </tbody>
     </table>
 <?php
-    $result = mysqli_query($connect, "SELECT COUNT(`id`) as total FROM `members` WHERE `blocked` = 1");
+    $result = mysqli_query($connect, "SELECT COUNT(`id`) as total FROM `members`");
     $row = mysqli_fetch_assoc($result);
     $total_records = $row['total'];
     $total_pages = ceil($total_records / $records_per_page);
@@ -103,5 +104,5 @@ $users = mysqli_query($connect, "SELECT `id`, `name`, `nickname`, `email`, `avat
 ?>
 
 <?php else: ?>
-    <p>Blocked members not found...</p>
+    <p>Members not found...</p>
 <?php endif; ?>

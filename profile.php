@@ -43,7 +43,7 @@
     <ul class="nav justify-content-center">
         <li class="nav-item">
             <?php if (isset($_SESSION['user']['blocked']) && !$_SESSION['user']['blocked']): ?>
-                <a class="btn btn-info" aria-current="page" href="chatpage.php">Go to <b>Chat.Loc</b></a>
+                <a class="btn btn-info" aria-current="page" href="chatlist.php">Go to <b>Chat List</b></a>
             <?php elseif (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']): ?>
                 <a class="btn btn-warning" aria-current="page"href=""><b>!!Your account is blocked!!</b></a>
             <?php endif; ?>
@@ -220,12 +220,14 @@
                         if (mysqli_num_rows($query2) > 0) {
                             $user = mysqli_fetch_assoc($query2);
                             $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5 minutes'))) ? $status = 'ONLINE' : $status = 'offline';
-                            echo("<a href='vendor/contactprofile.php?id=" . $find_id . "'>
+                            if ($find_id != $_SESSION['user']['id']) {
+                                echo("<a href='vendor/contactprofile.php?id=" . $find_id . "'>
                                         <li class='justify-content-between align-items-center'>" . $user['nickname'] . " - " . $user['email'] .
-                                "</a>&nbsp;
+                                    "</a>&nbsp;
                                         <span class='badge bg-primary rounded-pill'>" . $status . "</span>
                                         </li>"
-                            );
+                                );
+                            }
                         }
                     }
                 }

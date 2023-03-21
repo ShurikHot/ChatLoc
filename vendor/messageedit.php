@@ -23,4 +23,5 @@ if (isset($_GET['id']) & is_numeric($_GET['id'])) {
         $_SESSION['user']['mess_for_edit'] = $message['message'];
     }
 }
-header('Location: /chatpage.php');
+
+header('Location: /chatpage.php?chat_id=' . $_GET['chat_id']);

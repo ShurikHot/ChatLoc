@@ -40,7 +40,7 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
 <ul class="nav justify-content-center">
     <li class="nav-item">
         <?php if (isset($_SESSION['user']['blocked']) && !$_SESSION['user']['blocked']): ?>
-            <a class="btn btn-info" aria-current="page" href="../chatpage.php">Go to <b>Chat.Loc</b></a>
+            <a class="btn btn-info" aria-current="page" href="../chatlist.php">Go to <b>Chat List</b></a>
         <?php elseif (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']): ?>
             <a class="btn btn-warning" aria-current="page"href=""><b>!!Your account is blocked!!</b></a>
         <?php endif; ?>

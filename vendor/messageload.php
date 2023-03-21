@@ -7,12 +7,17 @@ ini_set('session.gc_probability', 1);
 ini_set('session.gc_divisor', 1);
 session_start();
 
-$result = mysqli_query($connect, "SELECT COUNT(`id`) as total FROM `messages`");
+$chat_id = $_POST['chat_id'];
+
+$result = mysqli_query($connect, "SELECT COUNT(`id`) as total FROM `messages` WHERE `chat_id` = $chat_id");
 $row = mysqli_fetch_assoc($result);
 $total_records = $row['total'];
-$total_records > 50 ? $start = $total_records - 50 : $start = $total_records;
-
-$query = mysqli_query($connect,"SELECT * FROM `messages` LIMIT $start, $total_records");
+if ($total_records > 50) {
+    $start = $total_records - 50;
+    $query = mysqli_query($connect,"SELECT * FROM `messages` WHERE `chat_id` = $chat_id LIMIT $start, $total_records");
+} else {
+    $query = mysqli_query($connect,"SELECT * FROM `messages` WHERE `chat_id` = $chat_id");
+}
 
 if (mysqli_num_rows($query)>0) {
     while ($messagearr = mysqli_fetch_assoc($query)) {
@@ -27,11 +32,14 @@ if (mysqli_num_rows($query)>0) {
                     <p>
                         <?php
                             echo "User ";
-                            if ($_SESSION['user']['id']== '1') {
-                                echo("<a href='vendor/admin/admin_member_edit.php?id=" . $name['id'] . "'>" . $name['nickname'] . "</a>" . " says: " . $messagearr['message']);
+                            if ($mes_userid == $_SESSION['user']['id']) {
+                                echo ("<a href='../profile.php' target='_blank'>");
+                            } elseif ($_SESSION['user']['id']== '1') {
+                                echo("<a href='vendor/admin/admin_member_edit.php?id=" . $name['id'] . "' target='_blank'>");
                             } else {
-                                echo ("<a href='vendor/contactprofile.php?id=" . $name['id'] . "'>" . $name['nickname'] . "</a>" . " says: " . $messagearr['message']);
+                                echo("<a href='vendor/contactprofile.php?id=" . $name['id'] . "' target='_blank'>");
                             }
+                            echo($name['nickname'] . "</a>" . " says: " . $messagearr['message']);
                         ?>
                     </p>
                 </div>
@@ -39,10 +47,10 @@ if (mysqli_num_rows($query)>0) {
                     if($_SESSION['user']['id']==$mes_userid || $_SESSION['user']['id']== '1') :
                 ?>
                     <div class="mes_right">
-                        <a href="../vendor/messagedelete.php?id=<?= $messagearr['id'] ?>">
+                        <a href="../vendor/messagedelete.php?id=<?= $messagearr['id'] ?>&chat_id=<?= $chat_id ?>">
                             <img src="../assets/delete_icon.png" alt="" class="mess_icon">
                         </a>
-                        <a href="../vendor/messageedit.php?id=<?= $messagearr['id'] ?>">
+                        <a href="../vendor/messageedit.php?id=<?= $messagearr['id'] ?>&chat_id=<?= $chat_id ?>">
                             <img src="../assets/edit_icon.png" alt="" class="mess_icon">
                         </a>
                     </div>
