@@ -4,7 +4,7 @@ require_once '../vendor/db.php';
 $records_per_page = 10;
 $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
 $start = ($current_page - 1) * $records_per_page;
-$chats = mysqli_query($connect, "SELECT * FROM `chats` WHERE `approved` = 1 LIMIT $start, $records_per_page");
+$chats = mysqli_query($connect, "SELECT * FROM `chats` WHERE `approved` = 0 LIMIT $start, $records_per_page");
 ?>
 
 <?php if (mysqli_num_rows($chats)>0): ?>
@@ -14,6 +14,7 @@ $chats = mysqli_query($connect, "SELECT * FROM `chats` WHERE `approved` = 1 LIMI
             <th>ID</th>
             <th>Chat name</th>
             <th>Author</th>
+            <th width="50"><i class="fas fa-lock"></i></th>
             <th width="50"><i class="fas fa-times"></i></th>
         </tr>
         </thead>
@@ -30,8 +31,12 @@ $chats = mysqli_query($connect, "SELECT * FROM `chats` WHERE `approved` = 1 LIMI
                     <a class="" href="../../vendor/admin/admin_member_edit.php?id=<?= $author['id'] ?>"> <?= $author['nickname'] ?></a>
                 </td>
                 <td>
+                    <a class="btn btn-warning btn-sm" href="../vendor/admin/admin_chats.php?approved_id=<?= $chat['id'] ?>">
+                    <i class="fas fa-lock"></i></a>
+                </td>
+                <td>
                     <a class="btn btn-sm" href="../vendor/admin/admin_chats.php?delid=<?= $chat['id'] ?>">
-                        <i class="fas fa-times"></i></a>
+                    <i class="fas fa-times"></i></a>
                 </td>
             </tr>
         <?php endforeach; ?>
@@ -40,7 +45,7 @@ $chats = mysqli_query($connect, "SELECT * FROM `chats` WHERE `approved` = 1 LIMI
     <?php
 
 
-    $result = mysqli_query($connect, "SELECT COUNT(`id`) as total FROM `chats` WHERE `approved` = 1");
+    $result = mysqli_query($connect, "SELECT COUNT(`id`) as total FROM `chats` WHERE `approved` = 0");
     $row = mysqli_fetch_assoc($result);
     $total_records = $row['total'];
     $total_pages = ceil($total_records / $records_per_page);
@@ -91,5 +96,5 @@ $chats = mysqli_query($connect, "SELECT * FROM `chats` WHERE `approved` = 1 LIMI
     ?>
 
 <?php else: ?>
-    <p>No chats yet...</p>
+    <p>No chats for approve...</p>
 <?php endif; ?>

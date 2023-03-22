@@ -21,6 +21,13 @@
             "avatar" => $user['avatar'],
             "blocked" => $user['blocked'],
         ];
+
+        $lang_page = $_SESSION['user']['language'];
+        $lang_path = "lang/$lang_page.php";
+        if (file_exists($lang_path)) {
+            $_SESSION['user']['lang_text'] = include($lang_path);
+        }
+
         $user['email'] === 'admin@admin.com' ? header('Location: ../admin/index.php') : header('Location: ../profile.php');
     } else {
         $_SESSION['message'] = '<h6 align="center">Incorrect username or password</h6>';

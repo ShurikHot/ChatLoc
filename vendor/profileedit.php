@@ -18,4 +18,9 @@ if (isset($_POST['actual_nickname'])) {
     $_SESSION['user']['actual_nickname'] = $_POST['actual_nickname'];
     unset($_SESSION['user']['edit_nickname']);
 }
+if (isset($_POST['lang'])) {
+    $new_lang = $_POST['lang'];
+    mysqli_query($connect,"UPDATE `members` SET `language`= '$new_lang' WHERE `id` = $userid");
+    $_SESSION['user']['language'] = $_POST['lang'];
+}
 header('Location: /profile.php');

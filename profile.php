@@ -43,7 +43,7 @@
     <ul class="nav justify-content-center">
         <li class="nav-item">
             <?php if (isset($_SESSION['user']['blocked']) && !$_SESSION['user']['blocked']): ?>
-                <a class="btn btn-info" aria-current="page" href="chatlist.php">Go to <b>Chat List</b></a>
+                <a class="btn btn-info" aria-current="page" href="chatlist.php"><?= $_SESSION['user']['lang_text']['go_to_chatlist'] ?></a>
             <?php elseif (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']): ?>
                 <a class="btn btn-warning" aria-current="page"href=""><b>!!Your account is blocked!!</b></a>
             <?php endif; ?>
@@ -58,7 +58,7 @@
         </li>
     </ul>
 
-    <h1 align="center" class="">Your ChatLoc Profile</h1>
+    <h1 align="center" class=""><?= $_SESSION['user']['lang_text']['your_chatloc_profile'] ?></h1>
     <?php
         if(isset($_SESSION['user']['avatar'])) :
     ?>
@@ -194,6 +194,19 @@
     </form>
 
     <h6>Your E-mail adress: <?= $_SESSION['user']['email'] ?></h6>
+    <h6>Your language: <b><?= strtoupper($_SESSION['user']['language']) ?></b> <a href="profile.php?lang"><i>Change?</i></a></h6>
+
+    <form action="vendor/profileedit.php" method="post" <?php if(!isset($_GET['lang'])) echo "hidden";?> >
+        <select name="lang" id="lang">
+            <?php
+                $langs = mysqli_query($connect, "SELECT DISTINCT `language` FROM `members`");
+                while ($lang = mysqli_fetch_assoc($langs)) : ?>
+                    <option value="<?= $lang['language'] ?>" <?php if (($lang['language']) == $_SESSION['user']['language']) echo "selected"?>> <?= $lang['language'] ?> </option>
+                }
+            <?php endwhile; ?>
+        </select>
+        <button type="submit" class="btn btn-primary">Change</button>
+    </form>
 
     <?php
         require_once ('vendor/contacts.php')
