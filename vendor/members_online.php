@@ -9,7 +9,7 @@ session_start();
 
 $chat_id = $_POST['chat_id'];
 
-echo ('<div align="center"><b>Online Users</b></div>');
+echo ('<div align="center"><b>' . $_SESSION['user']['lang_text']['online_users'] . '</b></div>');
 echo ('<ul class="" style="list-style-type: none;">');
 $query_id = mysqli_query($connect, "SELECT DISTINCT `user_id` FROM `messages` WHERE `chat_id` = $chat_id");
 if (mysqli_num_rows($query_id)>0) {

@@ -31,7 +31,7 @@ if (mysqli_num_rows($query)>0) {
                 <div class="mes_left">
                     <p>
                         <?php
-                            echo "User ";
+                            echo $_SESSION['user']['lang_text']['user'];
                             if ($mes_userid == $_SESSION['user']['id']) {
                                 echo ("<a href='../profile.php' target='_blank'>");
                             } elseif ($_SESSION['user']['id']== '1') {
@@ -39,7 +39,7 @@ if (mysqli_num_rows($query)>0) {
                             } else {
                                 echo("<a href='vendor/contactprofile.php?id=" . $name['id'] . "' target='_blank'>");
                             }
-                            echo($name['nickname'] . "</a>" . " says: " . $messagearr['message']);
+                            echo($name['nickname'] . "</a>" . $_SESSION['user']['lang_text']['says'] . $messagearr['message']);
                         ?>
                     </p>
                 </div>

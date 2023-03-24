@@ -27,7 +27,7 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= $user['nickname'] ?> | Contact Profile</title>
+    <title><?= $user['nickname'] ?> | <?= $_SESSION['user']['lang_text']['contact_profile'] ?></title>
     <link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/css/chatpage.css" rel="stylesheet">
     <script src="../assets/js/jquery3.6.3.min.js"></script>
@@ -40,25 +40,25 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
 <ul class="nav justify-content-center">
     <li class="nav-item">
         <?php if (isset($_SESSION['user']['blocked']) && !$_SESSION['user']['blocked']): ?>
-            <a class="btn btn-info" aria-current="page" href="../chatlist.php">Go to <b>Chat List</b></a>
+            <a class="btn btn-info" aria-current="page" href="../chatlist.php"><?= $_SESSION['user']['lang_text']['go_to_chatlist'] ?></a>
         <?php elseif (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']): ?>
-            <a class="btn btn-warning" aria-current="page"href=""><b>!!Your account is blocked!!</b></a>
+            <a class="btn btn-warning" aria-current="page"href=""><b><?= $_SESSION['user']['lang_text']['your_account_blocked'] ?></b></a>
         <?php endif; ?>
     </li>
     <li class="nav-item">
-        <a class="btn btn-primary" href="../profile.php">Go to your&nbsp;<b>Profile</b></a>
+        <a class="btn btn-primary" href="../profile.php"><?= $_SESSION['user']['lang_text']['go_to_profile'] ?></a>
     </li>
     <?php if (isset($_SESSION['user']['email']) && $_SESSION['user']['email'] === 'admin@admin.com'): ?>
         <li class="nav-item">
-            <a class="btn btn-success" href="../admin/index.php">Admin Area</a>
+            <a class="btn btn-success" href="../admin/index.php"><?= $_SESSION['user']['lang_text']['admin_area'] ?></a>
         </li>
     <?php endif; ?>
     <li class="nav-item">
-        <a class="btn btn-danger" href="../vendor/logout.php">Logout</a>
+        <a class="btn btn-danger" href="../vendor/logout.php"><?= $_SESSION['user']['lang_text']['logout'] ?></a>
     </li>
 </ul>
 
-<h1 align="center" class=""><?= $user['nickname'] ?> | Contact Profile</h1>
+<h1 align="center" class=""><?= $user['nickname'] ?> | <?= $_SESSION['user']['lang_text']['contact_profile'] ?></h1>
 <?php
     if(isset($user['avatar'])) : ?>
     <img src="<?= $user['avatar'] ?>" alt="" style="display: inline">
@@ -73,10 +73,10 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
 
 <script src="../assets/js/bootstrap.min.js"></script>
 
-<h6>Nickname: <b> <?= $user['nickname']?> </b> <span class='badge bg-primary rounded-pill'> <?= $status ?></span> </h6>
+<h6><?= $_SESSION['user']['lang_text']['nickname'] ?><b> <?= $user['nickname']?> </b> <span class='badge bg-primary rounded-pill'> <?= $status ?></span> </h6>
 
 
-<h6>E-mail adress: <?= $user['email'] ?></h6>
+<h6><?= $_SESSION['user']['lang_text']['email'] ?><?= $user['email'] ?></h6>
 
 <?php
     $user_id = $_SESSION['user']['id'];
@@ -84,11 +84,11 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
     $query = mysqli_query($connect,"SELECT `id` FROM `contacts` WHERE `user_id` = $user_id AND `contact_id` = $contact_id");
     if (mysqli_num_rows($query) > 0) :
 ?>
-    This user is already in your <b>Contact List</b> <a href="contactadd.php?delid=<?= $user['id'] ?>">Delete it?</a>
+        <?= $_SESSION['user']['lang_text']['user_already'] ?> <a href="contactadd.php?delid=<?= $user['id'] ?>"><?= $_SESSION['user']['lang_text']['delete_it'] ?></a>
     <br><br>
     <form method="post" id="sendmess" onsubmit="return false">
-        <textarea class="" type="text" name="personal_message" id="personal_message" placeholder="Enter your message..." rows="1"></textarea>
-        <button type="submit" class="btn btn-primary">Send</button>
+        <textarea class="" type="text" name="personal_message" id="personal_message" placeholder="<?= $_SESSION['user']['lang_text']['enter_message'] ?>" rows="1"></textarea>
+        <button type="submit" class="btn btn-primary"><?= $_SESSION['user']['lang_text']['send'] ?></button>
     </form>
 
     <div class="wrap" id="wrap" style="height: 300px; width: 600px; display: inline-block">
@@ -97,11 +97,11 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
 <?php
     else :
 ?>
-    <a href="contactadd.php?id=<?= $user['id'] ?>">Add this user to your <b>Contact List</b></a>
+    <a href="contactadd.php?id=<?= $user['id'] ?>"><?= $_SESSION['user']['lang_text']['add_contact'] ?></a>
     <br><br>
     <form method="post" id="sendmess">
-        <textarea class="enter_mess" type="text" name="" id="" placeholder="Enter your message... (User must be in your Contact List)" rows="1" disabled></textarea>
-        <button type="submit" disabled>Send</button>
+        <textarea class="enter_mess" type="text" name="" id="" placeholder="<?= $_SESSION['user']['lang_text']['enter_message_must'] ?>" rows="1" disabled></textarea>
+        <button type="submit" disabled><?= $_SESSION['user']['lang_text']['send'] ?></button>
     </form>
 <?php
     endif;

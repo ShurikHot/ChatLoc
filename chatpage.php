@@ -31,7 +31,7 @@ if (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']){
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ChatLoc</title>
+    <title><?= $_SESSION['user']['lang_text']['chatloc'] ?></title>
 
     <link href="/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/assets/css/chatpage.css" rel="stylesheet">
@@ -49,26 +49,26 @@ if (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']){
 <ul class="nav justify-content-center">
     <li class="nav-item">
         <?php if (isset($_SESSION['user']['blocked']) && !$_SESSION['user']['blocked']): ?>
-            <a class="btn btn-info" aria-current="page" href="chatlist.php">Go to <b>Chat List</b></a>
+            <a class="btn btn-info" aria-current="page" href="chatlist.php"><?= $_SESSION['user']['lang_text']['go_to_chatlist'] ?></a>
         <?php elseif (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']): ?>
-            <a class="btn btn-warning" aria-current="page"href=""><b>!!Your account is blocked!!</b></a>
+            <a class="btn btn-warning" aria-current="page"href=""><b><?= $_SESSION['user']['lang_text']['your_account_blocked'] ?></b></a>
         <?php endif; ?>
     </li>
     <li class="nav-item">
-        <a class="btn btn-primary" href="profile.php">Go to your&nbsp;<b>Profile</b></a>
+        <a class="btn btn-primary" href="profile.php"><?= $_SESSION['user']['lang_text']['go_to_profile'] ?></a>
     </li>
     <?php if (isset($_SESSION['user']['email']) && $_SESSION['user']['email'] === 'admin@admin.com'): ?>
         <li class="nav-item">
-            <a class="btn btn-success" href="admin/index.php">Admin Area</a>
+            <a class="btn btn-success" href="admin/index.php"><?= $_SESSION['user']['lang_text']['admin_area'] ?></a>
         </li>
     <?php endif; ?>
     <li class="nav-item">
-        <a class="btn btn-danger" href="vendor/logout.php">Logout</a>
+        <a class="btn btn-danger" href="vendor/logout.php"><?= $_SESSION['user']['lang_text']['logout'] ?></a>
     </li>
 </ul>
 
 
-<h1 align="center">ChatLoc Page</h1>
+<h1 align="center"><?= $_SESSION['user']['lang_text']['chatloc_page'] ?></h1>
 <h2 align="center"><?= $chat_name ?></h2>
 <div>
     <div class="wrap" id="wrap" style="display: inline-block;">
@@ -77,11 +77,12 @@ if (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']){
     <div class="members_online" id="members_online" style="display: inline-block; vertical-align: top;">
         <!-- MEMBERS ONLINE -->
     </div>
+
 </div>
 <br>
 <form method="post" id="sendmess" onsubmit="return false">
-    <textarea class="enter_mess" type="text" name="message" id="message" placeholder="Enter your message..." rows="1"></textarea>
-    <button type="submit" class="btn btn-primary">Send</button>
+    <textarea class="enter_mess" type="text" name="message" id="message" placeholder="<?= $_SESSION['user']['lang_text']['enter_message'] ?>" rows="1"></textarea>
+    <button type="submit" class="btn btn-primary"><?= $_SESSION['user']['lang_text']['send'] ?></button>
     <br><br>
 </form>
 <?php
@@ -89,8 +90,8 @@ if (key_exists('is_edit', $_SESSION['user'])) :
     ?>
     <form method="post" action="vendor/messageedit.php?chat_id=<?= $chat_id_get ?>">
         <textarea class="enter_mess" name="new_message" rows="1"><?= $_SESSION['user']['mess_for_edit'] ?></textarea>
-        <button type="edit" class="btn btn-success">Edit</button>
-        <button type="cancel" class="btn btn-secondary">Cancel</button>
+        <button type="edit" class="btn btn-success"><?= $_SESSION['user']['edit'] ?></button>
+        <button type="cancel" class="btn btn-secondary"><?= $_SESSION['user']['cancel'] ?></button>
     </form>
     <?php
     unset($_SESSION['user']['is_edit']);

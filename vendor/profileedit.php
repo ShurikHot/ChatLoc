@@ -22,5 +22,6 @@ if (isset($_POST['lang'])) {
     $new_lang = $_POST['lang'];
     mysqli_query($connect,"UPDATE `members` SET `language`= '$new_lang' WHERE `id` = $userid");
     $_SESSION['user']['language'] = $_POST['lang'];
+    $_SESSION['message'] = '<h6 align="center">' . $_SESSION['user']['lang_text']['change_language'] . '</h6>';
 }
 header('Location: /profile.php');

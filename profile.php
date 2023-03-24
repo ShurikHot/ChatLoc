@@ -20,7 +20,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Your ChatLoc Profile</title>
+    <title><?= $_SESSION['user']['lang_text']['your_chatloc_profile'] ?></title>
     <link href="/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
         img {
@@ -45,16 +45,16 @@
             <?php if (isset($_SESSION['user']['blocked']) && !$_SESSION['user']['blocked']): ?>
                 <a class="btn btn-info" aria-current="page" href="chatlist.php"><?= $_SESSION['user']['lang_text']['go_to_chatlist'] ?></a>
             <?php elseif (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']): ?>
-                <a class="btn btn-warning" aria-current="page"href=""><b>!!Your account is blocked!!</b></a>
+                <a class="btn btn-warning" aria-current="page"href=""><b><?= $_SESSION['user']['lang_text']['your_account_blocked'] ?></b></a>
             <?php endif; ?>
         </li>
         <?php if (isset($_SESSION['user']['email']) && $_SESSION['user']['email'] === 'admin@admin.com'): ?>
         <li class="nav-item">
-            <a class="btn btn-success" href="admin/index.php">Admin Area</a>
+            <a class="btn btn-success" href="admin/index.php"><?= $_SESSION['user']['lang_text']['admin_area']?></a>
         </li>
         <?php endif; ?>
         <li class="nav-item">
-            <a class="btn btn-danger" href="vendor/logout.php">Logout</a>
+            <a class="btn btn-danger" href="vendor/logout.php"><?= $_SESSION['user']['lang_text']['logout']?></a>
         </li>
     </ul>
 
@@ -72,7 +72,7 @@
     ?>
     <br><br>
             <div class="container">
-                <h6><?= isset($_SESSION['user']['avatar']) ? "Change Avatar: " : "Add Avatar: " ?></h6>
+                <h6><?= isset($_SESSION['user']['avatar']) ? $_SESSION['user']['lang_text']['change_avatar'] : $_SESSION['user']['lang_text']['add_avatar']?></h6>
                 <form method="post">
                     <input type="file" name="image" class="image">
                 </form>
@@ -82,7 +82,7 @@
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalLabel">Crop Avatar</h5>
+                            <h5 class="modal-title" id="modalLabel"><?= $_SESSION['user']['lang_text']['crop_avatar'] ?></h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span>
                             </button>
@@ -100,8 +100,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-primary" id="crop">Crop</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= $_SESSION['user']['lang_text']['cancel'] ?></button>
+                            <button type="button" class="btn btn-primary" id="crop"><?= $_SESSION['user']['lang_text']['crop'] ?></button>
                         </div>
                     </div>
                 </div>
@@ -176,7 +176,7 @@
     <br>
 
     <form action="vendor/profileedit.php" method="post">
-        <h6>Your Nickname: <b>
+        <h6><?= $_SESSION['user']['lang_text']['your_nickname'] ?><b>
 
             <?php
                 if (isset($_SESSION['user']['edit_nickname'])) : ?>
@@ -190,11 +190,21 @@
                         echo($_SESSION['user']['nickname']); }
             endif; ?>
 
-            </b>&nbsp;<input type="submit" name="edit_nickname" value="Click to Change"></h6>
+            </b>&nbsp;<input type="submit" name="edit_nickname" value="<?= $_SESSION['user']['lang_text']['click_change'] ?>"></h6>
     </form>
 
-    <h6>Your E-mail adress: <?= $_SESSION['user']['email'] ?></h6>
-    <h6>Your language: <b><?= strtoupper($_SESSION['user']['language']) ?></b> <a href="profile.php?lang"><i>Change?</i></a></h6>
+    <h6><?= $_SESSION['user']['lang_text']['your_email'] ?><?= $_SESSION['user']['email'] ?></h6>
+    <h6><?= $_SESSION['user']['lang_text']['your_language'] ?><b><?= strtoupper($_SESSION['user']['language']) ?></b> <a href="profile.php?lang"><i>
+                <?= $_SESSION['user']['lang_text']['change_q'] ?></i></a></h6>
+
+    <p align="center">
+        <?php
+        if (isset($_SESSION['message'])) {
+            echo $_SESSION['message'];
+            unset($_SESSION['message']);
+        }
+        ?>
+    </p>
 
     <form action="vendor/profileedit.php" method="post" <?php if(!isset($_GET['lang'])) echo "hidden";?> >
         <select name="lang" id="lang">
@@ -205,8 +215,10 @@
                 }
             <?php endwhile; ?>
         </select>
-        <button type="submit" class="btn btn-primary">Change</button>
+        <button type="submit" class="btn btn-primary"><?= $_SESSION['user']['lang_text']['change'] ?></button>
     </form>
+
+
 
     <?php
         require_once ('vendor/contacts.php')
@@ -214,8 +226,8 @@
 
     <br>
     <form method="post" id="find" action="#">
-        <textarea class="" style="width: 448px;" type="text" name="find_member" id="find_member" placeholder="Do you want find somebody? Enter part of nickname or email" rows="1"></textarea>
-        <button type="submit" class="btn btn-primary">Find</button>
+        <textarea class="" style="width: 448px;" type="text" name="find_member" id="find_member" placeholder="<?= $_SESSION['user']['lang_text']['find_somebody'] ?>" rows="1"></textarea>
+        <button type="submit" class="btn btn-primary"><?= $_SESSION['user']['lang_text']['find'] ?></button>
     </form>
 
     <ul class="list-group" style="list-style-type: none;">

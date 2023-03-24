@@ -4,7 +4,7 @@ require_once 'db.php';
 
 <br>
 <h4>
-    <b>My Contacts</b>
+    <b><?= $_SESSION['user']['lang_text']['my_contacts'] ?></b>
 </h4>
 <ul class="list-group" style="list-style-type: none;">
     <div style="border: #0a0e14 solid 1px; width: 500px; margin: auto">
