@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Мар 18 2023 г., 08:37
+-- Время создания: Мар 26 2023 г., 09:44
 -- Версия сервера: 10.1.48-MariaDB
 -- Версия PHP: 8.0.18
 
@@ -24,6 +24,33 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `chats`
+--
+
+CREATE TABLE `chats` (
+  `id` int(255) UNSIGNED NOT NULL,
+  `chat_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `author` int(100) UNSIGNED NOT NULL,
+  `approved` tinyint(100) UNSIGNED NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `chats`
+--
+
+INSERT INTO `chats` (`id`, `chat_name`, `author`, `approved`) VALUES
+(1, 'about cars', 1, 1),
+(2, 'who are you?', 1, 1),
+(3, 'test new chat', 1, 0),
+(4, 'test new chat2', 1, 0),
+(5, 'test new chat2', 1, 0),
+(6, 'test new chat3', 1, 1),
+(8, 'test new chat3', 19, 0),
+(9, 'test new chat4', 1, 0);
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `contacts`
 --
 
@@ -38,10 +65,13 @@ CREATE TABLE `contacts` (
 --
 
 INSERT INTO `contacts` (`id`, `user_id`, `contact_id`) VALUES
-(7, 19, 20),
 (8, 19, 1),
-(12, 1, 19),
-(13, 19, 427);
+(13, 19, 427),
+(15, 1, 487),
+(25, 1, 19),
+(34, 19, 20),
+(35, 20, 1),
+(36, 20, 19);
 
 -- --------------------------------------------------------
 
@@ -72,9 +102,9 @@ CREATE TABLE `members` (
 --
 
 INSERT INTO `members` (`id`, `email`, `name`, `nickname`, `password`, `blocked`, `phone_num`, `avatar`, `gender`, `country`, `language`, `specialization`, `comment`, `created_at`, `last_visit`) VALUES
-(1, 'admin@admin.com', 'Александр', 'sss', 'c4ca4238a0b923820dcc509a6f75849b', 0, '0977772713', '../uploads/avatar-uni.png	', 'female', '', 'ua', '', 'qq11', '2023-02-14 01:09:00', '2023-03-18 08:36:15'),
-(19, 'shurikhot2@gmail.com', 'Александр', 'Shurik22333', 'c4ca4238a0b923820dcc509a6f75849b', 1, '0977772713', '../uploads/6413490245abc.png', 'no_select', '', 'en', 'inf_technology,t_communication', '', '2023-02-15 01:31:00', '2023-03-18 08:11:41'),
-(20, '1@1.com', 'Основной Samsung', 'Shurik', 'c4ca4238a0b923820dcc509a6f75849b', 0, '+3809777', '../uploads/avatar-uni.png', 'no_select', 'ukr', 'en', 'c_science', 'sdfsdfsdfsdf', '2023-02-14 02:20:00', NULL),
+(1, 'admin@admin.com', 'Александр', 'sss', 'c4ca4238a0b923820dcc509a6f75849b', 0, '0977772713', '../uploads/avatar-uni.png', 'female', '', 'ua', '', 'qq11', '2023-02-14 01:09:00', '2023-03-24 21:43:06'),
+(19, 'shurikhot2@gmail.com', 'Александр', 'Shurik22333', 'c4ca4238a0b923820dcc509a6f75849b', 0, '0977772713', '../uploads/6413490245abc.png', 'no_select', '', 'en', 'inf_technology,t_communication', '', '2023-02-15 01:31:00', '2023-03-25 22:07:31'),
+(20, '1@1.com', 'Основной Samsung', 'Shurik', 'c4ca4238a0b923820dcc509a6f75849b', 0, '+3809777', '../uploads/avatar-uni.png', 'no_select', 'ukr', 'en', 'c_science', 'sdfsdfsdfsdf', '2023-02-14 02:20:00', '2023-03-26 09:08:03'),
 (96, 'Brown.Treutel@hotmail.com', 'Anabel Wisozk', 'Anastacio.Halvorson', '3a68fea9c32406d69b0e1c773ecfb834', 0, '2162181100', '../uploads/avatar-uni.png', 'female', 'United Arab Emirates', 'en', 'c_architecture', 'When the sands are all dry, he is gay as a boon,.', '2023-02-03 00:08:38', NULL),
 (97, 'Webster28@Kutch.com', 'Etha Smith', 'Germaine.Kihn', 'c5aa827b5999820752b7dd2558283d9d', 0, '6990985764', '../uploads/avatar-uni.png', 'male', 'Holy See (Vatican City State)', 'en', 'c_architecture', 'If she should meet the real Mary Ann, what ARE.', '2023-02-06 01:35:16', NULL),
 (98, 'Heaney.Danial@hotmail.com', 'Janick Franecki', 'Rau.Micheal', 'be44be789500d15e2b6a11a4c665b986', 0, '3170989378', '../uploads/avatar-uni.png', 'male', 'Korea', 'en', 'c_science', 'Alice herself, and once she remembered that she.', '2023-02-05 08:13:27', NULL),
@@ -1065,102 +1095,32 @@ INSERT INTO `members` (`id`, `email`, `name`, `nickname`, `password`, `blocked`,
 CREATE TABLE `messages` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
-  `message` text COLLATE utf8mb4_unicode_ci NOT NULL
+  `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `chat_id` int(255) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `messages`
 --
 
-INSERT INTO `messages` (`id`, `user_id`, `message`) VALUES
-(1, 19, '0'),
-(2, 19, '0'),
-(3, 19, 'hellio'),
-(4, 1, 'ghjgkhjkfhjkhjf'),
-(7, 19, 'vjgkfhjfghghjghj'),
-(8, 19, 'dgbdfgbdfgb'),
-(9, 19, 'fgbcvbvbhnf'),
-(13, 20, 'dfgdfdffgfg'),
-(15, 20, 'gdffgfghdfg gsdfgds g sfg fg dfgdg'),
-(16, 20, 'мисчмисмисми'),
-(17, 20, 'ывмывмымвывмывм'),
-(18, 20, 'приапрапиапр'),
-(19, 19, 'fvdfvd'),
-(22, 19, 'adsasdasd'),
-(25, 19, 'ghnghghng'),
-(26, 19, 'dcddfvdf'),
-(28, 19, 'adsasdasd'),
-(29, 19, 'adsasdasd'),
-(30, 19, 'ggghhhh'),
-(33, 19, 'adsasdasd'),
-(34, 19, 'sdcvsdc'),
-(35, 19, 'dfgdfgdfgdfs as afsfadefa eraerar'),
-(36, 19, 'dfgdfgdfgdfs as afsfadefa eraerar'),
-(37, 19, 'gmghnghnghjnghn'),
-(38, 19, 'fgpln,fplg,nlpffg f'),
-(39, 19, 'hnmghnmghmghmghm'),
-(41, 19, 'hjmhjmhjmhjm'),
-(42, 19, 'sdvsdv'),
-(43, 19, 'sdvsdv'),
-(44, 19, 'adsasdasd'),
-(45, 19, 'вуаиапиапьтзаьпт'),
-(46, 19, 'вуаиапиапьтзаьпт'),
-(47, 19, 'ваиваиваиваи'),
-(48, 19, 'пиапильльилтьаптаптапиимим'),
-(49, 19, 'апиапльаплзтьлзапппппппп'),
-(50, 19, 'button'),
-(51, 19, 'button'),
-(52, 19, 'fgnfgghng fh fgh fgh'),
-(53, 19, 'cbvfgbfghfgh'),
-(54, 19, 'cbvfgbfghfgh'),
-(55, 19, 'ртптпр'),
-(56, 19, 'апрарапр апрапрапр'),
-(57, 19, 'апрапрапр'),
-(58, 19, 'апапаптиа'),
-(59, 19, 'апапаптиа'),
-(60, 19, 'ghnghghng'),
-(61, 19, 'ывамвамвам'),
-(62, 19, 'хдбздбдзбздбдзбдзб'),
-(63, 19, 'здльзщльщльщль'),
-(64, 19, 'лшщощшощшощош'),
-(65, 19, 'щоаптщшоатпа'),
-(66, 19, ''),
-(67, 19, 'мваимваваиваи'),
-(68, 19, 'смиаптиапитап'),
-(69, 19, 'вижаьилдьап'),
-(70, 19, 'авапиапиапи'),
-(71, 19, 'смисисмисми'),
-(72, 19, 'мисисмисми'),
-(73, 19, 'смимситмитмиааааиииаи ваивапвап'),
-(74, 19, 'имвиаисми'),
-(75, 19, 'счмисмисми'),
-(76, 19, 'смисмитмитмит'),
-(77, 19, 'митмитмит'),
-(78, 19, 'тьбрьпрьмитми'),
-(79, 19, 'апижба птиждабпт'),
-(80, 19, 'таптэабптдбапт'),
-(81, 19, 'аптэаю птдзабдтаптаптапт'),
-(82, 19, 'аптдбаздпхтаптапва вапрвапрва'),
-(83, 19, 'апиазждпьбртзлаьптзаьпт'),
-(84, 19, 'митпрьп ро про'),
-(85, 19, 'пропропрпрть'),
-(86, 19, 'ваиварваиваи'),
-(89, 19, 'митмитмитмтим'),
-(90, 19, 'митпртмитмит'),
-(91, 19, 'митпртаитмит'),
-(93, 19, 'ть роброьроь'),
-(94, 19, 'прьпроьпрьпьdffffff'),
-(95, 19, 'апаптаптапппппп1111'),
-(98, 19, 'dcsdcsdcsdc222333erfrefrfhhhhhhfddddd'),
-(99, 19, '111222ddfdfdfd'),
-(101, 20, 'fghfghfgh'),
-(102, 20, 'fghfghfgh'),
-(103, 20, 'dfghfhfgh'),
-(104, 1, 'sdfsdfsdf'),
-(105, 1, 'sdfvddgd sd sdfsdf 22222222222222222222'),
-(106, 1, 'dfgdfdfvvd fdf dfgdfg'),
-(107, 1, '2222222'),
-(108, 1, '2222222');
+INSERT INTO `messages` (`id`, `user_id`, `message`, `chat_id`) VALUES
+(111, 19, 'dfgdfgdfg😈😬😓', 1),
+(112, 19, 'dfsfsdfsdf👨👣', 1),
+(113, 19, 'fefrsdfsdf👨‍💻👩‍💼', 1),
+(114, 19, 'sdfsvdsfvdfv', 2),
+(115, 19, 'xcvsdfvsdv', 2),
+(118, 19, 'dfvdfbdbdfgb', 2),
+(120, 19, 'cv bcvbcvb', 2),
+(121, 19, 'xcvxvxcvx', 1),
+(122, 1, 'fgnfgnfgnfgn', 1),
+(123, 1, 'fgnfgnfgnfgnfg', 1),
+(124, 1, 'nm hhjhjhjhjmcgh 😬👨', 1),
+(125, 1, 'nm hhjhjhjhjmcgh 😬👨', 1),
+(126, 1, 'ghmghmghm', 1),
+(127, 1, 'hj,hj,hjhj', 1),
+(128, 1, 'пррттр👩‍💼👣😈', 2),
+(129, 1, 'dvcdvdfv👨👨‍💻', 6),
+(130, 1, 'dvcdvdfv👨👨‍💻', 6);
 
 -- --------------------------------------------------------
 
@@ -1225,11 +1185,59 @@ INSERT INTO `personal_messages` (`id`, `from_id`, `to_id`, `message`, `unread`) 
 (42, 1, 19, '111222', 0),
 (43, 19, 1, '4444444', 0),
 (44, 19, 1, 'ggghhh', 0),
-(45, 19, 1, '777666', 0);
+(45, 19, 1, '777666', 0),
+(46, 19, 1, '44433221', 0),
+(47, 19, 1, 'ghghgh', 0),
+(48, 19, 1, 'hjjh', 0),
+(49, 19, 1, 'hhjhjhj😀', 0),
+(50, 19, 1, 'cvsvsdfv😂', 0),
+(51, 19, 1, 'fvdfvd😋', 0),
+(52, 19, 1, 'чсчсмчсм😂', 0),
+(53, 19, 1, '😍', 0),
+(54, 19, 1, '😋', 0),
+(55, 19, 1, '😍😋', 0),
+(56, 19, 1, '🙂', 0),
+(57, 19, 1, '😋', 0),
+(58, 19, 1, '😆', 0),
+(59, 19, 1, '😍😋', 0),
+(60, 19, 1, '😅😂', 0),
+(61, 19, 1, '🙂😀', 0),
+(62, 19, 1, '😆😁', 0),
+(63, 19, 1, '😃😄😁😆', 0),
+(64, 19, 1, 'ывмывывм😂ывмывмы😋', 0),
+(65, 19, 1, 'смымывм😂😂😀', 0),
+(66, 19, 1, '🐸', 0),
+(67, 19, 1, '⛳🏑🏒', 0),
+(68, 1, 19, '😃', 0),
+(69, 19, 1, 'fgnffgnfgn', 0),
+(70, 19, 1, 'xcv xcv cv', 0),
+(71, 19, 20, '1111111', 0),
+(72, 20, 19, 'User                     Shurik  wants to add you to contacts', 0),
+(73, 20, 19, 'User                     Shurik  wants to add you to contacts', 0),
+(74, 19, 20, 'User                     Shurik22333  added you to contacts', 0),
+(75, 19, 20, 'dfbdfdfgdfffgfd', 0),
+(76, 19, 20, 'thngthnghng', 0),
+(77, 20, 1, 'User Shurikadded you to contacts', 1),
+(78, 20, 19, 'User Shurikadded you to contacts', 0),
+(79, 20, 19, 'Join the chat ', 0),
+(80, 20, 19, 'Join the chat', 0),
+(81, 20, 19, 'Join the chat 2', 0),
+(82, 20, 19, 'Join the chat 2', 0),
+(83, 20, 19, 'Join the chat 2', 0),
+(84, 20, 19, 'Join the chat ', 0),
+(85, 19, 20, 'Join the chat ', 0),
+(86, 19, 20, 'Join the chat ', 0),
+(87, 19, 20, 'Join the chat <a href=\'/chatpage.php?chat_id=2\'>who are you?</a>', 0);
 
 --
 -- Индексы сохранённых таблиц
 --
+
+--
+-- Индексы таблицы `chats`
+--
+ALTER TABLE `chats`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Индексы таблицы `contacts`
@@ -1265,10 +1273,16 @@ ALTER TABLE `personal_messages`
 --
 
 --
+-- AUTO_INCREMENT для таблицы `chats`
+--
+ALTER TABLE `chats`
+  MODIFY `id` int(255) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT для таблицы `contacts`
 --
 ALTER TABLE `contacts`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT для таблицы `members`
@@ -1280,13 +1294,13 @@ ALTER TABLE `members`
 -- AUTO_INCREMENT для таблицы `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
 
 --
 -- AUTO_INCREMENT для таблицы `personal_messages`
 --
 ALTER TABLE `personal_messages`
-  MODIFY `id` int(255) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(255) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
