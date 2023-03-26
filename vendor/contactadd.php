@@ -7,9 +7,6 @@ ini_set('session.gc_probability', 1);
 ini_set('session.gc_divisor', 1);
 session_start();
 
-/*var_dump($_GET);
-die();*/
-
 if (isset($_GET['id']) & is_numeric($_GET['id'])) {
     $id = $_GET['id'];
     $user_id = $_SESSION['user']['id'];
@@ -17,6 +14,8 @@ if (isset($_GET['id']) & is_numeric($_GET['id'])) {
     $query2 = mysqli_query($connect,"SELECT `id` FROM `contacts` WHERE `user_id` = '$user_id' AND `contact_id` = '$id'");
     if (mysqli_num_rows($query) > 0 && mysqli_num_rows($query2) == 0) {
         $query_add = mysqli_query($connect,"INSERT INTO `contacts` (`user_id`, `contact_id`) VALUES ('$user_id', '$id')");
+        $mess = $_SESSION['user']['lang_text']['your_nickname'] . $_SESSION['user']['nickname'] . $_SESSION['user']['lang_text']['added_you'];
+        $approve_mess = mysqli_query($connect, "INSERT INTO `personal_messages` (`from_id`, `to_id`, `message`) VALUES ('$user_id', '$id', '$mess')");
     }
 }
 

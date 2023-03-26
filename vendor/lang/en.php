@@ -43,4 +43,8 @@ return [
     "says" => " says:  ",
     "online_users" => "Online Users",
     "change_language" => "The interface language has been changed. Changes will take effect after re-authorization",
+    "invite_contact" => "Do you want to invite your contact to this chat?",
+    "click_invite" => "Click on contact to invite it:",
+    "added_you" => " added you to contact list",
+    "join_chat" => "Join the chat",
 ];

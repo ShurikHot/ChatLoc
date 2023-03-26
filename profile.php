@@ -180,8 +180,7 @@
 
             <?php
                 if (isset($_SESSION['user']['edit_nickname'])) : ?>
-                    <input type="text" name="actual_nickname" value="
-                    <?= isset($_SESSION['user']['actual_nickname']) ? $_SESSION['user']['actual_nickname'] : $_SESSION['user']['nickname'] ?>  ">
+                    <input type="text" name="actual_nickname" value="<?= isset($_SESSION['user']['actual_nickname']) ? $_SESSION['user']['actual_nickname'] : $_SESSION['user']['nickname'] ?>">
             <?php
                 else :
                     if (isset($_SESSION['user']['actual_nickname'])) {
@@ -235,7 +234,7 @@
             <?php
             if (isset($_POST['find_member'])) {
                 $search_query = $_POST['find_member'];
-                $query = mysqli_query($connect, "SELECT `id` FROM `members` WHERE (`nickname` LIKE '%$search_query%') OR (`email` LIKE '%$search_query%')");
+                $query = mysqli_query($connect, "SELECT `id` FROM `members` WHERE (`nickname` LIKE '%$search_query%') OR (`email` LIKE '%$search_query%') AND `id` <> $id");
                 if (mysqli_num_rows($query) == 0) {
                     echo("No match found");
                 } else {

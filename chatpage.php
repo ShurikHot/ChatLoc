@@ -83,8 +83,41 @@ if (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']){
 <form method="post" id="sendmess" onsubmit="return false">
     <textarea class="enter_mess" type="text" name="message" id="message" placeholder="<?= $_SESSION['user']['lang_text']['enter_message'] ?>" rows="1"></textarea>
     <button type="submit" class="btn btn-primary"><?= $_SESSION['user']['lang_text']['send'] ?></button>
-    <br><br>
+    <br>
 </form>
+
+<h6><a href="chatpage.php?chat_id=<?= $chat_id_get ?>&invite">
+        <?php
+        if(!isset($_GET['invite'])) {
+            echo $_SESSION['user']['lang_text']['invite_contact'];
+        } else {
+            echo $_SESSION['user']['lang_text']['click_invite'];
+        }
+        ?>
+
+    </a></h6>
+<form action="#" method="post" <?php if(!isset($_GET['invite'])) echo "hidden";?> >
+    <ul class="" style="list-style-type: none;">
+    <?php
+        $contacts = mysqli_query($connect, "SELECT `contact_id` FROM `contacts` WHERE `user_id` = $id");
+        while($user = mysqli_fetch_assoc($contacts)) {
+            $contact_id = $user['contact_id'];
+            $query2 = mysqli_query($connect,"SELECT `last_visit`, `nickname` FROM `members` WHERE `id` = $contact_id");
+            if (mysqli_num_rows($query2) > 0) {
+                $contact = mysqli_fetch_assoc($query2);
+                $contact['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5 minutes'))) ? $status = 'ONLINE' : $status = 'offline';
+                echo ("<a href='vendor/contact_invite.php?invite_id=" . $contact_id . "&chat_id=" . $chat_id_get . "'> 
+                                    <li class='justify-content-between align-items-center'>" . $contact['nickname'] .
+                    "</a> 
+                     <span class='badge bg-primary rounded-pill'>" . $status . "</span>
+                                    </li>"
+                );
+            }
+        }
+    ?>
+    </ul>
+</form>
+
 <?php
 if (key_exists('is_edit', $_SESSION['user'])) :
     ?>
