@@ -69,7 +69,7 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
 <?php
     endif;
 ?>
-<br><br>
+<br>
 
 <script src="../assets/js/bootstrap.min.js"></script>
 
@@ -81,10 +81,16 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
 <?php
     $user_id = $_SESSION['user']['id'];
     $contact_id = $user['id'];
-    $query = mysqli_query($connect,"SELECT `id` FROM `contacts` WHERE `user_id` = $user_id AND `contact_id` = $contact_id");
+    $query = mysqli_query($connect,"SELECT `id`, `blocked` FROM `contacts` WHERE `user_id` = $user_id AND `contact_id` = $contact_id");
     if (mysqli_num_rows($query) > 0) :
+        $query_assoc = mysqli_fetch_assoc($query);
 ?>
         <?= $_SESSION['user']['lang_text']['user_already'] ?> <a href="contactadd.php?delid=<?= $user['id'] ?>"><?= $_SESSION['user']['lang_text']['delete_it'] ?></a>
+        <?php if ($query_assoc['blocked'] == 0): ?>
+            <a href="contactadd.php?blockid=<?= $user['id'] ?>" style="color: red">Or Block?</a>
+        <?php else: ?>
+            <a href="contactadd.php?deblockid=<?= $user['id'] ?>" style="color: red">Deblock?</a>
+        <?php endif; ?>
     <br><br>
     <form method="post" id="sendmess" onsubmit="return false">
         <textarea class="" type="text" name="personal_message" id="personal_message" placeholder="<?= $_SESSION['user']['lang_text']['enter_message'] ?>" rows="1"></textarea>

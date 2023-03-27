@@ -28,6 +28,26 @@ if (isset($_GET['delid']) & is_numeric($_GET['delid'])) {
     }
 }
 
+if (isset($_GET['blockid']) & is_numeric($_GET['blockid'])) {
+    $id = $_GET['blockid'];
+    $user_id = $_SESSION['user']['id'];
+    $query = mysqli_query($connect,"SELECT `id` FROM `contacts` WHERE `user_id` = '$user_id' AND `contact_id` = '$id'");
+    if (mysqli_num_rows($query) > 0) {
+        $query_upd = mysqli_query($connect,"UPDATE `contacts` SET `blocked` = 1 WHERE `user_id` = $user_id AND `contact_id` = $id");
+    } else {
+        $query_blk = mysqli_query($connect,"INSERT INTO `contacts` (`user_id`, `contact_id`, `blocked`) VALUES ('$user_id', '$id', 1)");
+    }
+}
+
+if (isset($_GET['deblockid']) & is_numeric($_GET['deblockid'])) {
+    $id = $_GET['deblockid'];
+    $user_id = $_SESSION['user']['id'];
+    $query = mysqli_query($connect,"SELECT `id` FROM `contacts` WHERE `user_id` = '$user_id' AND `contact_id` = '$id'");
+    if (mysqli_num_rows($query) > 0) {
+        $query_upd = mysqli_query($connect,"UPDATE `contacts` SET `blocked` = 0 WHERE `user_id` = $user_id AND `contact_id` = $id");
+    }
+}
+
 if (isset($_GET['admin'])) {
     header('Location: ../../admin/index.php?page=' . $_SESSION['user']['page_get']);
 } else {

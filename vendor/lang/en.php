@@ -19,7 +19,7 @@ return [
     "your_email" => "Your E-mail adress: ",
     "email" => "E-mail adress: ",
     "your_language" => "Your language: ",
-    "find_somebody" => "Do you want find somebody? Enter part of nickname or email",
+    "find_somebody" => "Do you want to find somebody? Enter part of the nickname or email",
     "change_q" => "Change?",
     "change" => "Change",
     "find" => "Find",

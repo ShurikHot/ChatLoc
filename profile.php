@@ -223,7 +223,36 @@
         require_once ('vendor/contacts.php')
     ?>
 
-    <br>
+    <?php if(!isset($_GET['black'])) : ?>
+        <a href="profile.php?black">Black list (Click to see)</a>
+    <?php else: ?>
+        Black list (Click on user to unblock)
+    <?php endif; ?>
+
+    <form action="#" method="post" <?php if(!isset($_GET['black'])) echo "hidden";?> >
+        <ul class="" style="list-style-type: none;">
+            <?php
+            $contacts_blk = mysqli_query($connect, "SELECT `contact_id` FROM `contacts` WHERE `user_id` = $id AND `blocked` = 1");
+            if (mysqli_num_rows($contacts_blk) > 0) {
+                while($user = mysqli_fetch_assoc($contacts_blk)) {
+                    $contact_id = $user['contact_id'];
+                    $query2 = mysqli_query($connect,"SELECT `nickname` FROM `members` WHERE `id` = $contact_id");
+                    if (mysqli_num_rows($query2) > 0) {
+                        $contact = mysqli_fetch_assoc($query2);
+                        echo ("<a href='vendor/contactadd.php?deblockid=" . $contact_id . "'>
+                                    <li class='justify-content-between align-items-center'>" . $contact['nickname'] .
+                            "</a><span class='badge bg-danger rounded-pill'> !Block!</span> " /*. $_SESSION['user']['lang_text']['added_you']*/ . " 
+                                    </li>"
+                        );
+                    }
+                }
+            } else {
+                echo ("No users in your blacklist");
+            }
+            ?>
+        </ul>
+    </form>
+
     <form method="post" id="find" action="#">
         <textarea class="" style="width: 448px;" type="text" name="find_member" id="find_member" placeholder="<?= $_SESSION['user']['lang_text']['find_somebody'] ?>" rows="1"></textarea>
         <button type="submit" class="btn btn-primary"><?= $_SESSION['user']['lang_text']['find'] ?></button>

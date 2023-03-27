@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Мар 26 2023 г., 09:44
+-- Время создания: Мар 27 2023 г., 18:22
 -- Версия сервера: 10.1.48-MariaDB
 -- Версия PHP: 8.0.18
 
@@ -57,21 +57,22 @@ INSERT INTO `chats` (`id`, `chat_name`, `author`, `approved`) VALUES
 CREATE TABLE `contacts` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
-  `contact_id` int(10) UNSIGNED NOT NULL
+  `contact_id` int(10) UNSIGNED NOT NULL,
+  `blocked` tinyint(100) UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `contacts`
 --
 
-INSERT INTO `contacts` (`id`, `user_id`, `contact_id`) VALUES
-(8, 19, 1),
-(13, 19, 427),
-(15, 1, 487),
-(25, 1, 19),
-(34, 19, 20),
-(35, 20, 1),
-(36, 20, 19);
+INSERT INTO `contacts` (`id`, `user_id`, `contact_id`, `blocked`) VALUES
+(8, 19, 1, 0),
+(13, 19, 427, 0),
+(15, 1, 487, 0),
+(25, 1, 19, 0),
+(34, 19, 20, 1),
+(35, 20, 1, 0),
+(36, 20, 19, 0);
 
 -- --------------------------------------------------------
 
@@ -103,8 +104,8 @@ CREATE TABLE `members` (
 
 INSERT INTO `members` (`id`, `email`, `name`, `nickname`, `password`, `blocked`, `phone_num`, `avatar`, `gender`, `country`, `language`, `specialization`, `comment`, `created_at`, `last_visit`) VALUES
 (1, 'admin@admin.com', 'Александр', 'sss', 'c4ca4238a0b923820dcc509a6f75849b', 0, '0977772713', '../uploads/avatar-uni.png', 'female', '', 'ua', '', 'qq11', '2023-02-14 01:09:00', '2023-03-24 21:43:06'),
-(19, 'shurikhot2@gmail.com', 'Александр', 'Shurik22333', 'c4ca4238a0b923820dcc509a6f75849b', 0, '0977772713', '../uploads/6413490245abc.png', 'no_select', '', 'en', 'inf_technology,t_communication', '', '2023-02-15 01:31:00', '2023-03-25 22:07:31'),
-(20, '1@1.com', 'Основной Samsung', 'Shurik', 'c4ca4238a0b923820dcc509a6f75849b', 0, '+3809777', '../uploads/avatar-uni.png', 'no_select', 'ukr', 'en', 'c_science', 'sdfsdfsdfsdf', '2023-02-14 02:20:00', '2023-03-26 09:08:03'),
+(19, 'shurikhot2@gmail.com', 'Александр', 'Shurik22333', 'c4ca4238a0b923820dcc509a6f75849b', 0, '0977772713', '../uploads/6413490245abc.png', 'no_select', '', 'en', 'inf_technology,t_communication', '', '2023-02-15 01:31:00', '2023-03-27 18:21:11'),
+(20, '1@1.com', 'Основной Samsung', 'Shurik', 'c4ca4238a0b923820dcc509a6f75849b', 0, '+3809777', '../uploads/avatar-uni.png', 'no_select', 'ukr', 'en', 'c_science', 'sdfsdfsdfsdf', '2023-02-14 02:20:00', '2023-03-27 18:21:30'),
 (96, 'Brown.Treutel@hotmail.com', 'Anabel Wisozk', 'Anastacio.Halvorson', '3a68fea9c32406d69b0e1c773ecfb834', 0, '2162181100', '../uploads/avatar-uni.png', 'female', 'United Arab Emirates', 'en', 'c_architecture', 'When the sands are all dry, he is gay as a boon,.', '2023-02-03 00:08:38', NULL),
 (97, 'Webster28@Kutch.com', 'Etha Smith', 'Germaine.Kihn', 'c5aa827b5999820752b7dd2558283d9d', 0, '6990985764', '../uploads/avatar-uni.png', 'male', 'Holy See (Vatican City State)', 'en', 'c_architecture', 'If she should meet the real Mary Ann, what ARE.', '2023-02-06 01:35:16', NULL),
 (98, 'Heaney.Danial@hotmail.com', 'Janick Franecki', 'Rau.Micheal', 'be44be789500d15e2b6a11a4c665b986', 0, '3170989378', '../uploads/avatar-uni.png', 'male', 'Korea', 'en', 'c_science', 'Alice herself, and once she remembered that she.', '2023-02-05 08:13:27', NULL),
@@ -1227,7 +1228,8 @@ INSERT INTO `personal_messages` (`id`, `from_id`, `to_id`, `message`, `unread`) 
 (84, 20, 19, 'Join the chat ', 0),
 (85, 19, 20, 'Join the chat ', 0),
 (86, 19, 20, 'Join the chat ', 0),
-(87, 19, 20, 'Join the chat <a href=\'/chatpage.php?chat_id=2\'>who are you?</a>', 0);
+(87, 19, 20, 'Join the chat <a href=\'/chatpage.php?chat_id=2\'>who are you?</a>', 0),
+(88, 19, 20, 'Join the chat <a href=\'/chatpage.php?chat_id=1\'>about cars</a>', 1);
 
 --
 -- Индексы сохранённых таблиц
@@ -1300,7 +1302,7 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT для таблицы `personal_messages`
 --
 ALTER TABLE `personal_messages`
-  MODIFY `id` int(255) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+  MODIFY `id` int(255) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц

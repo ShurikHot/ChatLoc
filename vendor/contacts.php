@@ -2,7 +2,6 @@
 require_once 'db.php';
 ?>
 
-<br>
 <h4>
     <b><?= $_SESSION['user']['lang_text']['my_contacts'] ?></b>
 </h4>
@@ -11,7 +10,7 @@ require_once 'db.php';
     <div style="border: #0a0e14 solid 1px; width: 500px; margin: auto">
         <?php
         $user_id = $_SESSION['user']['id'];
-        $query = mysqli_query($connect,"SELECT `contact_id` FROM `contacts` WHERE `user_id` = $user_id");
+        $query = mysqli_query($connect,"SELECT `contact_id` FROM `contacts` WHERE `user_id` = $user_id AND `blocked` <> 1");
         while($user = mysqli_fetch_assoc($query)) {
             $contact_id = $user['contact_id'];
             $query_mess = mysqli_query($connect,"SELECT `id` FROM `personal_messages` WHERE `from_id` = $contact_id AND `to_id` = $user_id AND `unread` = 1");
