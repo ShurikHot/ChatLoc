@@ -88,7 +88,7 @@ CREATE TABLE `members` (
   `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `blocked` tinyint(1) DEFAULT '0',
   `phone_num` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `avatar` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT '../uploads/avatar-uni.png',
+  `avatar` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT '../public/uploads/avatar-uni.png',
   `gender` enum('male','female','no_select') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `country` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `language` enum('ua','en') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
