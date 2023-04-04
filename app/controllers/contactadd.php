@@ -39,14 +39,14 @@ if (isset($_GET['blockid']) & is_numeric($_GET['blockid'])) {
     }
 }
 
-if (isset($_GET['deblockid']) & is_numeric($_GET['deblockid'])) {
+/*if (isset($_GET['deblockid']) & is_numeric($_GET['deblockid'])) {
     $id = $_GET['deblockid'];
     $user_id = $_SESSION['user']['id'];
     $query = mysqli_query($connect,"SELECT `id` FROM `contacts` WHERE `user_id` = '$user_id' AND `contact_id` = '$id'");
     if (mysqli_num_rows($query) > 0) {
         $query_upd = mysqli_query($connect,"UPDATE `contacts` SET `blocked` = 0 WHERE `user_id` = $user_id AND `contact_id` = $id");
     }
-}
+}*/
 
 if (isset($_GET['admin'])) {
     header('Location: ../../admin/index.php?page=' . $_SESSION['user']['page_get']);

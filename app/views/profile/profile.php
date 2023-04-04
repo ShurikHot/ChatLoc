@@ -164,42 +164,9 @@
             });
         });
     </script>
-
-    <!--/*fetch('/profile/uploadavatar', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({ image: base64data })
-                            })
-                                .then(response => {
-                                    if (response.ok) {
-                                        bs_modal.modal('hide');
-                                        alert("Success upload Avatar");
-                                        window.location.reload();
-                                    } else {
-                                        alert("Error: " + response.statusText);
-                                    }
-                                })
-                                .catch(error => {
-                                    console.log(error);
-                                });
-  /*var xhr = new XMLHttpRequest();
-                            xhr.open("POST", "/profile/uploadavatar", true);
-                            xhr.setRequestHeader("Content-Type", "application/json");
-                            xhr.onreadystatechange = function() {
-                                if (xhr.readyState === 4 && xhr.status === 200) {
-                                    bs_modal.modal('hide');
-                                    alert("Success upload Avatar");
-                                    window.location.reload();
-                                } else if (xhr.readyState === 4 && xhr.status !== 200) {
-                                    alert("Error: " + xhr.statusText);
-                                }
-                            };
-                            xhr.send(JSON.stringify({image: base64data}));*/-->
     <br>
 
-    <form action="vendor/profileedit.php" method="post">
+    <form action="/profile/profileedit" method="post">
         <h6><?= $_SESSION['user']['lang_text']['your_nickname'] ?><b>
 
             <?php
@@ -217,7 +184,7 @@
     </form>
 
     <h6><?= $_SESSION['user']['lang_text']['your_email'] ?><?= $_SESSION['user']['email'] ?></h6>
-    <h6><?= $_SESSION['user']['lang_text']['your_language'] ?><b><?= strtoupper($_SESSION['user']['language']) ?></b> <a href="profile.php?lang"><i>
+    <h6><?= $_SESSION['user']['lang_text']['your_language'] ?><b><?= strtoupper($_SESSION['user']['language']) ?></b> <a href="/profile/profileedit?lang"><i>
                 <?= $_SESSION['user']['lang_text']['change_q'] ?></i></a></h6>
 
     <p align="center">
@@ -229,46 +196,37 @@
         ?>
     </p>
 
-    <form action="vendor/profileedit.php" method="post" <?php if(!isset($_GET['lang'])) echo "hidden";?> >
+    <form action="/profile/profileedit" method="post" <?php if($_SESSION['user']['change_language'] == false) echo "hidden";?> >
         <select name="lang" id="lang">
             <?php
-                $langs = mysqli_query($connect, "SELECT DISTINCT `language` FROM `members`");
-                while ($lang = mysqli_fetch_assoc($langs)) : ?>
-                    <option value="<?= $lang['language'] ?>" <?php if (($lang['language']) == $_SESSION['user']['language']) echo "selected"?>> <?= $lang['language'] ?> </option>
-                }
-            <?php endwhile; ?>
+            foreach ($lang_list as $lang) : ?>
+                <option value="<?= $lang ?>" <?php if (($lang) == $_SESSION['user']['language']) echo "selected"?>> <?= $lang ?> </option>
+            <?php endforeach; ?>
         </select>
         <button type="submit" class="btn btn-primary"><?= $_SESSION['user']['lang_text']['change'] ?></button>
     </form>
 
-
-
     <?php
-        require_once ('vendor/contacts.php')
+        //require_once ('vendor/contacts.php')
     ?>
 
-    <?php if(!isset($_GET['black'])) : ?>
-        <a href="profile.php?black">Black list (Click to see)</a>
+    <?php if($_SESSION['user']['black_list'] == false) : ?>
+        <a href="/profile/blacklist?black">&#9660; Black list &#9660;</a> (Click to see)
     <?php else: ?>
-        Black list (Click on user to unblock)
+        <a href="/profile/blacklist?closeblack"> &#9650; Black list &#9650; </a> (Click to hide) <br>
+        Click on user to unblock
     <?php endif; ?>
 
-    <form action="#" method="post" <?php if(!isset($_GET['black'])) echo "hidden";?> >
+    <form action="#" method="post" <?php if($_SESSION['user']['black_list'] == false) echo "hidden";?> >
         <ul class="" style="list-style-type: none;">
             <?php
-            $contacts_blk = mysqli_query($connect, "SELECT `contact_id` FROM `contacts` WHERE `user_id` = $id AND `blocked` = 1");
-            if (mysqli_num_rows($contacts_blk) > 0) {
-                while($user = mysqli_fetch_assoc($contacts_blk)) {
-                    $contact_id = $user['contact_id'];
-                    $query2 = mysqli_query($connect,"SELECT `nickname` FROM `members` WHERE `id` = $contact_id");
-                    if (mysqli_num_rows($query2) > 0) {
-                        $contact = mysqli_fetch_assoc($query2);
-                        echo ("<a href='vendor/contactadd.php?deblockid=" . $contact_id . "'>
-                                    <li class='justify-content-between align-items-center'>" . $contact['nickname'] .
-                            "</a><span class='badge bg-danger rounded-pill'> !Block!</span> " /*. $_SESSION['user']['lang_text']['added_you']*/ . " 
-                                    </li>"
-                        );
-                    }
+            if (isset($contact_black)) {
+                foreach ($contact_black as $key => $user) {
+                    echo ("<a href='/profile/deblockid?deblockid=" . $key . "'>
+                                <li class='justify-content-between align-items-center'>" . $user .
+                        "</a><span class='badge bg-danger rounded-pill'> !Block!</span> " /*. $_SESSION['user']['lang_text']['added_you']*/ . " 
+                                </li>"
+                    );
                 }
             } else {
                 echo ("No users in your blacklist");
@@ -277,7 +235,7 @@
         </ul>
     </form>
 
-    <form method="post" id="find" action="#">
+    <form method="post" id="find" action="/profile/searchmember">
         <textarea class="" style="width: 448px;" type="text" name="find_member" id="find_member" placeholder="<?= $_SESSION['user']['lang_text']['find_somebody'] ?>" rows="1"></textarea>
         <button type="submit" class="btn btn-primary"><?= $_SESSION['user']['lang_text']['find'] ?></button>
     </form>
