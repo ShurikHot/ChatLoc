@@ -43,6 +43,7 @@
                 </p>
             </form>
 
+
             <form class="form-signup" action="vendor/signup.php" method="post" name="form" enctype="multipart/form-data">
                 <label for="fullname">Full name</label>
                 <input class="form-styling" type="text" name="name" placeholder="Full name" />

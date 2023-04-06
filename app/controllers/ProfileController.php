@@ -6,7 +6,7 @@ require_once 'Controller.php';
 require_once 'View.php';
 require_once 'app/models/ProfileModel.php';
 
-use app\models\Model;
+//use app\models\Model;
 use app\models\ProfileModel;
 
 
@@ -46,8 +46,11 @@ class ProfileController extends Controller
             $setvisit = new ProfileModel();
             $setvisit->lastVisit($_SESSION['user']['id']);
 
+            $contacts = self::getContacts();
+
             $view = new View();
-            $view->render('profile/profile.php', $_SESSION['user']);
+            $view->render('profile/profile.php', ['contacts' => $contacts]);
+
         } else {
             header('Location: /');
         }
@@ -103,7 +106,6 @@ class ProfileController extends Controller
 
             $view = new View();
             $view->render('profile/profile.php', ['lang_list' => $lang_list]);
-            header('Location: /');
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['lang'])) {
@@ -152,8 +154,6 @@ class ProfileController extends Controller
 
     public function deblockId($id)
     {
-        /*var_dump($id);
-        die();*/
         if (is_numeric($id)) {
             $deblock_q = new ProfileModel();
             $deblock_q->deblockId($_SESSION['user']['id'], $id);
@@ -163,6 +163,8 @@ class ProfileController extends Controller
 
     public function searchMember()
     {
+        $_SESSION['user']['black_list'] = false;
+        $_SESSION['user']['change_language'] = false;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $search_query = $_POST['find_member'];
 
@@ -172,31 +174,77 @@ class ProfileController extends Controller
             if (mysqli_num_rows($search_res) == 0) {
                 echo("No match found");
             } else {
-
-            }
-            /*if (isset($_POST['find_member'])) {
-
-                $query = mysqli_query($connect, "SELECT `id` FROM `members` WHERE (`nickname` LIKE '%$search_query%') OR (`email` LIKE '%$search_query%') AND `id` <> $id");
-
-                    while ($find_user = mysqli_fetch_assoc($query)) {
-                        $find_id = $find_user['id'];
-                        $query2 = mysqli_query($connect, "SELECT `nickname`, `email`, `last_visit` FROM `members` WHERE `id` = $find_id");
-                        if (mysqli_num_rows($query2) > 0) {
-                            $user = mysqli_fetch_assoc($query2);
-                            $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5 minutes'))) ? $status = 'ONLINE' : $status = 'offline';
-                            if ($find_id != $_SESSION['user']['id']) {
-                                echo("<a href='vendor/contactprofile.php?id=" . $find_id . "'>
-                                            <li class='justify-content-between align-items-center'>" . $user['nickname'] . " - " . $user['email'] .
-                                    "</a>&nbsp;
-                                            <span class='badge bg-primary rounded-pill'>" . $status . "</span>
-                                            </li>"
-                                );
-                            }
+                while ($find_user = mysqli_fetch_assoc($search_res)) {
+                    $find_id = $find_user['id'];
+                    $find_q = new ProfileModel();
+                    $find_info = $find_q->searchInfo($find_id);
+                    if (mysqli_num_rows($find_info) > 0) {
+                        $user = mysqli_fetch_assoc($find_info);
+                        $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5 minutes'))) ? $status = 'ONLINE' : $status = 'offline';
+                        if ($find_id != $_SESSION['user']['id']) {
+                            $find_arr[] = [
+                                'id' => $find_id,
+                                'nickname' => $user['nickname'],
+                                'email' => $user['email'],
+                                'last_visit' => $status,
+                            ];
                         }
                     }
                 }
-            }*/
+            }
+        }
+        $view = new View();
+        $view->render('profile/profile.php', ['find_arr' => $find_arr]);
     }
+
+    public function getContacts()
+    {
+        $contacts = new ProfileModel();
+        $contact_q = $contacts->contactList($_SESSION['user']['id']);
+
+        if (mysqli_num_rows($contact_q) > 0) {
+            while ($user = mysqli_fetch_assoc($contact_q)) {
+                $contact_id = $user['contact_id'];
+
+                $message_q = new ProfileModel();
+                $message_arr = $message_q->persMessage($contact_id, $_SESSION['user']['id']);
+
+                $count_unread = mysqli_num_rows($message_arr) > 0 ? "<span class='badge rounded-pill text-bg-success'>" . mysqli_num_rows($message_arr) . " </span>" : '';
+
+                $contact2_q = new ProfileModel();
+                $contact_info = $contact2_q->searchInfo($contact_id);
+
+                if (mysqli_num_rows($contact_info) > 0) {
+                    $contact = mysqli_fetch_assoc($contact_info);
+                    $contact['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5 minutes'))) ? $status = 'ONLINE' : $status = 'offline';
+                    $contact_arr[$contact_id] = [
+                        'nickname' => $contact['nickname'],
+                        'count_unread' => $count_unread,
+                        'status' => $status,
+                    ];
+                }
+            }
+        }
+
+        $contacts_appr = new ProfileModel();
+        $contacts_appr_q = $contacts_appr->contactApprList($_SESSION['user']['id']);
+
+        if (mysqli_num_rows($contacts_appr_q) > 0) {
+            while ($contact_appr = mysqli_fetch_assoc($contacts_appr_q)) {
+                $contact_appr_id = $contact_appr['from_id'];
+
+                $contact_appr_nick = new ProfileModel();
+                $contact_appr_q = $contact_appr_nick->contactNick($contact_appr_id);
+
+                $contact_appr_assoc = mysqli_fetch_assoc($contact_appr_q);
+                $contact_appr_arr[$contact_appr_id] = [
+                    'nickname' => $contact_appr_assoc['nickname'],
+                ];
+            }
+        } else {
+            $contact_appr_arr = [];
+        }
+        return ['contact_arr' => $contact_arr, 'contact_appr_arr' => $contact_appr_arr];
     }
 
     public function logout()
@@ -204,6 +252,4 @@ class ProfileController extends Controller
         unset($_SESSION['user']);
         header('Location: /');
     }
-
-
 }

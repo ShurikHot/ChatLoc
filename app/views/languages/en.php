@@ -47,4 +47,5 @@ return [
     "click_invite" => "Click on contact to invite it:",
     "added_you" => " added you to contact list",
     "join_chat" => "Join the chat",
+    "block" => "!Block!",
 ];

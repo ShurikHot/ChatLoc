@@ -15,6 +15,7 @@
     <script src="/public/assets/js/jquery3.6.3.min.js"></script>
     <link href="/public/assets/css/cropper.min.css" rel="stylesheet">
     <script src="/public/assets/js/cropper.min.js"></script>
+    <script src="/public/assets/js/bootstrap.min.js"></script>
     <style type="text/css">
         img {
             display: block;
@@ -98,7 +99,99 @@
                 </div>
             </div>
 
-            <script src="/public/assets/js/bootstrap.min.js"></script>
+    <br>
+
+    <form action="/profile/profileedit" method="post">
+        <h6><?= $_SESSION['user']['lang_text']['your_nickname'] ?><b>
+
+            <?php
+                if (isset($_SESSION['user']['edit_nickname'])) : ?>
+                    <input type="text" name="actual_nickname" value="<?= isset($_SESSION['user']['actual_nickname']) ? $_SESSION['user']['actual_nickname'] : $_SESSION['user']['nickname'] ?>">
+            <?php
+                else :
+                    if (isset($_SESSION['user']['actual_nickname'])) {
+                        echo($_SESSION['user']['actual_nickname']);
+                    } else {
+                        echo($_SESSION['user']['nickname']); }
+            endif; ?>
+
+            </b>&nbsp;<input type="submit" name="edit_nickname" value="<?= $_SESSION['user']['lang_text']['click_change'] ?>"></h6>
+    </form>
+
+    <h6><?= $_SESSION['user']['lang_text']['your_email'] ?><?= $_SESSION['user']['email'] ?></h6>
+    <h6><?= $_SESSION['user']['lang_text']['your_language'] ?><b><?= strtoupper($_SESSION['user']['language']) ?></b> <a href="/profile/profileedit?lang"><i>
+                <?= $_SESSION['user']['lang_text']['change_q'] ?></i></a></h6>
+
+    <p align="center">
+        <?php
+        if (isset($_SESSION['message'])) {
+            echo $_SESSION['message'];
+            unset($_SESSION['message']);
+        }
+        ?>
+    </p>
+
+    <form action="/profile/profileedit" method="post" <?php if($_SESSION['user']['change_language'] == false) echo "hidden";?> >
+        <select name="lang" id="lang">
+            <?php
+            foreach ($lang_list as $lang) : ?>
+                <option value="<?= $lang ?>" <?php if (($lang) == $_SESSION['user']['language']) echo "selected"?>> <?= $lang ?> </option>
+            <?php endforeach; ?>
+        </select>
+        <button type="submit" class="btn btn-primary"><?= $_SESSION['user']['lang_text']['change'] ?></button>
+    </form>
+
+    <?php
+        require_once ('app/views/profile/contacts.php')
+    ?>
+
+    <?php if($_SESSION['user']['black_list'] == false) : ?>
+        <a href="/profile/blacklist?black">&#9660; Black list &#9660;</a> (Click to see)
+    <?php else: ?>
+        <a href="/profile/blacklist?closeblack"> &#9650; Black list &#9650; </a> (Click to hide) <br>
+        Click on user to unblock
+    <?php endif; ?>
+
+    <form action="#" method="post" <?php if($_SESSION['user']['black_list'] == false) echo "hidden";?> >
+        <ul class="" style="list-style-type: none;">
+            <?php
+            if (isset($contact_black)) {
+                foreach ($contact_black as $key => $user) {
+                    echo ("<a href='/profile/deblockid?deblockid=" . $key . "'>
+                                <li class='justify-content-between align-items-center'>" . $user .
+                        "</a><span class='badge bg-danger rounded-pill'>" . $_SESSION['user']['lang_text']['block'] . "</span>   
+                                </li>"
+                    );
+                }
+            } else {
+                echo ("No users in your blacklist");
+            }
+            ?>
+        </ul>
+    </form>
+
+    <form method="post" id="find" action="/profile/searchmember">
+        <textarea class="" style="width: 505px;" type="text" name="find_member" id="find_member" placeholder="<?= $_SESSION['user']['lang_text']['find_somebody'] ?>" rows="1"></textarea>
+        <button type="submit" class="btn btn-primary"><?= $_SESSION['user']['lang_text']['find'] ?></button>
+    </form>
+
+    <ul class="list-group" style="list-style-type: none;">
+        <div style="border: #0a0e14 solid 1px; width: 500px; margin: auto">
+            <?php
+                if (isset($find_arr)) {
+                    foreach ($find_arr as $value) {
+                        echo("<a href='vendor/contactprofile.php?id=" . $value['id'] . "'>
+                                        <li class='justify-content-between align-items-center'>" . $value['nickname'] . " - " . $value['email'] .
+                            "</a>&nbsp;
+                                        <span class='badge bg-primary rounded-pill'>" . $value['last_visit'] . "</span>
+                                        </li>"
+                        );
+                    }
+                }
+            ?>
+        </div>
+    </ul>
+
     <script>
         var bs_modal = $('#modal');
         var image = document.getElementById('image');
@@ -164,112 +257,5 @@
             });
         });
     </script>
-    <br>
-
-    <form action="/profile/profileedit" method="post">
-        <h6><?= $_SESSION['user']['lang_text']['your_nickname'] ?><b>
-
-            <?php
-                if (isset($_SESSION['user']['edit_nickname'])) : ?>
-                    <input type="text" name="actual_nickname" value="<?= isset($_SESSION['user']['actual_nickname']) ? $_SESSION['user']['actual_nickname'] : $_SESSION['user']['nickname'] ?>">
-            <?php
-                else :
-                    if (isset($_SESSION['user']['actual_nickname'])) {
-                        echo($_SESSION['user']['actual_nickname']);
-                    } else {
-                        echo($_SESSION['user']['nickname']); }
-            endif; ?>
-
-            </b>&nbsp;<input type="submit" name="edit_nickname" value="<?= $_SESSION['user']['lang_text']['click_change'] ?>"></h6>
-    </form>
-
-    <h6><?= $_SESSION['user']['lang_text']['your_email'] ?><?= $_SESSION['user']['email'] ?></h6>
-    <h6><?= $_SESSION['user']['lang_text']['your_language'] ?><b><?= strtoupper($_SESSION['user']['language']) ?></b> <a href="/profile/profileedit?lang"><i>
-                <?= $_SESSION['user']['lang_text']['change_q'] ?></i></a></h6>
-
-    <p align="center">
-        <?php
-        if (isset($_SESSION['message'])) {
-            echo $_SESSION['message'];
-            unset($_SESSION['message']);
-        }
-        ?>
-    </p>
-
-    <form action="/profile/profileedit" method="post" <?php if($_SESSION['user']['change_language'] == false) echo "hidden";?> >
-        <select name="lang" id="lang">
-            <?php
-            foreach ($lang_list as $lang) : ?>
-                <option value="<?= $lang ?>" <?php if (($lang) == $_SESSION['user']['language']) echo "selected"?>> <?= $lang ?> </option>
-            <?php endforeach; ?>
-        </select>
-        <button type="submit" class="btn btn-primary"><?= $_SESSION['user']['lang_text']['change'] ?></button>
-    </form>
-
-    <?php
-        //require_once ('vendor/contacts.php')
-    ?>
-
-    <?php if($_SESSION['user']['black_list'] == false) : ?>
-        <a href="/profile/blacklist?black">&#9660; Black list &#9660;</a> (Click to see)
-    <?php else: ?>
-        <a href="/profile/blacklist?closeblack"> &#9650; Black list &#9650; </a> (Click to hide) <br>
-        Click on user to unblock
-    <?php endif; ?>
-
-    <form action="#" method="post" <?php if($_SESSION['user']['black_list'] == false) echo "hidden";?> >
-        <ul class="" style="list-style-type: none;">
-            <?php
-            if (isset($contact_black)) {
-                foreach ($contact_black as $key => $user) {
-                    echo ("<a href='/profile/deblockid?deblockid=" . $key . "'>
-                                <li class='justify-content-between align-items-center'>" . $user .
-                        "</a><span class='badge bg-danger rounded-pill'> !Block!</span> " /*. $_SESSION['user']['lang_text']['added_you']*/ . " 
-                                </li>"
-                    );
-                }
-            } else {
-                echo ("No users in your blacklist");
-            }
-            ?>
-        </ul>
-    </form>
-
-    <form method="post" id="find" action="/profile/searchmember">
-        <textarea class="" style="width: 448px;" type="text" name="find_member" id="find_member" placeholder="<?= $_SESSION['user']['lang_text']['find_somebody'] ?>" rows="1"></textarea>
-        <button type="submit" class="btn btn-primary"><?= $_SESSION['user']['lang_text']['find'] ?></button>
-    </form>
-
-    <ul class="list-group" style="list-style-type: none;">
-        <div style="border: #0a0e14 solid 1px; width: 500px; margin: auto">
-            <?php
-            if (isset($_POST['find_member'])) {
-                $search_query = $_POST['find_member'];
-                $query = mysqli_query($connect, "SELECT `id` FROM `members` WHERE (`nickname` LIKE '%$search_query%') OR (`email` LIKE '%$search_query%') AND `id` <> $id");
-                if (mysqli_num_rows($query) == 0) {
-                    echo("No match found");
-                } else {
-                    while ($find_user = mysqli_fetch_assoc($query)) {
-                        $find_id = $find_user['id'];
-                        $query2 = mysqli_query($connect, "SELECT `nickname`, `email`, `last_visit` FROM `members` WHERE `id` = $find_id");
-                        if (mysqli_num_rows($query2) > 0) {
-                            $user = mysqli_fetch_assoc($query2);
-                            $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5 minutes'))) ? $status = 'ONLINE' : $status = 'offline';
-                            if ($find_id != $_SESSION['user']['id']) {
-                                echo("<a href='vendor/contactprofile.php?id=" . $find_id . "'>
-                                        <li class='justify-content-between align-items-center'>" . $user['nickname'] . " - " . $user['email'] .
-                                    "</a>&nbsp;
-                                        <span class='badge bg-primary rounded-pill'>" . $status . "</span>
-                                        </li>"
-                                );
-                            }
-                        }
-                    }
-                }
-            }
-            ?>
-        </div>
-    </ul>
-
 </body>
 </html>

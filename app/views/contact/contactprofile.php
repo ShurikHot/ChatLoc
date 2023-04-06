@@ -1,25 +1,8 @@
 <?php
-require_once 'app/config/db.php';
-require_once 'app/config/params.php';
 
-ini_set('session.gc_maxlifetime', $session_lifetime);
-ini_set('session.gc_probability', 1);
-ini_set('session.gc_divisor', 1);
-session_start();
+if (isset($contact_arr)) :
+    foreach ($contact_arr as $key => $value) :
 
-if(!isset($_SESSION['user']['id'])) {
-    header('Location: ../index.php');
-}
-
-$id = $_SESSION['user']['id'];
-$query_visit = mysqli_query($connect, "UPDATE `members` SET `last_visit` = NOW() WHERE `id` = $id");
-
-if (isset($_GET['id']) & is_numeric($_GET['id'])) {
-    $id = $_GET['id'];
-    $query = mysqli_query($connect,"SELECT `id`, `email`, `nickname`, `avatar`, `last_visit` FROM `members` WHERE `id` = $id");
-    $user = mysqli_fetch_assoc($query);
-}
-$user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5 minutes'))) ? $status = 'ONLINE' : $status = 'offline';
 ?>
 
 <!doctype html>
@@ -27,12 +10,12 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= $user['nickname'] ?> | <?= $_SESSION['user']['lang_text']['contact_profile'] ?></title>
-    <link href="../public/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../public/assets/css/chatpage.css" rel="stylesheet">
-    <script src="../public/assets/js/jquery3.6.3.min.js"></script>
-    <script src="../public/assets/js/emojionearea.js"></script>
-    <link rel="stylesheet" href="../public/assets/css/emojionearea.css" />
+    <title><?= $value['nickname'] ?> | <?= $_SESSION['user']['lang_text']['contact_profile'] ?></title>
+    <link href="/public/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/public/assets/css/chatpage.css" rel="stylesheet">
+    <script src="/public/assets/js/jquery3.6.3.min.js"></script>
+    <script src="/public/assets/js/emojionearea.js"></script>
+    <link rel="stylesheet" href="/public/assets/css/emojionearea.css" />
 </head>
 <body class="text-center">
 
@@ -54,14 +37,14 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
         </li>
     <?php endif; ?>
     <li class="nav-item">
-        <a class="btn btn-danger" href="../vendor/logout.php"><?= $_SESSION['user']['lang_text']['logout'] ?></a>
+        <a class="btn btn-danger" href="/profile/logout"><?= $_SESSION['user']['lang_text']['logout'] ?></a>
     </li>
 </ul>
 
-<h1 align="center" class=""><?= $user['nickname'] ?> | <?= $_SESSION['user']['lang_text']['contact_profile'] ?></h1>
+<h1 align="center" class=""><?= $value['nickname'] ?> | <?= $_SESSION['user']['lang_text']['contact_profile'] ?></h1>
 <?php
-    if(isset($user['avatar'])) : ?>
-    <img src="<?= $user['avatar'] ?>" alt="" style="display: inline">
+    if(isset($value['avatar'])) : ?>
+    <img src="<?= $value['avatar'] ?>" alt="" style="display: inline">
 <?php
      else :
 ?>
@@ -71,25 +54,23 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
 ?>
 <br>
 
-<script src="../public/assets/js/bootstrap.min.js"></script>
+<script src="/public/assets/js/bootstrap.min.js"></script>
 
-<h6><?= $_SESSION['user']['lang_text']['nickname'] ?><b> <?= $user['nickname']?> </b> <span class='badge bg-primary rounded-pill'> <?= $status ?></span> </h6>
+<h6><?= $_SESSION['user']['lang_text']['nickname'] ?><b> <?= $value['nickname']?> </b> <span class='badge bg-primary rounded-pill'> <?= $value['status'] ?></span> </h6>
 
 
-<h6><?= $_SESSION['user']['lang_text']['email'] ?><?= $user['email'] ?></h6>
+<h6><?= $_SESSION['user']['lang_text']['email'] ?><?= $value['email'] ?></h6>
 
 <?php
-    $user_id = $_SESSION['user']['id'];
-    $contact_id = $user['id'];
-    $query = mysqli_query($connect,"SELECT `id`, `blocked` FROM `contacts` WHERE `user_id` = $user_id AND `contact_id` = $contact_id");
-    if (mysqli_num_rows($query) > 0) :
-        $query_assoc = mysqli_fetch_assoc($query);
+
+       if (key_exists('blocked', $value) && $value['blocked'] != "") :
 ?>
-        <?= $_SESSION['user']['lang_text']['user_already'] ?> <a href="contactadd.php?delid=<?= $user['id'] ?>"><?= $_SESSION['user']['lang_text']['delete_it'] ?></a>
-        <?php if ($query_assoc['blocked'] == 0): ?>
-            <a href="contactadd.php?blockid=<?= $user['id'] ?>" style="color: red">Or Block?</a>
+
+        <?= $_SESSION['user']['lang_text']['user_already'] ?> <a href="contactadd.php?delid=<?= $value['id'] ?>"><?= $_SESSION['user']['lang_text']['delete_it'] ?></a>
+        <?php if ($value['blocked'] == 0): ?>
+            <a href="contactadd.php?blockid=<?= $value['id'] ?>" style="color: red">Or Block?</a>
         <?php else: ?>
-            <a href="contactadd.php?deblockid=<?= $user['id'] ?>" style="color: red">Deblock?</a>
+            <a href="contactadd.php?deblockid=<?= $value['id'] ?>" style="color: red">Deblock?</a>
         <?php endif; ?>
     <br><br>
     <form method="post" id="sendmess" onsubmit="return false">
@@ -111,6 +92,11 @@ $user['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5
     </form>
 <?php
     endif;
+?>
+
+<?php
+endforeach;
+endif;
 ?>
 
 <script>

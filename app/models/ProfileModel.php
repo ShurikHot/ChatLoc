@@ -77,5 +77,29 @@ class ProfileModel extends Model
         return $result;
     }
 
+    public function searchInfo($find_id)
+    {
+        $result = $this->query("SELECT `nickname`, `email`, `last_visit` FROM `members` WHERE `id` = $find_id");
+        return $result;
+    }
+
+    public function contactList($id)
+    {
+        $result = $this->query("SELECT `contact_id` FROM `contacts` WHERE `user_id` = $id AND `blocked` <> 1");
+        return $result;
+    }
+
+    public function persMessage($contact_id, $id)
+    {
+        $result = $this->query("SELECT `id` FROM `personal_messages` WHERE `from_id` = $contact_id AND `to_id` = $id AND `unread` = 1");
+        return $result;
+    }
+
+    public function contactApprList($id)
+    {
+        $result = $this->query("SELECT `from_id` FROM `personal_messages` WHERE `to_id` = $id AND `unread` = 1 AND `message` LIKE '%added you to contacts%'");
+        return $result;
+    }
+
 
 }
