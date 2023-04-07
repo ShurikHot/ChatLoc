@@ -25,7 +25,7 @@ if (isset($contact_arr)) :
         <?php if (isset($_SESSION['user']['blocked']) && !$_SESSION['user']['blocked']): ?>
             <a class="btn btn-info" aria-current="page" href="../chatlist.php"><?= $_SESSION['user']['lang_text']['go_to_chatlist'] ?></a>
         <?php elseif (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']): ?>
-            <a class="btn btn-warning" aria-current="page"href=""><b><?= $_SESSION['user']['lang_text']['your_account_blocked'] ?></b></a>
+            <a class="btn btn-warning" aria-current="page" href=""><b><?= $_SESSION['user']['lang_text']['your_account_blocked'] ?></b></a>
         <?php endif; ?>
     </li>
     <li class="nav-item">
@@ -48,7 +48,7 @@ if (isset($contact_arr)) :
 <?php
      else :
 ?>
-    <img src="public/uploads/avatar-uni.png" alt="" style="width: 150px; height: 150px; display: inline">
+    <img src="/public/uploads/avatar-uni.png" alt="" style="width: 150px; height: 150px; display: inline">
 <?php
     endif;
 ?>
@@ -62,15 +62,11 @@ if (isset($contact_arr)) :
 <h6><?= $_SESSION['user']['lang_text']['email'] ?><?= $value['email'] ?></h6>
 
 <?php
-
-       if (key_exists('blocked', $value) && $value['blocked'] != "") :
+       if (key_exists('blocked', $value) && $value['blocked'] == 0) :
 ?>
-
-        <?= $_SESSION['user']['lang_text']['user_already'] ?> <a href="contactadd.php?delid=<?= $value['id'] ?>"><?= $_SESSION['user']['lang_text']['delete_it'] ?></a>
+        <?= $_SESSION['user']['lang_text']['user_already'] ?> <a href="/contact/action?delid=<?= $key ?>"><?= $_SESSION['user']['lang_text']['delete_it'] ?></a>
         <?php if ($value['blocked'] == 0): ?>
-            <a href="contactadd.php?blockid=<?= $value['id'] ?>" style="color: red">Or Block?</a>
-        <?php else: ?>
-            <a href="contactadd.php?deblockid=<?= $value['id'] ?>" style="color: red">Deblock?</a>
+            <a href="/contact/action?blockid=<?= $key ?>" style="color: red">Or Block?</a>
         <?php endif; ?>
     <br><br>
     <form method="post" id="sendmess" onsubmit="return false">
@@ -84,7 +80,10 @@ if (isset($contact_arr)) :
 <?php
     else :
 ?>
-    <a href="contactadd.php?id=<?= $user['id'] ?>"><?= $_SESSION['user']['lang_text']['add_contact'] ?></a>
+    <a href="/contact/action?id=<?= $key ?>"><?= $_SESSION['user']['lang_text']['add_contact'] ?></a>
+    <?php if ($value['blocked'] == 1): ?>
+        <a href="/contact/action?deblockid=<?= $key ?>" style="color: red">Deblock?</a>
+    <?php endif; ?>
     <br><br>
     <form method="post" id="sendmess">
         <textarea class="enter_mess" type="text" name="" id="" placeholder="<?= $_SESSION['user']['lang_text']['enter_message_must'] ?>" rows="1" disabled></textarea>

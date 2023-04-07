@@ -12,6 +12,8 @@ if (isset(array_keys($_GET)[1])) {
     $get_param_key = "";
     $get_param_value = "";
 }
+/*var_dump($get_param_key, $get_param_value);
+die();*/
 
 if ($parts[0] == "") $parts[0] = 'profile';
 $controller = $parts[0] ?? 'profile';
@@ -58,14 +60,17 @@ switch ($action) {
     case 'contacts':
         $controller->getContacts();
         break;
+    case 'logout':
+        $controller->logout();
+        break;
 
     case 'profile':
         $controller->contactProfile($get_param_value);
         break;
-
-    case 'logout':
-        $controller->logout();
+    case 'action':
+        $controller->contactActions($get_param_key, $get_param_value);
         break;
+
     default:
         header('HTTP/1.1 404 Not Found');
         die('Page not found!!!!!!!!!!!!!!!');
