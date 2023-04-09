@@ -15,22 +15,19 @@ class ContactController extends Controller
 {
     public function contactProfile($id)
     {
-        if (isset($_SESSION['user'])) {  /*вынести в отдельный экшн, или конструктор, или в конструктор Controller???*/
-            $setvisit = new ContactModel();
-            $setvisit->lastVisit($_SESSION['user']['id']);
+        $model = new ContactModel();
+        if (isset($_SESSION['user'])) {
+            $model->lastVisit($_SESSION['user']['id']);
         } else {
             header('Location: /');
         }
 
         if (is_numeric($id)) {
-            $contact_q = new ContactModel();
-            $contact_info = $contact_q->contactInfo($id);
-
+            $contact_info = $model->contactInfo($id);
             if (mysqli_num_rows($contact_info) > 0) {
                 $contact = mysqli_fetch_assoc($contact_info);
 
-                $contact_bl_q = new ContactModel();
-                $contact_bl = $contact_bl_q->contactIsBlock($_SESSION['user']['id'], $id);
+                $contact_bl = $model->contactIsBlock($_SESSION['user']['id'], $id);
 
                 if (mysqli_num_rows($contact_bl) > 0) {
                     $contact_is_bl = mysqli_fetch_assoc($contact_bl);
@@ -49,35 +46,29 @@ class ContactController extends Controller
             }
 
             $view = new View();
-            $view->render('/contact/contactprofile.php', ['contact_arr' => $contact_arr]);
+            $view->render('contact/contactprofile.php', ['contact_arr' => $contact_arr]);
         }
     }
 
     public function contactActions($key, $value)
     {
+        $contact_q = new ContactModel();
         if ($key == 'delid' & is_numeric($value)) {
-            $contact_q = new ContactModel();
             $contact_q->contactDel($_SESSION['user']['id'], $value);
         }
         if ($key == 'id' & is_numeric($value)) {
-            $contact_q = new ContactModel();
             $contact = $contact_q->contactIs($_SESSION['user']['id'], $value);
             if (mysqli_num_rows($contact) == 0) {
                 $mess = $_SESSION['user']['lang_text']['user'] . $_SESSION['user']['nickname'] . $_SESSION['user']['lang_text']['added_you'];
-                $contact_q = new ContactModel();
                 $contact_q->contactAdd($_SESSION['user']['id'], $value, $mess);
             }
         }
         if ($key == 'blockid' & is_numeric($value)) {
-            $contact_q = new ContactModel();
             $contact_q->contactBlock($_SESSION['user']['id'], $value);
         }
         if ($key == 'deblockid' & is_numeric($value)) {
-            $contact_q = new ContactModel();
             $contact_q->contactDeblock($_SESSION['user']['id'], $value);
         }
         header('Location: /contact/profile?id=' . $value);
     }
-
-
 }

@@ -1,6 +1,7 @@
 <?php
 require_once 'app/controllers/ProfileController.php';
 require_once 'app/controllers/ContactController.php';
+require_once 'app/controllers/ChatController.php';
 
 $url = isset($_GET['url']) ? $_GET['url'] : '';
 $parts = explode('/', $url);
@@ -28,14 +29,15 @@ switch ($controller) {
         //var_dump($controller);
         $controller = new \app\controllers\ContactController();
         break;
-    /*case 'chat':
+    case 'chat':
         $controller = new \app\controllers\ChatController();
-        break;*/
+        break;
     default:
         header('HTTP/1.1 404 Not Found');
         die('Page not found!!!!!!!!!!!!!!!');
 }
 switch ($action) {
+    /*ProfileController*/
     case 'login':
         $controller->login();
         break;
@@ -64,12 +66,28 @@ switch ($action) {
         $controller->logout();
         break;
 
+    /*ContactController*/
     case 'profile':
         $controller->contactProfile($get_param_value);
         break;
     case 'action':
         $controller->contactActions($get_param_key, $get_param_value);
         break;
+
+    /*ChatController*/
+    case 'messpers':
+        $controller->messageAdd();
+        break;
+    case 'messpersload':
+        $controller->messagePersonalLoad();
+        break;
+    case 'chatlist':
+        $controller->chatList($get_param_key);
+        break;
+    case 'page':
+        $controller->chatPage($get_param_key, $get_param_value);
+        break;
+
 
     default:
         header('HTTP/1.1 404 Not Found');

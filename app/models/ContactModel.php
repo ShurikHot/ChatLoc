@@ -4,7 +4,6 @@
 namespace app\models;
 require_once 'app/models/Model.php';
 
-
 class ContactModel extends Model
 {
     public function lastVisit($id)

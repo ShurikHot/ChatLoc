@@ -35,7 +35,7 @@
     <ul class="nav justify-content-center">
         <li class="nav-item">
             <?php if (isset($_SESSION['user']['blocked']) && !$_SESSION['user']['blocked']): ?>
-                <a class="btn btn-info" aria-current="page" href="chatlist.php"><?= $_SESSION['user']['lang_text']['go_to_chatlist'] ?></a>
+                <a class="btn btn-info" aria-current="page" href="/chat/chatlist"><?= $_SESSION['user']['lang_text']['go_to_chatlist'] ?></a>
             <?php elseif (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']): ?>
                 <a class="btn btn-warning" aria-current="page"href=""><b><?= $_SESSION['user']['lang_text']['your_account_blocked'] ?></b></a>
             <?php endif; ?>

@@ -48,4 +48,5 @@ return [
     "added_you" => " added you to contact list",
     "join_chat" => "Join the chat",
     "block" => "!Block!",
+    "contact_is_bl" => "User in your Contact List, but it was blocked. ",
 ];
