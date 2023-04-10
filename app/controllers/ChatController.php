@@ -1,6 +1,5 @@
 <?php
 
-
 namespace app\controllers;
 
 require_once 'Controller.php';
@@ -106,9 +105,10 @@ class ChatController extends Controller
 
     public function chatPage($get_key, $get_value)
     {
-        $model_visit = new ProfileModel();
+        $model_profile = new ProfileModel();
+        $_SESSION['user']['invite'] = false;
         if (isset($_SESSION['user'])) {
-            $model_visit->lastVisit($_SESSION['user']['id']);
+            $model_profile->lastVisit($_SESSION['user']['id']);
         } else {
             header('Location: /');
         }
@@ -116,23 +116,147 @@ class ChatController extends Controller
         if (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']) {
             header('Location: /profile/info');
         }
-
-        if (isset($get_key) && $get_key == 'chat_id' && is_numeric($get_value)) {
-            $model = new ChatModel();
+        $model = new ChatModel();
+        if (isset($get_key) && is_numeric($get_value)) {
             $chat_q = $model->chatName($get_value);
+            $contacts_arr = [];
 
             if (mysqli_num_rows($chat_q) > 0) {
                 $chat = mysqli_fetch_assoc($chat_q);
                 $chat_name = $chat['chat_name'];
             }
-        } elseif () {
 
+            if ($get_key == 'invite') {
+                $_SESSION['user']['invite'] = true;
+                $contacts = $model_profile->contactList($_SESSION['user']['id']);
+                while ($user = mysqli_fetch_assoc($contacts)) {
+                    $contact_info = $model->contactInfo($user['contact_id']);
+                    if (mysqli_num_rows($contact_info) > 0) {
+                        $contact = mysqli_fetch_assoc($contact_info);
+                        $contact['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5 minutes'))) ? $status = 'ONLINE' : $status = 'offline';
+                        $contacts_arr[$user['contact_id']] = [
+                            'nickname' => $contact['nickname'],
+                            'status' => $status,
+                        ];
+                    }
+                }
+            }
+
+            if (is_numeric($get_key) && is_numeric($get_value)) {
+                $invite_mess = $_SESSION['user']['lang_text']['join_chat'] . " <a href=\'/chat/page?chat_id=" . $get_value . "\'>" . $chat_name ."</a>";
+                $model->inviteToChat($_SESSION['user']['id'], $get_key, $invite_mess);
+
+                header('Location: /chat/page?chat_id=' . $get_value);
+            }
         } else {
             header('Location: /chat/chatlist');
         }
 
         $view = new View();
-        $view->render('chats/chatpage.php', ['chat_name' => $chat_name, 'chat_id' => $get_value]); /*'chat_name' => $chat_name*/
+        $view->render('chats/chatpage.php', ['chat_name' => $chat_name, 'chat_id' => $get_value, 'contacts_arr' => $contacts_arr]);
+    }
+
+    public function messageLoad()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $model = new ChatModel();
+            $result = $model->messageChatCount($_POST['chat_id']);
+            $row = mysqli_fetch_assoc($result);
+            $total_records = $row['total'];
+            if ($total_records > 50) {
+                $start = $total_records - 50;
+                $messages = $model->selectMessages($_POST['chat_id'], $start, $total_records);
+            } else {
+                $messages = $model->selectMessages($_POST['chat_id'], 0, $total_records);
+            }
+            if (mysqli_num_rows($messages) > 0) {
+                while ($messagearr = mysqli_fetch_assoc($messages)) {
+                    $user_info = $model->contactInfo($messagearr['user_id']);
+                    $name = mysqli_fetch_assoc($user_info);
+                    if (isset($name)) {
+                        echo ("<div class='container'>
+                                    <img src=" . $name['avatar'] . " alt='' class='avatar'>
+                                    <div class='mes_left'>
+                                       <p>" . $_SESSION['user']['lang_text']['user']);
+                        if ($messagearr['user_id'] == $_SESSION['user']['id']) {
+                            echo ("<a href='/profile/info' target='_blank'>");
+                        } elseif ($_SESSION['user']['id'] == '1') {
+                            echo("<a href='vendor/admin/admin_member_edit.php?id=" . $name['id'] . "' target='_blank'>");
+                        } else {
+                            echo("<a href='/contact/profile?id=" . $name['id'] . "' target='_blank'>");
+                        }
+                        echo($name['nickname'] . "</a>" . $_SESSION['user']['lang_text']['says'] . $messagearr['message'] .
+                                       "</p>
+                                    </div>");
+
+                                    if($_SESSION['user']['id'] == $messagearr['user_id'] || $_SESSION['user']['id'] == '1') {
+                                        echo ("
+                                            <div class='mes_right'>
+                                                <a href='/chat/messagedel?" . $messagearr['id'] . "=" . $_POST['chat_id'] . "'>
+                                                    <img src='/public/assets/img/delete_icon.png' alt='' class='mess_icon'>
+                                                </a>
+                                                <a href='/chat/messageedit?" . $messagearr['id'] . "=" . $_POST['chat_id'] . "'>
+                                                    <img src='/public/assets/img/edit_icon.png' alt='' class='mess_icon'>
+                                                </a>
+                                            </div>");
+                                    }
+                                    echo "</div>";
+                    }
+                }
+            }
+        }
+    }
+
+    public function membersOnline()
+    {
+        $model = new ChatModel();
+        echo ("<div align='center'><b>" . $_SESSION['user']['lang_text']['online_users'] . "</b></div>");
+        echo ("<ul class='' style='list-style-type: none;'>");
+        $member_list = $model->memberOnline($_POST['chat_id']);
+        if (mysqli_num_rows($member_list) > 0) {
+            while ($member_id = mysqli_fetch_assoc($member_list)) {
+                $member_info = $model->contactInfo($member_id['user_id']);
+                if (mysqli_num_rows($member_info) > 0) {
+                    $member = mysqli_fetch_assoc($member_info);
+                    if ($member['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5 minutes'))) && $member['id'] != $_SESSION['user']['id']) {
+                        echo("<a href='/contact/profile?id=" . $member['id'] . "' target='_blank'>
+                                        <li class='justify-content-between align-items-center'>" . $member['nickname'] .
+                            "</a>&nbsp;
+                                        <span class='badge bg-primary rounded-pill'>ONLINE</span>
+                                        </li>"
+                        );
+                    }
+                }
+            }
+        }
+        echo "</ul>";
+    }
+
+    public function messageDelete($get_key, $get_value)
+    {
+        $model = new ChatModel();
+        $model->messageDelete($get_key);
+
+        header('Location: /chat/page?chat_id=' . $get_value);
+    }
+
+    public function messageEdit($get_key, $get_value)
+    {
+        $model = new ChatModel();
+
+        if (isset($_POST['new_message'])) {
+            $model->messageEdit($_POST['new_message'], $_SESSION['user']['id_for_edit']);
+        }
+
+        if (isset($get_key) & is_numeric($get_key)) {
+            $message_edit = $model->selectMessage($get_key);
+            $message = mysqli_fetch_assoc($message_edit);
+            if ($message_edit) {
+                $_SESSION['user']['is_edit'] = true;
+                $_SESSION['user']['id_for_edit'] = $get_key;
+                $_SESSION['user']['mess_for_edit'] = $message['message'];
+            }
+        }
+        header('Location: /chat/page?chat_id=' . $get_value);
     }
 }
-

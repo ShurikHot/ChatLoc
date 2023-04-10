@@ -38,6 +38,9 @@ switch ($controller) {
 }
 switch ($action) {
     /*ProfileController*/
+    case 'registration':
+        $controller->registration();
+        break;
     case 'login':
         $controller->login();
         break;
@@ -75,7 +78,7 @@ switch ($action) {
         break;
 
     /*ChatController*/
-    case 'messpers':
+    case 'message':
         $controller->messageAdd();
         break;
     case 'messpersload':
@@ -86,6 +89,18 @@ switch ($action) {
         break;
     case 'page':
         $controller->chatPage($get_param_key, $get_param_value);
+        break;
+    case 'messchatload':
+        $controller->messageLoad();
+        break;
+    case 'membersonline':
+        $controller->membersOnline();
+        break;
+    case 'messagedel':
+        $controller->messageDelete($get_param_key, $get_param_value);
+        break;
+    case 'messageedit':
+        $controller->messageEdit($get_param_key, $get_param_value);
         break;
 
 

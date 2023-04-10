@@ -44,7 +44,7 @@
             </form>
 
 
-            <form class="form-signup" action="vendor/signup.php" method="post" name="form" enctype="multipart/form-data">
+            <form class="form-signup" action="profile/registration" method="post" name="form" enctype="multipart/form-data">
                 <label for="fullname">Full name</label>
                 <input class="form-styling" type="text" name="name" placeholder="Full name" />
 

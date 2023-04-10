@@ -1,27 +1,7 @@
 <?php
-/*require_once 'app/config/db.php';
-require_once 'app/config/params.php';
-
-ini_set('session.gc_maxlifetime', $session_lifetime);
-ini_set('session.gc_probability', 1);
-ini_set('session.gc_divisor', 1);
-session_start();*/
-
-/*$id = $_SESSION['user']['id'];
-$query_visit = mysqli_query($connect, "UPDATE `members` SET `last_visit` = NOW() WHERE `id` = $id");*/
-
-//if (!isset($_GET['chat_id']) || !is_numeric($_GET['chat_id'])) header('Location: /chatlist.php');
 
 //$chat_id_get = isset($_GET['chat_id']) ? $_GET['chat_id'] : "";
 
-
-
-/*if(!isset($_SESSION['user'])) {
-    header('Location: /index.php');
-}*/
-/*if (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']){
-    header('Location: /profile.php');*/
-//var_dump($chat_id);
 ?>
 <!doctype html>
 <html lang="en">
@@ -85,7 +65,7 @@ $query_visit = mysqli_query($connect, "UPDATE `members` SET `last_visit` = NOW()
 
 <h6><a href="/chat/page?invite=<?= $chat_id ?>">
         <?php
-        if(!isset($_GET['invite'])) {
+        if(isset($_SESSION['user']['invite']) && $_SESSION['user']['invite']) {
             echo $_SESSION['user']['lang_text']['invite_contact'];
         } else {
             echo $_SESSION['user']['lang_text']['click_invite'];
@@ -93,35 +73,29 @@ $query_visit = mysqli_query($connect, "UPDATE `members` SET `last_visit` = NOW()
         ?>
 
     </a></h6>
-<form action="#" method="post" <?php if(!isset($_GET['invite'])) echo "hidden";?> >
+<form action="" method="post" <?php if(isset($_SESSION['user']['invite']) && !$_SESSION['user']['invite']) echo "hidden";?> >
     <ul class="" style="list-style-type: none;">
-    <?php
-        $contacts = mysqli_query($connect, "SELECT `contact_id` FROM `contacts` WHERE `user_id` = $id");
-        while($user = mysqli_fetch_assoc($contacts)) {
-            $contact_id = $user['contact_id'];
-            $query2 = mysqli_query($connect,"SELECT `last_visit`, `nickname` FROM `members` WHERE `id` = $contact_id");
-            if (mysqli_num_rows($query2) > 0) {
-                $contact = mysqli_fetch_assoc($query2);
-                $contact['last_visit'] >= (date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -5 minutes'))) ? $status = 'ONLINE' : $status = 'offline';
-                echo ("<a href='vendor/contact_invite.php?invite_id=" . $contact_id . "&chat_id=" . $chat_id_get . "'> 
-                                    <li class='justify-content-between align-items-center'>" . $contact['nickname'] .
-                    "</a> 
-                     <span class='badge bg-primary rounded-pill'>" . $status . "</span>
-                                    </li>"
-                );
-            }
-        }
-    ?>
+        <?php
+            foreach ($contacts_arr as $key => $value) :
+        ?>
+        <a href='/chat/page?<?= $key ?>=<?= $chat_id ?>'>
+            <li class='justify-content-between align-items-center'> <?= $value['nickname'] ?>
+        </a>
+                <span class='badge bg-primary rounded-pill'><?= $value['status'] ?></span>
+            </li>
+        <?php
+            endforeach;
+        ?>
     </ul>
 </form>
 
 <?php
-if (key_exists('is_edit', $_SESSION['user'])) :
+if (key_exists('is_edit', $_SESSION['user']) && $_SESSION['user']['is_edit']) :
     ?>
-    <form method="post" action="vendor/messageedit.php?chat_id=<?= $chat_id_get ?>">
+    <form method="post" action="/chat/messageedit?chat_id=<?= $chat_id ?>">
         <textarea class="enter_mess" name="new_message" rows="1"><?= $_SESSION['user']['mess_for_edit'] ?></textarea>
-        <button type="edit" class="btn btn-success"><?= $_SESSION['user']['edit'] ?></button>
-        <button type="cancel" class="btn btn-secondary"><?= $_SESSION['user']['cancel'] ?></button>
+        <button type="edit" class="btn btn-success"><?= $_SESSION['user']['lang_text']['edit'] ?></button>
+        <button type="cancel" class="btn btn-secondary"><?= $_SESSION['user']['lang_text']['cancel'] ?></button>
     </form>
     <?php
     unset($_SESSION['user']['is_edit']);
@@ -131,10 +105,10 @@ endif; ?>
     $("document").ready(function(){
         $("#sendmess").on("submit", function (){
             let dataFormArray = $(this).serializeArray();
-            dataFormArray.push({name: "chat_id", value: "<?= $chat_id_get ?>"});
+            dataFormArray.push({name: "chat_id", value: "<?= $chat_id ?>"});
             let dataForm = $.param(dataFormArray);
             $.ajax({
-                url: 'vendor/messageadd.php',
+                url: '/chat/message',
                 method: 'post',
                 dataType: 'html',
                 data: dataForm,
@@ -154,8 +128,8 @@ endif; ?>
     {
         $.ajax({
             method: 'POST',
-            url: 'vendor/messageload.php',
-            data: "req=ok&chat_id=<?= $chat_id_get ?>",
+            url: '/chat/messchatload',
+            data: "req=ok&chat_id=<?= $chat_id ?>",
             success: function(html)
             {
                 $("#wrap").empty();
@@ -168,8 +142,8 @@ endif; ?>
     {
         $.ajax({
             method: 'POST',
-            url: 'vendor/members_online.php',
-            data: "req=ok&chat_id=<?= $chat_id_get ?>",
+            url: '/chat/membersonline',
+            data: "req=ok&chat_id=<?= $chat_id ?>",
             success: function(html)
             {
                 $("#members_online").empty();
@@ -183,10 +157,10 @@ endif; ?>
 
 <script src="/public/assets/js/index.js"></script>
 <script>
-    /*load_mess();
+    load_mess();
     load_online_members();
     setInterval(load_mess,5000);
-    setInterval(load_online_members,30000);*/
+    setInterval(load_online_members,30000);
 </script>
 
 </body>

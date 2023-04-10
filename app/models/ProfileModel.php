@@ -7,7 +7,7 @@ require_once 'app/models/Model.php';
 
 class ProfileModel extends Model
 {
-    public function signinUser($email, $password)
+    public function signInUser($email, $password)
     {
         $result = $this->query("SELECT `id`, `nickname`, `email`, `language`, `avatar`, `blocked` FROM `members` WHERE `email` = '$email' AND `password` = '$password'");
         if (mysqli_num_rows($result) > 0) {

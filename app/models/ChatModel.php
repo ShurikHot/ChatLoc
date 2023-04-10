@@ -32,7 +32,7 @@ class ChatModel extends Model
 
     public function contactInfo($id)
     {
-        $result = $this->query("SELECT `nickname` FROM `members` WHERE `id` = $id");
+        $result = $this->query("SELECT `id`, `nickname`, `avatar`, `last_visit` FROM `members` WHERE `id` = $id");
         return $result;
     }
 
@@ -56,5 +56,44 @@ class ChatModel extends Model
     {
         $result = $this->query("SELECT * FROM `chats` WHERE `id` = $chat_id");
         return $result;
+    }
+
+    public function inviteToChat($user_id, $invite_id, $invite_mess)
+    {
+        $this->query("INSERT INTO `personal_messages` (`from_id`, `to_id`, `message`) VALUES ('$user_id', '$invite_id', '$invite_mess')");
+    }
+
+    public function messageChatCount($chat_id)
+    {
+        $result = $this->query("SELECT COUNT(`id`) as total FROM `messages` WHERE `chat_id` = $chat_id");
+        return $result;
+    }
+
+    public function selectMessages($chat_id, $start, $total)
+    {
+        $result = $this->query("SELECT * FROM `messages` WHERE `chat_id` = $chat_id LIMIT $start, $total");
+        return $result;
+    }
+
+    public function memberOnline($chat_id)
+    {
+        $result = $this->query("SELECT DISTINCT `user_id` FROM `messages` WHERE `chat_id` = $chat_id");
+        return $result;
+    }
+
+    public function messageDelete($mess_id)
+    {
+        $this->query("DELETE FROM `messages` WHERE `id` = $mess_id");
+    }
+
+    public function selectMessage($mess_id)
+    {
+        $result = $this->query("SELECT * FROM `messages` WHERE `id` = $mess_id");
+        return $result;
+    }
+
+    public function messageEdit($new_message, $id_for_edit)
+    {
+        $this->query("UPDATE `messages` SET `message`= '$new_message' WHERE `id` = $id_for_edit");
     }
 }

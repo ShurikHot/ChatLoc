@@ -102,7 +102,7 @@ if (isset($contact_arr)) :
             dataFormArray.push({name: "contact_id", value: "<?= $key ?>"});
             let dataForm = $.param(dataFormArray);
             $.ajax({
-                url: '/chat/messpers',
+                url: '/chat/message',
                 method: 'post',
                 dataType: 'html',
                 data: dataForm,

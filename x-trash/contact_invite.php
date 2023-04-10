@@ -1,5 +1,5 @@
 <?php
-require_once 'app/config/db.php';
+/*require_once 'app/config/db.php';
 require_once 'app/config/params.php';
 
 ini_set('session.gc_maxlifetime', $session_lifetime);
@@ -16,4 +16,4 @@ if (isset($_GET['invite_id']) & is_numeric($_GET['invite_id'])) {
     $invite_mess = $_SESSION['user']['lang_text']['join_chat'] . " <a href=\'/chatpage.php?chat_id=" . $chat_id . "\'>" . $chat_name['chat_name'] ."</a>";
     mysqli_query($connect,"INSERT INTO `personal_messages` (`from_id`, `to_id`, `message`) VALUES ('$user_id', '$invite_id', '$invite_mess')");
     header('Location: /chatpage.php?chat_id=' . $chat_id);
-}
+}*/

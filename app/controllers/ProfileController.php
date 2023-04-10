@@ -18,13 +18,18 @@ class ProfileController extends Controller
         $view->render('profile/registration.php', []);
     }
 
+    public function registration()
+    {
+        
+    }
+
     public function signIn()
     {
         $model = new ProfileModel();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'];
             $password = md5($_POST['password']);
-            $check = $model->signinUser($email, $password);
+            $check = $model->signInUser($email, $password);
             $_SESSION['user'] = [
                 "id" => $check['id'],
                 "nickname" => $check['nickname'],
@@ -35,6 +40,8 @@ class ProfileController extends Controller
                 "change_language" => false,
                 "black_list" => false,
                 "chat_create" => false,
+                "invite" => false,
+                "is_edit" => false,
             ];
             $lang_page = $_SESSION['user']['language'];
             $lang_path = "app/views/languages/$lang_page.php";
