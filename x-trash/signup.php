@@ -14,6 +14,8 @@ require_once '../vendor/PHPMailer/src/Exception.php';
 require_once '../vendor/PHPMailer/src/PHPMailer.php';
 require_once '../vendor/PHPMailer/src/SMTP.php';
 
+
+
 $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
 $name = filter_var(trim($_POST['name']),FILTER_SANITIZE_STRING);
 $nickname = filter_var(trim($_POST['nickname']),FILTER_SANITIZE_STRING);

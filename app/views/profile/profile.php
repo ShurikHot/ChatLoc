@@ -42,7 +42,7 @@
         </li>
         <?php if (isset($_SESSION['user']['email']) && $_SESSION['user']['email'] === 'admin@admin.com'): ?>
         <li class="nav-item">
-            <a class="btn btn-success" href="/app/views/admin/index.php"><?= $_SESSION['user']['lang_text']['admin_area']?></a>
+            <a class="btn btn-success" href="/app/views/admin/admin.php"><?= $_SESSION['user']['lang_text']['admin_area']?></a>
         </li>
         <?php endif; ?>
         <li class="nav-item">
@@ -171,7 +171,7 @@
     </form>
 
     <form method="post" id="find" action="/profile/searchmember">
-        <textarea class="" style="width: 505px;" type="text" name="find_member" id="find_member" placeholder="<?= $_SESSION['user']['lang_text']['find_somebody'] ?>" rows="1"></textarea>
+        <input type="text" style="width: 505px;" id="find_member" name="find_member" placeholder="<?= $_SESSION['user']['lang_text']['find_somebody'] ?>">
         <button type="submit" class="btn btn-primary"><?= $_SESSION['user']['lang_text']['find'] ?></button>
     </form>
 
@@ -180,7 +180,7 @@
             <?php
                 if (isset($find_arr)) {
                     foreach ($find_arr as $value) {
-                        echo("<a href='vendor/contactprofile.php?id=" . $value['id'] . "'>
+                        echo("<a href='/contact/profile?id=" . $value['id'] . "'>
                                         <li class='justify-content-between align-items-center'>" . $value['nickname'] . " - " . $value['email'] .
                             "</a>&nbsp;
                                         <span class='badge bg-primary rounded-pill'>" . $value['last_visit'] . "</span>

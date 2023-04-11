@@ -1,18 +1,8 @@
 <?php
-/*require_once '../app/config/db.php';
-require_once '../app/config/params.php';
-
-ini_set('session.gc_maxlifetime', $session_lifetime);
-ini_set('session.gc_probability', 1);
-ini_set('session.gc_divisor', 1);
-session_start();
-
-$id = $_SESSION['user']['id'];
-$query_visit = mysqli_query($connect, "UPDATE `members` SET `last_visit` = NOW() WHERE `id` = $id");
 
 if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
-    header('Location: ../index.php');
-}*/
+    header('Location: /');
+}
 ?>
 
 <!DOCTYPE html>
@@ -25,11 +15,11 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="../../../public/adminlte/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="/public/adminlte/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="../../../public/adminlte/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="/public/adminlte/dist/css/adminlte.min.css">
     <!-- overlayScrollbars -->
-    <link rel="stylesheet" href="../../../public/adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link rel="stylesheet" href="/public/adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
 
     <script src="https://www.gstatic.com/charts/loader.js"></script>
 
@@ -39,7 +29,7 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
 
   <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="../public/assets/img/logo.png" alt="ChatLocLogo" height="60" width="60">
+    <img class="animation__shake" src="/public/assets/img/logo.png" alt="ChatLocLogo" height="120" width="120">
   </div>
 
   <!-- Navbar -->
@@ -50,11 +40,11 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="../chatlist.php" class="nav-link">Go to <b>ChatList</b></a>
+        <a href="/char/chatlist" class="nav-link">Go to <b>ChatList</b></a>
       </li>
 
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="../profile.php" class="nav-link">Your <b>Profile</b></a>
+        <a href="/profile/info" class="nav-link">Your <b>Profile</b></a>
       </li>
 
       <li class="nav-item d-none d-sm-inline-block">
@@ -68,7 +58,7 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
-      <img src="../public/assets/img/logo.png" alt="ChatLocLogo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <img src="/public/assets/img/logo.png" alt="ChatLocLogo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">Chat Loc</span>
     </a>
 
@@ -77,10 +67,10 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="../public/assets/img/admin_logo.png" class="img-circle elevation-2" alt="User Image">
+          <img src="/public/assets/img/admin_logo.png" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="../profile.php" class="d-block">MegaAdmin</a>
+          <a href="/profile/info" class="d-block">MegaAdmin</a>
         </div>
       </div>
 
@@ -99,14 +89,14 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="../vendor/admin/admin_content.php?content=members" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
+                <a href="/admin/content?members" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
                     $_SESSION['user']['admin_category'] == "members") echo "active"?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Members Manage</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../vendor/admin/admin_content.php?content=statistics" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
+                <a href="/admin/content?statistics" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
                     $_SESSION['user']['admin_category'] == "statistics") echo "active"?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Statistics</p>
@@ -130,7 +120,7 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="../vendor/admin/admin_content.php?content=chat_list" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
+                    <a href="/admin/content?chat_list" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
                         $_SESSION['user']['admin_category'] == "chat_list") echo "active"?>">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Chat List</p>
@@ -139,7 +129,7 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
             </ul>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="../vendor/admin/admin_content.php?content=chat_approve" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
+                    <a href="/admin/content?chat_approve" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
                         $_SESSION['user']['admin_category'] == "chat_approve") echo "active"?>">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Chat for approve</p>
@@ -148,7 +138,7 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
             </ul>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="../vendor/admin/admin_content.php?content=blocked" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
+                <a href="/admin/content?blocked" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
                     $_SESSION['user']['admin_category'] == "blocked") echo "active"?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Blocked Members</p>
@@ -172,7 +162,7 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="../vendor/admin/admin_content.php?content=settings" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
+                <a href="/admin/content?settings" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
                     $_SESSION['user']['admin_category'] == "settings") echo "active"?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Design Settings</p>
@@ -210,7 +200,7 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
     <!-- Main content -->
     <section class="content" id="content">
       <?php
-        require_once('content.php');
+        //require_once('content.php');
       ?>
     </section>
 
@@ -234,19 +224,19 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
 <!-- ./wrapper -->
 
     <!-- jQuery -->
-    <script src="../../../public/adminlte/plugins/jquery/jquery.min.js"></script>
+    <script src="/public/adminlte/plugins/jquery/jquery.min.js"></script>
     <!-- jQuery UI 1.11.4 -->
-    <script src="../../../public/adminlte/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="/public/adminlte/plugins/jquery-ui/jquery-ui.min.js"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script>
       $.widget.bridge('uibutton', $.ui.button)
     </script>
     <!-- Bootstrap 4 -->
-    <script src="../../../public/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/public/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- overlayScrollbars -->
-    <script src="../../../public/adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="/public/adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
     <!-- AdminLTE App -->
-    <script src="../../../public/adminlte/dist/js/adminlte.js"></script>
+    <script src="/public/adminlte/dist/js/adminlte.js"></script>
 
 </body>
 </html>

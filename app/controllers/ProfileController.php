@@ -5,9 +5,13 @@ namespace app\controllers;
 require_once 'Controller.php';
 require_once 'View.php';
 require_once 'app/models/ProfileModel.php';
+require_once 'vendor/PHPMailer/src/Exception.php';
+require_once 'vendor/PHPMailer/src/PHPMailer.php';
+require_once 'vendor/PHPMailer/src/SMTP.php';
 
 use app\models\Model;
 use app\models\ProfileModel;
+use PHPMailer\PHPMailer\PHPMailer;
 
 
 class ProfileController extends Controller
@@ -18,9 +22,60 @@ class ProfileController extends Controller
         $view->render('profile/registration.php', []);
     }
 
-    public function registration()
+    public function signUp()
     {
-        
+        $model = new ProfileModel();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+            $name = filter_var(trim($_POST['name']),FILTER_SANITIZE_STRING);
+            $nickname = filter_var(trim($_POST['nickname']),FILTER_SANITIZE_STRING);
+            $password = $_POST['password'];
+            $confirm_password = $_POST['confirm_password'];
+            $phone_num = filter_var(trim($_POST['phone_num']), FILTER_SANITIZE_NUMBER_INT);
+            $gender = $_POST['gender'];
+            $country = filter_var(trim($_POST['country']),FILTER_SANITIZE_STRING);
+            $language = $_POST['language'];
+            if (isset($_POST['specialization'])) {
+                $specialization = implode(',', $_POST['specialization']);
+            } else {
+                $specialization = "";
+            }
+            $comment = htmlspecialchars($_POST['comment']);
+
+            $email_uniq = $model->checkEmail($email);
+
+            if (mysqli_num_rows($email_uniq) > 1) {
+                $_SESSION['message'] = '<h6 align="center">This email is in use by another user</h6>';
+                header('Location: /');
+            } elseif ($password === $confirm_password && $name != "" && $email != "" && $nickname != "" && $password != "") {
+                $password = md5($password);
+                $date = date('Y-m-d H:i:s');
+
+                $member_singup = $model->memberSignup($email, $name, $nickname, $password, $phone_num, $gender, $country, $language, $specialization, $comment, $date);
+
+                if($member_singup) {
+                    $mail = new PHPMailer();
+                    $mail->isSMTP();
+                    $mail->Host = 'smtp.gmail.com';
+                    $mail->SMTPAuth = true;
+                    $mail->Username = 'youremail@gmail.com';
+                    $mail->Password = 'yourpassword';
+                    $mail->SMTPSecure = 'tls';
+                    $mail->Port = 587;
+                    $mail->setFrom('youremail@gmail.com', 'Your Name');
+                    $mail->addAddress("$email");
+                    $mail->Subject = '<b>Your registration data: </b><br>';
+                    $mail->Body = 'Your Nickname: ' . $nickname . '<br> Your Password: '. $password;
+                } else {
+                    echo 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo;
+                }
+                $_SESSION['message'] = '<h6 align="center">Registration completed successfully <br> Please Check your email!</h6>';
+                header('Location: /');
+            } else {
+                $_SESSION['message'] = '<h6 align="center">Some fields do not fill, </br>or the password and confirm password fields do not match</h6>';
+                header('Location: /');
+            }
+        }
     }
 
     public function signIn()
@@ -55,7 +110,11 @@ class ProfileController extends Controller
 
             $contacts = self::getContacts();
             $view = new View();
-            $view->render('profile/profile.php', ['contacts' => $contacts]);
+            if ($_SESSION['user']['id'] == '1') {
+                header('Location: /admin/main');
+            } else {
+                $view->render('profile/profile.php', ['contacts' => $contacts]);
+            }
         } else {
             header('Location: /');
         }
@@ -141,6 +200,8 @@ class ProfileController extends Controller
                         $contact_black[$contact_id] = $contact['nickname'];
                     }
                 }
+            } else {
+                $contact_black = [];
             }
 
             $contacts = self::getContacts();
@@ -193,9 +254,12 @@ class ProfileController extends Controller
                     }
                 }
             }
+        } else {
+            $find_arr = [];
         }
+        $contacts = self::getContacts();
         $view = new View();
-        $view->render('profile/profile.php', ['find_arr' => $find_arr]);
+        $view->render('profile/profile.php', ['find_arr' => $find_arr, 'contacts' => $contacts]);
     }
 
     public function getContacts()
@@ -223,6 +287,8 @@ class ProfileController extends Controller
                     ];
                 }
             }
+        } else {
+            $contact_arr = [];
         }
 
         $contacts_appr_q = $model->contactApprList($_SESSION['user']['id']);

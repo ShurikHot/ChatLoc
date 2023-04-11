@@ -2,6 +2,7 @@
 require_once 'app/controllers/ProfileController.php';
 require_once 'app/controllers/ContactController.php';
 require_once 'app/controllers/ChatController.php';
+require_once 'app/controllers/admin/AdminMainController.php';
 
 $url = isset($_GET['url']) ? $_GET['url'] : '';
 $parts = explode('/', $url);
@@ -13,25 +14,27 @@ if (isset(array_keys($_GET)[1])) {
     $get_param_key = "";
     $get_param_value = "";
 }
-/*var_dump($get_param_key, $get_param_value);
-die();*/
 
 if ($parts[0] == "") $parts[0] = 'profile';
+if (key_exists(1, $parts) && strlen($parts[1]) == 0) $parts[1] = 'info';
+
 $controller = $parts[0] ?? 'profile';
 $action = $parts[1] ?? 'login';
-//var_dump($controller, $action);
 
 switch ($controller) {
     case 'profile':
         $controller = new \app\controllers\ProfileController();
         break;
     case 'contact':
-        //var_dump($controller);
         $controller = new \app\controllers\ContactController();
         break;
     case 'chat':
         $controller = new \app\controllers\ChatController();
         break;
+    case 'admin':
+        $controller = new \app\controllers\admin\AdminMainController();
+        break;
+
     default:
         header('HTTP/1.1 404 Not Found');
         die('Page not found!!!!!!!!!!!!!!!');
@@ -39,7 +42,7 @@ switch ($controller) {
 switch ($action) {
     /*ProfileController*/
     case 'registration':
-        $controller->registration();
+        $controller->signUp();
         break;
     case 'login':
         $controller->login();
@@ -102,6 +105,15 @@ switch ($action) {
     case 'messageedit':
         $controller->messageEdit($get_param_key, $get_param_value);
         break;
+
+    /*AdminMainController*/
+    case 'main':
+        $controller->adminMain();
+        break;
+    case 'content':
+        $controller->adminContent($get_param_key);
+        break;
+
 
 
     default:
