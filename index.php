@@ -10,6 +10,7 @@ $parts = explode('/', $url);
 if (isset(array_keys($_GET)[1])) {
     $get_param_key = array_keys($_GET)[1];
     $get_param_value = $_GET[$get_param_key];
+    if ($get_param_value == "") $get_param_value = null;
 } else {
     $get_param_key = "";
     $get_param_value = "";
@@ -111,8 +112,12 @@ switch ($action) {
         $controller->adminMain();
         break;
     case 'content':
-        $controller->adminContent($get_param_key);
+        //var_dump($get_param_key, $get_param_value);die();
+        $controller->adminContent($get_param_key, $get_param_value);
         break;
+    /*case 'members':
+        $controller->membersContent($get_param_value);
+        break;*/
 
 
 

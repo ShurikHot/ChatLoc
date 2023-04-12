@@ -40,7 +40,7 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="/char/chatlist" class="nav-link">Go to <b>ChatList</b></a>
+        <a href="/chat/chatlist" class="nav-link">Go to <b>ChatList</b></a>
       </li>
 
       <li class="nav-item d-none d-sm-inline-block">
@@ -120,7 +120,7 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="/admin/content?chat_list" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
+                    <a href="/admin/content?chatlist" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
                         $_SESSION['user']['admin_category'] == "chat_list") echo "active"?>">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Chat List</p>
@@ -129,7 +129,7 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
             </ul>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="/admin/content?chat_approve" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
+                    <a href="/admin/content?chatapprove" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
                         $_SESSION['user']['admin_category'] == "chat_approve") echo "active"?>">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Chat for approve</p>
@@ -200,7 +200,7 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
     <!-- Main content -->
     <section class="content" id="content">
       <?php
-        //require_once('content.php');
+        require_once('content.php');
       ?>
     </section>
 
