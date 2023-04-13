@@ -115,9 +115,9 @@ switch ($action) {
         //var_dump($get_param_key, $get_param_value);die();
         $controller->adminContent($get_param_key, $get_param_value);
         break;
-    /*case 'members':
-        $controller->membersContent($get_param_value);
-        break;*/
+    case 'memberupdate':
+        $controller->membersUpdate($get_param_value);
+        break;
 
 
 

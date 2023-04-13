@@ -5,6 +5,7 @@
             <th>ID</th>
             <th>Chat name</th>
             <th>Author</th>
+            <th width="50"><i class="fas fa-lock"></i></th>
             <th width="50"><i class="fas fa-times"></i></th>
         </tr>
         </thead>
@@ -17,17 +18,22 @@
                     <a class="" href="../../vendor/admin/admin_member_edit.php?id=<?= $value['author_id'] ?>"> <?= $value['nickname'] ?></a>
                 </td>
                 <td>
+                    <a class="btn btn-warning btn-sm" href="../vendor/admin/admin_chats.php?approved_id=<?= $key ?>">
+                    <i class="fas fa-lock"></i></a>
+                </td>
+                <td>
                     <a class="btn btn-sm" href="../vendor/admin/admin_chats.php?delid=<?= $key ?>">
-                        <i class="fas fa-times"></i></a>
+                    <i class="fas fa-times"></i></a>
                 </td>
             </tr>
         <?php endforeach; ?>
         </tbody>
     </table>
+
 <?php
-    require_once 'app/views/admin/pages/pagination.php'
+    require_once 'app/views/admin/pages/pagination.php';
 ?>
 
 <?php else: ?>
-    <p>No chats yet...</p>
+    <p>No chats for approve...</p>
 <?php endif; ?>

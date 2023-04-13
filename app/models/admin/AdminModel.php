@@ -35,4 +35,62 @@ class AdminModel extends \app\models\Model
         $result = $this->query("SELECT COUNT(`id`) as total FROM `chats` WHERE `approved` = 1");
         return $result;
     }
+
+    public function chatsApproveList($start, $records_per_page)
+    {
+        $result = $this->query("SELECT * FROM `chats` WHERE `approved` = 0 LIMIT $start, $records_per_page");
+        return $result;
+    }
+
+    public function countApproveChats()
+    {
+        $result = $this->query("SELECT COUNT(`id`) as total FROM `chats` WHERE `approved` = 0");
+        return $result;
+    }
+
+    public function blockedMemberList($start, $records_per_page)
+    {
+        $result = $this->query("SELECT `id`, `name`, `nickname`, `email`, `avatar`, `blocked` FROM `members` WHERE `blocked` = 1 LIMIT $start, $records_per_page");
+        return $result;
+    }
+
+    public function countBlockedMembers()
+    {
+        $result = $this->query("SELECT COUNT(`id`) as total FROM `members` WHERE `blocked` = 1");
+        return $result;
+    }
+
+    public function statisticMember()
+    {
+        $result = $this->query("SELECT DATE_FORMAT(created_at, '%Y-%m-%d %H:00:00') as hour, COUNT(`id`) as count FROM members GROUP BY hour");
+        return $result;
+    }
+
+    public function memberInfo($user_id)
+    {
+        $result = $this->query("SELECT * FROM `members` WHERE `id` = $user_id");
+        return $result;
+    }
+
+    public function contactIs($id)
+    {
+        $result = $this->query("SELECT * FROM `contacts` WHERE `user_id` = 1 AND `contact_id` = $id");
+        return $result;
+    }
+
+    public function updateMember($blocked, $email, $name, $nickname, $phone_num, $avatar, $gender, $country, $language, $specialization, $userid)
+    {
+        $this->query("UPDATE `members` SET  `blocked` = '$blocked',
+                                                            `email` = '$email',
+                                                            `name` = '$name',
+                                                            `nickname` = '$nickname',
+                                                            `phone_num` = '$phone_num',
+                                                            `avatar` = '$avatar',
+                                                            `gender` = '$gender',
+                                                            `country` = '$country', 
+                                                            `language` = '$language', 
+                                                            `specialization` = '$specialization' WHERE `id` = $userid");
+    }
+
+
 }

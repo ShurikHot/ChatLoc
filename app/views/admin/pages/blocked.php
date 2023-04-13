@@ -21,7 +21,7 @@
                 <td><?= $value['nickname'] ?></td>
                 <td><a href="<?= $value['avatar'] ?>"><?= $value['avatar'] ?></a></td>
                 <td>
-                    <a class="btn btn-warning btn-sm" href="/admin/content?memberedit=<?= $key ?>">
+                    <a class="btn btn-warning btn-sm" href="../../vendor/admin/admin_member_edit.php?id=<?= $key ?>">
                         <i class="fas fa-pencil-alt"></i>
                     </a>
                 </td>
@@ -47,5 +47,5 @@
 ?>
 
 <?php else: ?>
-    <p>Members not found...</p>
+    <p>Blocked members not found...</p>
 <?php endif; ?>

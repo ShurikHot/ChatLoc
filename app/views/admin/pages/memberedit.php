@@ -1,14 +1,13 @@
 <?php
-require_once '../app/config/db.php';
 
 if (!isset($_SESSION['user']['admin_member_edit'])) {
-    header('Location: ../index.php');
+    header('Location: /admin/content?members');
 }
 ?>
 
 <div class="card">
     <div class="card-body">
-        <form action="../vendor/admin/admin_member_edit.php" method="post" class="row">
+        <form action="/admin/memberupdate?page=<?= $data['page'] ?>" method="post" class="row">
             <div class="col-md-2">
                 <div class="form-group">
                     <label for="userid">ID</label>
@@ -31,9 +30,7 @@ if (!isset($_SESSION['user']['admin_member_edit'])) {
             </div>
 
             <?php
-                $contact_id = $_SESSION['user']['admin_member_edit']['id'];
-                $query = mysqli_query($connect,"SELECT * FROM `contacts` WHERE `user_id` = 1 AND `contact_id` = $contact_id ");
-                if (mysqli_num_rows($query) == 0) :
+                if (!$data['iscontact']) :
             ?>
                 <div class="col-md-2">
                     <div class="form-group">

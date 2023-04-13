@@ -121,7 +121,7 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
             <ul class="nav nav-treeview">
                 <li class="nav-item">
                     <a href="/admin/content?chatlist" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
-                        $_SESSION['user']['admin_category'] == "chat_list") echo "active"?>">
+                        $_SESSION['user']['admin_category'] == "chatlist") echo "active"?>">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Chat List</p>
                     </a>
@@ -130,7 +130,7 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
             <ul class="nav nav-treeview">
                 <li class="nav-item">
                     <a href="/admin/content?chatapprove" class="nav-link <?php if (isset($_SESSION['user']['admin_category']) &&
-                        $_SESSION['user']['admin_category'] == "chat_approve") echo "active"?>">
+                        $_SESSION['user']['admin_category'] == "chatapprove") echo "active"?>">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Chat for approve</p>
                     </a>
