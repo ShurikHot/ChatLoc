@@ -6,6 +6,7 @@ namespace app\controllers\admin;
 use app\controllers\Controller;
 use app\controllers\View;
 use app\models\admin\AdminModel;
+use app\models\ContactModel;
 use app\models\Model;
 
 require_once 'app/controllers/Controller.php';
@@ -39,7 +40,11 @@ class AdminMainController extends Controller
         $action_name = $get_content . "Content";
 
         if ($get_content == 'memberedit') {
-            $data = self::$action_name($get_value, $_SESSION['user']['admin_member_edit']['page']);
+            if (key_exists('page', $_SESSION['user']['admin_member_edit'])) {
+                $data = self::$action_name($get_value, $_SESSION['user']['admin_member_edit']['page']);
+            } else {
+                $data = self::$action_name($get_value, 1);
+            }
         } else {
             $_SESSION['user']['admin_member_edit']['page'] = null;
             $get_value = $get_value ?? 1;
@@ -239,8 +244,51 @@ die();*/
         header('Location: /admin/content?members=' . $page);
     }
 
-    public function settingsContent($page)
+    public function contactAdminActions($key, $value)
     {
-        return true;
+        $contact_q = new ContactModel();
+        if ($key == 'delid' & is_numeric($value)) {
+            $contact_q->contactDel($_SESSION['user']['id'], $value);
+        }
+        if ($key == 'id' & is_numeric($value)) {
+            $contact = $contact_q->contactIs($_SESSION['user']['id'], $value);
+            if (mysqli_num_rows($contact) == 0) {
+                $mess = $_SESSION['user']['lang_text']['user'] . $_SESSION['user']['nickname'] . $_SESSION['user']['lang_text']['added_you'];
+                $contact_q->contactAdd($_SESSION['user']['id'], $value, $mess);
+            }
+        }
+        header('Location: /admin/content?memberedit=' . $value);
     }
+
+    public function memberBlock($page, $lockid)
+    {
+        $model = new AdminModel();
+        $model->memberBlock($lockid);
+        header('Location: /admin/content?members=' . $page);
+    }
+
+    public function memberDel($page, $delid)
+    {
+        $model = new AdminModel();
+        $model->memberDel($delid);
+        header('Location: /admin/content?members=' . $page);
+    }
+
+    public function chatDel($page, $delid)
+    {
+        $model = new AdminModel();
+        $model->chatDel($delid);
+        header('Location: /admin/content?chatlist=' . $page);
+    }
+
+    public function chatApprove($page, $appid)
+    {
+        $model = new AdminModel();
+        $model->chatApprove($appid);
+        header('Location: /admin/content?chatapprove=' . $page);
+    }
+
+
+
+
 }

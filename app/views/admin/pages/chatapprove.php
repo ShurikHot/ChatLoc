@@ -15,14 +15,14 @@
                 <td><?= $key ?></td>
                 <td><?= $value['chat_name'] ?></td>
                 <td>
-                    <a class="" href="../../vendor/admin/admin_member_edit.php?id=<?= $value['author_id'] ?>"> <?= $value['nickname'] ?></a>
+                    <a class="" href="/admin/content?memberedit=<?= $value['author_id'] ?>"> <?= $value['nickname'] ?></a>
                 </td>
                 <td>
-                    <a class="btn btn-warning btn-sm" href="../vendor/admin/admin_chats.php?approved_id=<?= $key ?>">
+                    <a class="btn btn-warning btn-sm" href="/admin/chatapprove?<?= $data['current_page'] ?>=<?= $key ?>">
                     <i class="fas fa-lock"></i></a>
                 </td>
                 <td>
-                    <a class="btn btn-sm" href="../vendor/admin/admin_chats.php?delid=<?= $key ?>">
+                    <a class="btn btn-sm" href="/admin/chatdel?<?= $data['current_page'] ?>=<?= $key ?>">
                     <i class="fas fa-times"></i></a>
                 </td>
             </tr>

@@ -11,10 +11,10 @@ if (isset($_GET['approved_id']) && is_numeric($_GET['approved_id'])) {
     $chat_id = $_GET['approved_id'];
     mysqli_query($connect, "UPDATE `chats` SET `approved`='1' WHERE `id` = $chat_id");
 }
-if (isset($_GET['delid']) && is_numeric($_GET['delid'])) {
+/*if (isset($_GET['delid']) && is_numeric($_GET['delid'])) {
     $chat_id = $_GET['delid'];
     mysqli_query($connect, "DELETE FROM `chats` WHERE `id` = $chat_id");
     mysqli_query($connect, "DELETE FROM `messages` WHERE `chat_id` = $chat_id");
-}
+}*/
 
 header('Location: ../../admin/index.php?page=' . $_SESSION['user']['page_get']);

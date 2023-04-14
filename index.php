@@ -118,6 +118,21 @@ switch ($action) {
     case 'memberupdate':
         $controller->membersUpdate($get_param_value);
         break;
+    case 'admincontact':
+        $controller->contactAdminActions($get_param_key, $get_param_value);
+        break;
+    case 'memberblock':
+        $controller->memberBlock($get_param_key, $get_param_value);
+        break;
+    case 'memberdel':
+        $controller->memberDel($get_param_key, $get_param_value);
+        break;
+    case 'chatdel':
+        $controller->chatDel($get_param_key, $get_param_value);
+        break;
+    case 'chatapprove':
+        $controller->chatApprove($get_param_key, $get_param_value);
+        break;
 
 
 

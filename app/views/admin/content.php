@@ -47,5 +47,5 @@
 ?>
 
 <?php else: ?>
-    <p>Members not found...</p>
+    <p>Blocked members not found...</p>
 <?php endif; ?>

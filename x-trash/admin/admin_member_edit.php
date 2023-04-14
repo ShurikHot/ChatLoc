@@ -33,7 +33,7 @@ session_start();*/
 }*/
 
 /*block*/
-if (isset($_GET['lockid']) & is_numeric($_GET['lockid'])) {
+/*if (isset($_GET['lockid']) & is_numeric($_GET['lockid'])) {
     $lockid = $_GET['lockid'];
     $query = mysqli_query($connect,"SELECT `id`, `blocked` FROM `members` WHERE `id` = $lockid");
     if (mysqli_num_rows($query) > 0) {
@@ -47,20 +47,20 @@ if (isset($_GET['lockid']) & is_numeric($_GET['lockid'])) {
         $content_data = file_get_contents($content_path);
         file_put_contents("../../admin/content.php", $content_data);
     }
-}
+}*/
 
 /*delete*/
-if (isset($_GET['delid']) & is_numeric($_GET['delid'])) {
+/*if (isset($_GET['delid']) & is_numeric($_GET['delid'])) {
     $delid = $_GET['delid'];
     mysqli_query($connect,"DELETE FROM `members` WHERE `id` = $delid");
     mysqli_query($connect,"DELETE FROM `messages` WHERE `id` = $delid");
     $content_path = "../../admin/views/members.php";
     $content_data = file_get_contents($content_path);
     file_put_contents("../../admin/content.php", $content_data);
-}
+}*/
 
 /*update*/
-if(isset($_POST['submit'])) {
+/*if(isset($_POST['submit'])) {
     $userid = $_POST['userid'];
     $blocked = $_POST['blocked'];
     $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
@@ -88,5 +88,5 @@ if(isset($_POST['submit'])) {
         $content_data = file_get_contents($content_path);
         file_put_contents("../../admin/content.php", $content_data);
     }
-}
+}*/
 header('Location: ../../admin/index.php?page=' . $_SESSION['user']['page_get']);

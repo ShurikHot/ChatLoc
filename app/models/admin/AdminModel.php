@@ -92,5 +92,35 @@ class AdminModel extends \app\models\Model
                                                             `specialization` = '$specialization' WHERE `id` = $userid");
     }
 
+    public function memberBlock($lockid)
+    {
+        $result = $this->query("SELECT `id`, `blocked` FROM `members` WHERE `id` = $lockid");
+        if (mysqli_num_rows($result) > 0) {
+            $user = mysqli_fetch_assoc($result);
+            if ($user['blocked']) {
+                $this->query("UPDATE `members` SET `blocked` = 0 WHERE `id` = $lockid");
+            } else {
+                $this->query("UPDATE `members` SET `blocked` = 1 WHERE `id` = $lockid");
+            }
+        }
+    }
+
+    public function memberDel($delid)
+    {
+        $this->query("DELETE FROM `members` WHERE `id` = $delid");
+        $this->query("DELETE FROM `messages` WHERE `id` = $delid");
+    }
+
+    public function chatDel($delid)
+    {
+        $this->query("DELETE FROM `chats` WHERE `id` = $delid");
+        $this->query("DELETE FROM `messages` WHERE `chat_id` = $delid");
+    }
+
+    public function chatApprove($appid)
+    {
+        $this->query("UPDATE `chats` SET `approved`='1' WHERE `id` = $appid");
+    }
+
 
 }
