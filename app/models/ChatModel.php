@@ -26,7 +26,7 @@ class ChatModel extends Model
     public function messagesPersonal($user_id, $contact_id, $start, $total_records)
     {
         $result = $this->query("SELECT `id`, `from_id`, `message` FROM `personal_messages` WHERE (`from_id` = '$user_id' AND `to_id` = '$contact_id') 
-                                      OR (`from_id` = '$contact_id' AND `to_id` = '$user_id') LIMIT '$start', '$total_records'");
+                                      OR (`from_id` = '$contact_id' AND `to_id` = '$user_id') LIMIT $start, $total_records");
         return $result;
     }
 
@@ -71,7 +71,7 @@ class ChatModel extends Model
 
     public function selectMessages($chat_id, $start, $total)
     {
-        $result = $this->query("SELECT * FROM `messages` WHERE `chat_id` = '$chat_id' LIMIT '$start', '$total'");
+        $result = $this->query("SELECT * FROM `messages` WHERE `chat_id` = '$chat_id' LIMIT $start, $total");
         return $result;
     }
 

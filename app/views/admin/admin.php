@@ -23,6 +23,8 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
 
     <script src="https://www.gstatic.com/charts/loader.js"></script>
 
+    <script src="/public/assets/js/jquery3.6.3.min.js"></script>
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -48,7 +50,7 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
       </li>
 
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="../vendor/admin/admin_faker.php" class="nav-link">!!! FAKER !!!</a>
+        <a href="" id="faker" class="nav-link">!!! FAKER !!!</a>
       </li>
     </ul>
   </nav>
@@ -240,3 +242,21 @@ if ($_SESSION['user']['id'] != "1" || !isset($_SESSION['user'])) {
 
 </body>
 </html>
+
+<script>
+    $(document).ready(function() {
+        $('#faker').click(function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: '/admin/faker',
+                type: 'POST',
+                success: function(data) {
+                    alert('Faker started successfully!');
+                },
+                error: function() {
+                    alert('Error starting Faker!');
+                }
+            });
+        });
+    });
+</script>

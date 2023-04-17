@@ -49,4 +49,8 @@ return [
     "join_chat" => "Join the chat",
     "block" => "!Block!",
     "contact_is_bl" => "User in your Contact List, but it was blocked. ",
+    "bl_list" => "Black list",
+    "click_see" => "(Click to see)",
+    "click_hide" => "(Click to hide)",
+    "click_unblock" => "Click on user to unblock",
 ];

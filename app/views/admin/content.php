@@ -27,15 +27,15 @@
                 </td>
                 <td>
                     <?php if ($value['blocked']): ?>
-                        <a class="btn btn-warning btn-sm" href="../../vendor/admin/admin_member_edit.php?lockid=<?= $key ?>">
+                        <a class="btn btn-warning btn-sm" href="/admin/memberblock?<?= $data['current_page'] ?>=<?= $key ?>">
                             <i class="fas fa-user-lock"></i></a>
                     <?php else: ?>
-                        <a class="btn btn-sm" href="../../vendor/admin/admin_member_edit.php?lockid=<?= $key ?>">
+                        <a class="btn btn-sm" href="/admin/memberblock?<?= $data['current_page'] ?>=<?= $key ?>">
                             <i class="fas fa-crosshairs"></i></a>
                     <?php endif; ?>
                 </td>
                 <td>
-                    <a class="btn btn-sm" href="../../vendor/admin/admin_member_edit.php?delid=<?= $key ?>">
+                    <a class="btn btn-sm" href="/admin/memberdel?<?= $data['current_page'] ?>=<?= $key ?>">
                         <i class="fas fa-times"></i></a>
                 </td>
             </tr>
@@ -47,5 +47,5 @@
 ?>
 
 <?php else: ?>
-    <p>Blocked members not found...</p>
+    <p>Members not found...</p>
 <?php endif; ?>

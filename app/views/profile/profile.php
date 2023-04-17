@@ -42,7 +42,7 @@
         </li>
         <?php if (isset($_SESSION['user']['email']) && $_SESSION['user']['email'] === 'admin@admin.com'): ?>
         <li class="nav-item">
-            <a class="btn btn-success" href="/app/views/admin/admin.php"><?= $_SESSION['user']['lang_text']['admin_area']?></a>
+            <a class="btn btn-success" href="/admin/content?members"><?= $_SESSION['user']['lang_text']['admin_area']?></a>
         </li>
         <?php endif; ?>
         <li class="nav-item">

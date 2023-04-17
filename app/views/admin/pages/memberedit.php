@@ -7,7 +7,7 @@ if (!isset($_SESSION['user']['admin_member_edit'])) {
 
 <div class="card">
     <div class="card-body">
-        <form action="/admin/memberupdate?page=<?= $data['page'] ?>" method="post" class="row">
+        <form action="/admin/memberupdate?page=<?= $data['page'] ?>&<?= $data['page_name'] ?>" id="contactedit" method="post" class="row">
             <div class="col-md-2">
                 <div class="form-group">
                     <label for="userid">ID</label>
@@ -29,32 +29,25 @@ if (!isset($_SESSION['user']['admin_member_edit'])) {
                 </div>
             </div>
 
-            <?php
-                if (!$data['iscontact']) :
-            ?>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label for="contact">Add to Contacts?</label>
-                        <button type="button" name="button" class="btn btn-light form-control">
-                            <a href="/admin/admincontact?id=<?= $_SESSION['user']['admin_member_edit']['id'] ?>">Add</a>
-                        </button>
-                    </div>
-                </div>
-            <?php
-                else:
-            ?>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label for="contact">Del from Contacts?</label>
-                        <button type="button" name="button" class="btn btn-light form-control">
-                            <a href="/admin/admincontact?delid=<?= $_SESSION['user']['admin_member_edit']['id'] ?>">Del</a>
-                        </button>
-                    </div>
-                </div>
-            <?php
-                endif;
-            ?>
 
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="contact">What to do?</label>
+                        <button type="button" name="contact" id="contact" class="btn btn-light form-control">
+                            <?php
+                                if (!$data['iscontact']) :
+                            ?>
+                                <a href="#">Add to Contacts</a>
+                            <?php
+                                else:
+                            ?>
+                                <a href="#">Del from Contacts</a>
+                            <?php
+                                endif;
+                            ?>
+                        </button>
+                    </div>
+                </div>
             <div class="col-md-8">
                 <div class="form-group">
                     <label for="email">Email<b>*</b></label>
@@ -132,3 +125,28 @@ if (!isset($_SESSION['user']['admin_member_edit'])) {
         </form>
     </div>
 </div>
+
+<script>
+
+    $(document).ready(function(){
+        $('#contact').click(function(){
+            let dataFormArray = $(this).serializeArray();
+            dataFormArray.push({name: "<?= !$data['iscontact'] ? "add_id" : "del_id"?>", value: "<?= $_SESSION['user']['admin_member_edit']['id'] ?>"});
+            let dataForm = $.param(dataFormArray);
+            $.ajax({
+                url: '/admin/admincontact',
+                method: 'post',
+                dataType: 'html',
+                data: dataForm,
+                success: function (data){
+                    if ($('#contact a').text() == 'Add to Contacts') {
+                        $('#contact a').text('Del to Contacts');
+                    } else {
+                        $('#contact a').text('Add to Contacts');
+                    }
+                }
+            });
+        })
+    })
+
+</script>

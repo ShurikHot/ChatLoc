@@ -8,10 +8,12 @@ use app\controllers\View;
 use app\models\admin\AdminModel;
 use app\models\ContactModel;
 use app\models\Model;
+use Faker\Factory;
 
 require_once 'app/controllers/Controller.php';
 require_once 'app/controllers/View.php';
 require_once 'app/models/admin/AdminModel.php';
+require_once 'D:\OpenServer\domains\chat.loc\vendor\faker\src\autoload.php';
 
 
 class AdminMainController extends Controller
@@ -34,16 +36,16 @@ class AdminMainController extends Controller
         }
     }
 
-    public function adminContent($get_content, $get_value)
+    public function adminContent($get_content, $get_value, $get_second_param)
     {
         self::adminPutContent($get_content);
         $action_name = $get_content . "Content";
 
         if ($get_content == 'memberedit') {
             if (key_exists('page', $_SESSION['user']['admin_member_edit'])) {
-                $data = self::$action_name($get_value, $_SESSION['user']['admin_member_edit']['page']);
+                $data = self::$action_name($get_value, $_SESSION['user']['admin_member_edit']['page'], $get_second_param);
             } else {
-                $data = self::$action_name($get_value, 1);
+                $data = self::$action_name($get_value, 1, "");
             }
         } else {
             $_SESSION['user']['admin_member_edit']['page'] = null;
@@ -51,8 +53,6 @@ class AdminMainController extends Controller
             $_SESSION['user']['admin_member_edit']['page'] = $get_value;
             $data = self::$action_name($get_value);
         }
-/*var_dump($data);
-die();*/
         $view = new View();
         $view->render('admin/admin.php', ['data' => $data, 'content' => $get_content]);
     }
@@ -60,12 +60,12 @@ die();*/
     
     public function membersContent($page)
     {
+        $model = new AdminModel();
         $records_per_page = 10;
         $current_page = $page ?? 1;
         $_SESSION['user']['page_get'] = $current_page;
-        $start = ($current_page - 1) * $records_per_page;
+        $start = $model->escape(($current_page - 1) * $records_per_page);
 
-        $model = new AdminModel();
         $members_info = $model-> membersList($start, $records_per_page);
 
         if (mysqli_num_rows($members_info) > 0) {
@@ -193,7 +193,7 @@ die();*/
         return $data_json;
     }
 
-    public function membereditContent($user_id, $page)
+    public function membereditContent($user_id, $page, $page_name)
     {
         if (is_numeric($user_id)) {
             $model = new AdminModel();
@@ -218,10 +218,15 @@ die();*/
             $contact = $model->contactIs($_SESSION['user']['admin_member_edit']['id']);
             mysqli_num_rows($contact) > 0 ? $iscontact = true : $iscontact = false;
         }
-        return ['iscontact' => $iscontact, 'page' => $page];
+        return ['iscontact' => $iscontact, 'page' => $page, 'page_name' => $page_name];
     }
 
-    public function membersUpdate($page)
+    public function settingsContent()
+    {
+        return true;
+    }
+
+    public function membersUpdate($page, $page_name)
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $userid = $_POST['userid'];
@@ -241,37 +246,55 @@ die();*/
                 $model->updateMember($blocked, $email, $name, $nickname, $phone_num, $avatar, $gender, $country, $language, $specialization, $userid);
             }
         }
-        header('Location: /admin/content?members=' . $page);
+
+        if (isset($page_name) && $page_name == "blocked") {
+            header('Location: /admin/content?blocked=' . $page);
+        } elseif ($page_name == "approve") {
+            header('Location: /admin/content?chatapprove=' . $page);
+        } elseif ($page_name == "chatlist") {
+            header('Location: /admin/content?chatlist=' . $page);
+        } else {
+            header('Location: /admin/content?members=' . $page);
+        }
     }
 
-    public function contactAdminActions($key, $value)
+    public function contactAdminActions()
     {
         $contact_q = new ContactModel();
-        if ($key == 'delid' & is_numeric($value)) {
-            $contact_q->contactDel($_SESSION['user']['id'], $value);
+        if (key_exists('del_id', $_POST) && is_numeric($_POST['del_id'])) {
+            $contact_q->contactDel($_SESSION['user']['id'], $_POST['del_id']);
         }
-        if ($key == 'id' & is_numeric($value)) {
-            $contact = $contact_q->contactIs($_SESSION['user']['id'], $value);
+
+        if (key_exists('add_id', $_POST) && is_numeric($_POST['add_id'])) {
+            $contact = $contact_q->contactIs($_SESSION['user']['id'], $_POST['add_id']);
             if (mysqli_num_rows($contact) == 0) {
                 $mess = $_SESSION['user']['lang_text']['user'] . $_SESSION['user']['nickname'] . $_SESSION['user']['lang_text']['added_you'];
-                $contact_q->contactAdd($_SESSION['user']['id'], $value, $mess);
+                $contact_q->contactAdd($_SESSION['user']['id'], $_POST['add_id'], $mess);
             }
         }
-        header('Location: /admin/content?memberedit=' . $value);
+        return true;
     }
 
-    public function memberBlock($page, $lockid)
+    public function memberBlock($page, $lockid, $page_name)
     {
         $model = new AdminModel();
         $model->memberBlock($lockid);
-        header('Location: /admin/content?members=' . $page);
+        if (isset($page_name) && $page_name != "") {
+            header('Location: /admin/content?blocked=' . $page);
+        } else {
+            header('Location: /admin/content?members=' . $page);
+        }
     }
 
-    public function memberDel($page, $delid)
+    public function memberDel($page, $delid, $page_name)
     {
         $model = new AdminModel();
         $model->memberDel($delid);
-        header('Location: /admin/content?members=' . $page);
+        if (isset($page_name) && $page_name != "") {
+            header('Location: /admin/content?blocked=' . $page);
+        } else {
+            header('Location: /admin/content?members=' . $page);
+        }
     }
 
     public function chatDel($page, $delid)
@@ -288,7 +311,29 @@ die();*/
         header('Location: /admin/content?chatapprove=' . $page);
     }
 
+    public function faker()
+    {
+        $faker = Factory::create();
+        $model = new AdminModel();
 
+        $rand_count = rand(10, 200);
+
+        for ($i=1; $i < $rand_count; $i++) {
+            $email = $model->escape($faker->email);
+            $name = $model->escape($faker->name);
+            $nickname = $model->escape($faker->userName);
+            $password = $model->escape($faker->md5);
+            $phone_num = $model->escape($faker->numberBetween(1000000000, 9999999999));
+            $gender = $model->escape($faker->randomElement($array = array ('male', 'female', 'no_select')));
+            $country = $model->escape($faker->country);
+            $language = $model->escape($faker->randomElement($array = array ('ua', 'en')));
+            $specialization = $model->escape($faker->randomElement($array = array ('c_science','inf_technology','c_architecture','t_communication')));
+            $comment = $model->escape($faker->realText($maxNbChars = 50, $indexSize = 2));
+            $date = $model->escape($faker->dateTimeBetween('2023-01-01', '2023-03-10')->format('Y-m-d') . " " . $faker->time($format = 'H:i:s', $max = 'now'));
+
+            $model->faker($email, $name, $nickname, $password, $phone_num, $gender, $country, $language, $specialization, $comment, $date);
+        }
+    }
 
 
 }

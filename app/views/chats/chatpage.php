@@ -1,8 +1,3 @@
-<?php
-
-//$chat_id_get = isset($_GET['chat_id']) ? $_GET['chat_id'] : "";
-
-?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -36,7 +31,7 @@
     </li>
     <?php if (isset($_SESSION['user']['email']) && $_SESSION['user']['email'] === 'admin@admin.com'): ?>
         <li class="nav-item">
-            <a class="btn btn-success" href="admin/index.php"><?= $_SESSION['user']['lang_text']['admin_area'] ?></a>
+            <a class="btn btn-success" href="/admin/content?members"><?= $_SESSION['user']['lang_text']['admin_area'] ?></a>
         </li>
     <?php endif; ?>
     <li class="nav-item">

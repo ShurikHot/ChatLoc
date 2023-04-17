@@ -32,4 +32,3 @@ class Model
         return $this->db->real_escape_string($value);
     }
 }
-

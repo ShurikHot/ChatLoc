@@ -110,11 +110,11 @@ class ProfileController extends Controller
 
             $contacts = self::getContacts();
             $view = new View();
-            if ($_SESSION['user']['id'] == '1') {
-                header('Location: /admin/content?members');
-            } else {
+            //if ($_SESSION['user']['id'] == '1') {
+            //    header('Location: /admin/content?members');
+            //} else {
                 $view->render('profile/profile.php', ['contacts' => $contacts]);
-            }
+            //}
         } else {
             header('Location: /');
         }

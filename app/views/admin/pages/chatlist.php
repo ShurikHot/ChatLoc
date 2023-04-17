@@ -14,7 +14,7 @@
                 <td><?= $key ?></td>
                 <td><?= $value['chat_name'] ?></td>
                 <td>
-                    <a class="" href="/admin/content?memberedit=<?= $value['author_id'] ?>"> <?= $value['nickname'] ?></a>
+                    <a class="" href="/admin/content?memberedit=<?= $value['author_id'] ?>&chatlist"> <?= $value['nickname'] ?></a>
                 </td>
                 <td>
                     <a class="btn btn-sm" href="/admin/chatdel?<?= $data['current_page'] ?>=<?= $key ?>">

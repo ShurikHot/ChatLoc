@@ -122,5 +122,11 @@ class AdminModel extends \app\models\Model
         $this->query("UPDATE `chats` SET `approved`='1' WHERE `id` = $appid");
     }
 
+    public function faker($email, $name, $nickname, $password, $phone_num, $gender, $country, $language, $specialization, $comment, $date)
+    {
+        $this->query("INSERT INTO `members` (`email`, `name`, `nickname`, `password`, `phone_num`, `gender`, `country`, `language`, `specialization`, `comment`, `created_at`)
+               VALUES ('$email', '$name', '$nickname', '$password', '$phone_num', '$gender', '$country', '$language', '$specialization', '$comment', '$date')");
+    }
+
 
 }

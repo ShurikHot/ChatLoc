@@ -25,7 +25,7 @@
             </ul>
         </div>
         <div ng-app ng-init="checked = false">
-            <form class="form-signin" action="profile/info" method="POST" name="form">
+            <form class="form-signin" action="/profile/info" method="POST" name="form">
                 <label for="email">Email address</label>
                 <input class="form-styling" type="email" name="email" placeholder="name@example.com"/>
 
@@ -44,7 +44,7 @@
             </form>
 
 
-            <form class="form-signup" action="profile/registration" method="post" name="form" enctype="multipart/form-data">
+            <form class="form-signup" action="/profile/registration" method="post" name="form" enctype="multipart/form-data">
                 <label for="fullname">Full name</label>
                 <input class="form-styling" type="text" name="name" placeholder="Full name" />
 
