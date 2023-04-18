@@ -1,9 +1,6 @@
 <?php
 
-
-namespace app\models;
-require_once 'app/models/Model.php';
-
+namespace models;
 
 class ProfileModel extends Model
 {
@@ -114,5 +111,9 @@ class ProfileModel extends Model
         return true;
     }
 
-
+    public function accountInfo($id)
+    {
+        $result = $this->query("SELECT * FROM `account` WHERE `user_id` = '$id'");
+        return $result;
+    }
 }

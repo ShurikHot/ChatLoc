@@ -1,13 +1,15 @@
 <?php
-require_once 'app/controllers/ProfileController.php';
-require_once 'app/controllers/ContactController.php';
-require_once 'app/controllers/ChatController.php';
-require_once 'app/controllers/admin/AdminMainController.php';
+
+use controllers\admin\AdminMainController;
+use controllers\ChatController;
+use controllers\ContactController;
+use controllers\ProfileController;
+
+require_once('vendor/autoload.php');
 
 $url = isset($_GET['url']) ? $_GET['url'] : '';
 $parts = explode('/', $url);
 
-//var_dump($url);die();
 if (isset(array_keys($_GET)[1])) {
     $get_param_key = array_keys($_GET)[1];
     $get_param_value = $_GET[$get_param_key];
@@ -34,20 +36,18 @@ $controller_if = $controller;
 $action = $parts[1] ?? 'login';
 $action_if = $action;
 
-//var_dump($controller, $action);die();
-
 switch ($controller) {
     case 'profile':
-        $controller = new \app\controllers\ProfileController();
+        $controller = new ProfileController();
         break;
     case 'contact':
-        $controller = new \app\controllers\ContactController();
+        $controller = new ContactController();
         break;
     case 'chat':
-        $controller = new \app\controllers\ChatController();
+        $controller = new ChatController();
         break;
     case 'admin':
-        $controller = new \app\controllers\admin\AdminMainController();
+        $controller = new AdminMainController();
         break;
     default:
         header('Location: /public/404.html');
@@ -87,6 +87,13 @@ if ($controller_if == 'profile') {
         case 'logout':
             $controller->logout();
             break;
+        case 'refill':
+            $controller->refill();
+            break;
+        case 'stripe':
+            $controller->stripe();
+            break;
+
         default:
             header('Location: /public/404.html');
             die('Page not found!');
@@ -142,11 +149,9 @@ if ($controller_if == 'profile') {
             $controller->adminMain();
             break;
         case 'content':
-            //var_dump($get_param_key, $get_param_value);die();
             $controller->adminContent($get_param_key, $get_param_value, $get_second_param);
             break;
         case 'memberupdate':
-            //var_dump($get_param_value, $get_second_param);die();
             $controller->membersUpdate($get_param_value, $get_second_param);
             break;
         case 'admincontact':

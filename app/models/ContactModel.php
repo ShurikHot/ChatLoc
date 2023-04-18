@@ -1,8 +1,7 @@
 <?php
 
 
-namespace app\models;
-require_once 'app/models/Model.php';
+namespace models;
 
 class ContactModel extends Model
 {
@@ -56,6 +55,4 @@ class ContactModel extends Model
             $this->query("UPDATE `contacts` SET `blocked` = 0 WHERE `user_id` = '$user_id' AND `contact_id` = '$id'");
         }
     }
-
-
 }

@@ -1,18 +1,17 @@
 <?php
 
-namespace app\controllers;
+namespace controllers;
 
-require_once 'Controller.php';
-require_once 'View.php';
-require_once 'app/models/ProfileModel.php';
-require_once 'vendor/PHPMailer/src/Exception.php';
-require_once 'vendor/PHPMailer/src/PHPMailer.php';
-require_once 'vendor/PHPMailer/src/SMTP.php';
-
-use app\models\Model;
-use app\models\ProfileModel;
+use models\ProfileModel;
 use PHPMailer\PHPMailer\PHPMailer;
-
+use Stripe\Exception\ApiConnectionException;
+use Stripe\Exception\ApiErrorException;
+use Stripe\Exception\AuthenticationException;
+use Stripe\Exception\CardException;
+use Stripe\Exception\InvalidRequestException;
+use Stripe\Exception\RateLimitException;
+use Stripe\PaymentIntent;
+use Stripe\Stripe;
 
 class ProfileController extends Controller
 {
@@ -110,11 +109,7 @@ class ProfileController extends Controller
 
             $contacts = self::getContacts();
             $view = new View();
-            //if ($_SESSION['user']['id'] == '1') {
-            //    header('Location: /admin/content?members');
-            //} else {
                 $view->render('profile/profile.php', ['contacts' => $contacts]);
-            //}
         } else {
             header('Location: /');
         }
@@ -127,7 +122,6 @@ class ProfileController extends Controller
             $folderPath = 'public/uploads/';
             $image_parts = explode(";base64,", $_POST['image']);
             $image_type_aux = explode("image/", $image_parts[0]);
-            //$image_type = $image_type_aux[1]; ???
             $image_base64 = base64_decode($image_parts[1]);
             $file = $folderPath . uniqid() . '.png';
             file_put_contents($file, $image_base64);
@@ -308,6 +302,72 @@ class ProfileController extends Controller
             $contact_appr_arr = [];
         }
         return ['contact_arr' => $contact_arr, 'contact_appr_arr' => $contact_appr_arr];
+    }
+
+    public function refill()
+    {
+        $model = new ProfileModel();
+        $account = $model->accountInfo($_SESSION['user']['id']);
+        if (mysqli_num_rows($account) > 0) {
+            $acc_info = mysqli_fetch_assoc($account);
+            if ($acc_info['top'] == 1) {
+
+            }
+        }
+
+        $view = new View();
+        $view->render('profile/refill.php');
+    }
+
+    public function stripe()
+    {
+        Stripe::setApiKey("sk_test_51MxsKHGBYkXTQVbsE4mEKX064UVm6ZEdzd9dqlPQE3nyhcB6Uwq3rvW4xK3TT9By4EPH1ub67vYd3mEBXQfTBRYO00xIwPUX5o");
+
+        $cardHolderName = filter_var(trim($_POST['card-holder-name']),FILTER_SANITIZE_STRING);
+        $cardNumber = filter_var(trim($_POST['card-number']), FILTER_SANITIZE_NUMBER_INT);
+        $expiryMonth = $_POST['expiry-month'];
+        $expiryYear = $_POST['expiry-year'];
+        $cvv = filter_var(trim($_POST['cvv']), FILTER_SANITIZE_NUMBER_INT);
+        $amount = filter_var(trim($_POST['amount']), FILTER_SANITIZE_NUMBER_FLOAT);
+
+        try {
+            $payment = PaymentIntent::create([
+                'amount' => $amount * 100,
+                'currency' => 'usd',
+                'description' => 'Test Payment',
+                'payment_method' => 'pm_card_visa',
+                'confirmation_method' => 'automatic',
+                'confirm' => true
+            ]);
+            echo "Payment successful!";
+        } catch (CardException $e) {
+            // Если платеж не удался из-за проблемы с картой
+            echo "Payment failed: " . $e->getMessage();
+        } catch (RateLimitException $e) {
+            // Если Stripe API вернул ошибку о превышении лимита запросов в минуту
+            echo "Payment failed: " . $e->getMessage();
+        } catch (InvalidRequestException $e) {
+            // Если были переданы неверные параметры запроса
+            echo "Payment failed: " . $e->getMessage();
+        } catch (AuthenticationException $e) {
+            // Если Stripe API вернул ошибку аутентификации
+            echo "Payment failed: " . $e->getMessage();
+        } catch (ApiConnectionException $e) {
+            // Если не удалось установить соединение с Stripe API
+            echo "Payment failed: " . $e->getMessage();
+        } catch (ApiErrorException $e) {
+            // Если возникла другая ошибка Stripe API
+            echo "Payment failed: " . $e->getMessage();
+        }
+
+        $payment_intent = PaymentIntent::retrieve($payment->id);
+
+        if ($payment_intent->status == 'succeeded') {
+            header('Location: /profile/refill');
+        } else {
+            echo 'Payment failed.';
+        }
+
     }
 
     public function logout()

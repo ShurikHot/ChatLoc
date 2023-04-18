@@ -1,20 +1,14 @@
 <?php
 
 
-namespace app\controllers\admin;
+namespace controllers\admin;
 
-use app\controllers\Controller;
-use app\controllers\View;
-use app\models\admin\AdminModel;
-use app\models\ContactModel;
-use app\models\Model;
+use controllers\Controller;
+use controllers\View;
+use models\admin\AdminModel;
+use models\ContactModel;
+use models\Model;
 use Faker\Factory;
-
-require_once 'app/controllers/Controller.php';
-require_once 'app/controllers/View.php';
-require_once 'app/models/admin/AdminModel.php';
-require_once 'D:\OpenServer\domains\chat.loc\vendor\faker\src\autoload.php';
-
 
 class AdminMainController extends Controller
 {
@@ -334,6 +328,4 @@ class AdminMainController extends Controller
             $model->faker($email, $name, $nickname, $password, $phone_num, $gender, $country, $language, $specialization, $comment, $date);
         }
     }
-
-
 }

@@ -1,15 +1,10 @@
 <?php
 
-namespace app\controllers;
+namespace controllers;
 
-require_once 'Controller.php';
-require_once 'View.php';
-require_once 'app/models/ChatModel.php';
-
-use app\models\ChatModel;
-use app\models\Model;
-use app\models\ProfileModel;
-
+use models\ChatModel;
+use models\Model;
+use models\ProfileModel;
 
 class ChatController extends Controller
 {
@@ -181,7 +176,7 @@ class ChatController extends Controller
                         if ($messagearr['user_id'] == $_SESSION['user']['id']) {
                             echo ("<a href='/profile/info' target='_blank'>");
                         } elseif ($_SESSION['user']['id'] == '1') {
-                            echo("<a href='vendor/admin/admin_member_edit.php?id=" . $name['id'] . "' target='_blank'>");
+                            echo("<a href='/admin/content?memberedit=" . $name['id'] . "' target='_blank'>");
                         } else {
                             echo("<a href='/contact/profile?id=" . $name['id'] . "' target='_blank'>");
                         }

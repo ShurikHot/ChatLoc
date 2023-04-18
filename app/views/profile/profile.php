@@ -141,15 +141,17 @@
         <button type="submit" class="btn btn-primary"><?= $_SESSION['user']['lang_text']['change'] ?></button>
     </form>
 
+    <a href="/profile/refill">On your account: 10 coins</a>
+
     <?php
         require_once ('app/views/profile/contacts.php')
     ?>
 
     <?php if($_SESSION['user']['black_list'] == false) : ?>
-        <a href="/profile/blacklist?black">&#9660; Black list &#9660;</a> (Click to see)
+        <a href="/profile/blacklist?black">&#9660; <?= $_SESSION['user']['lang_text']['bl_list'] ?> &#9660;</a> <?= $_SESSION['user']['lang_text']['click_see'] ?>
     <?php else: ?>
-        <a href="/profile/blacklist?closeblack"> &#9650; Black list &#9650; </a> (Click to hide) <br>
-        Click on user to unblock
+        <a href="/profile/blacklist?closeblack"> &#9650; <?= $_SESSION['user']['lang_text']['bl_list'] ?> &#9650; </a> <?= $_SESSION['user']['lang_text']['click_hide'] ?> <br>
+        <?= $_SESSION['user']['lang_text']['click_unblock'] ?>
     <?php endif; ?>
 
     <form action="#" method="post" <?php if($_SESSION['user']['black_list'] == false) echo "hidden";?> >

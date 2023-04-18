@@ -1,9 +1,8 @@
 <?php
 
+namespace models;
 
-namespace app\models;
 use mysqli;
-
 
 class Model
 {

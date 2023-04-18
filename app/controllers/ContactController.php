@@ -1,15 +1,9 @@
 <?php
 
+namespace controllers;
 
-namespace app\controllers;
-
-require_once 'Controller.php';
-require_once 'View.php';
-require_once 'app/models/ContactModel.php';
-
-use app\models\ContactModel;
-use app\models\Model;
-
+use models\ContactModel;
+use models\Model;
 
 class ContactController extends Controller
 {

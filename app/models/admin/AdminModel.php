@@ -1,10 +1,10 @@
 <?php
 
+namespace models\admin;
 
-namespace app\models\admin;
-require_once 'app/models/Model.php';
+use models\Model;
 
-class AdminModel extends \app\models\Model
+class AdminModel extends Model
 {
     public function membersList($start, $records_per_page)
     {
@@ -127,6 +127,4 @@ class AdminModel extends \app\models\Model
         $this->query("INSERT INTO `members` (`email`, `name`, `nickname`, `password`, `phone_num`, `gender`, `country`, `language`, `specialization`, `comment`, `created_at`)
                VALUES ('$email', '$name', '$nickname', '$password', '$phone_num', '$gender', '$country', '$language', '$specialization', '$comment', '$date')");
     }
-
-
 }
