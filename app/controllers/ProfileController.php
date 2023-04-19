@@ -107,9 +107,14 @@ class ProfileController extends Controller
         if (isset($_SESSION['user'])) {
             $model->lastVisit($_SESSION['user']['id']);
 
+            $account_info = $model->accountInfo($_SESSION['user']['id']);
+            if (mysqli_num_rows($account_info) > 0) {
+                $account = mysqli_fetch_assoc($account_info);
+            }
+
             $contacts = self::getContacts();
             $view = new View();
-                $view->render('profile/profile.php', ['contacts' => $contacts]);
+                $view->render('profile/profile.php', ['contacts' => $contacts, 'account' => $account]);
         } else {
             header('Location: /');
         }
@@ -310,13 +315,10 @@ class ProfileController extends Controller
         $account = $model->accountInfo($_SESSION['user']['id']);
         if (mysqli_num_rows($account) > 0) {
             $acc_info = mysqli_fetch_assoc($account);
-            if ($acc_info['top'] == 1) {
-
-            }
         }
 
         $view = new View();
-        $view->render('profile/refill.php');
+        $view->render('profile/refill.php', ['acc_info' => $acc_info]);
     }
 
     public function stripe()
@@ -329,6 +331,7 @@ class ProfileController extends Controller
         $expiryYear = $_POST['expiry-year'];
         $cvv = filter_var(trim($_POST['cvv']), FILTER_SANITIZE_NUMBER_INT);
         $amount = filter_var(trim($_POST['amount']), FILTER_SANITIZE_NUMBER_FLOAT);
+        $subscription = $_POST['subscription'];
 
         try {
             $payment = PaymentIntent::create([
@@ -363,11 +366,33 @@ class ProfileController extends Controller
         $payment_intent = PaymentIntent::retrieve($payment->id);
 
         if ($payment_intent->status == 'succeeded') {
-            header('Location: /profile/refill');
+            $model = new ProfileModel();
+            $model->fillAccount($_SESSION['user']['id'], $amount);
+            $_SESSION['message'] = '<h6 align="center">' . $_SESSION['user']['lang_text']['account_fill'] . '</h6>';
         } else {
-            echo 'Payment failed.';
+            $_SESSION['message'] = '<h6 align="center">' . $_SESSION['user']['lang_text']['payment_failed'] . '</h6>';
         }
+        header('Location: /profile/info');
+    }
 
+    public function changeSubscribe()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $model = new ProfileModel();
+            $account_info = $model->accountInfo($_SESSION['user']['id']);
+            if (mysqli_num_rows($account_info) > 0) {
+                $account = mysqli_fetch_assoc($account_info);
+                if ($account['top'] == 1 && $_POST['subscription'] == 'top' && $account['amount'] > 99) {
+                    $model->minusCoin($_SESSION['user']['id'], 100);
+                    $model->setMonthly($_SESSION['user']['id']);
+                    $_SESSION['message'] = '<h6 align="center">' . $_SESSION['user']['lang_text']['set_monthly'] . '</h6>';
+                } elseif ($account['top'] == 1 && $_POST['subscription'] == 'simple') {
+                    $model->unsetMonthly($_SESSION['user']['id']);
+                    $_SESSION['message'] = '<h6 align="center">' . $_SESSION['user']['lang_text']['unset_monthly'] . '</h6>';
+                }
+            }
+        }
+        header('Location: /profile/refill');
     }
 
     public function logout()

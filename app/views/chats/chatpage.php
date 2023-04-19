@@ -53,8 +53,16 @@
 </div>
 <br>
 <form method="post" id="sendmess" onsubmit="return false">
-    <textarea class="enter_mess" type="text" name="message" id="message" placeholder="<?= $_SESSION['user']['lang_text']['enter_message'] ?>" rows="1"></textarea>
+    <textarea class="enter_mess" type="text" name="message" id="message" placeholder="
+            <?= $_SESSION['user']['lang_text']['enter_message'] ?>" rows="1" <?= $account['amount'] == 0 ? "disabled" : "" ?>></textarea>
     <button type="submit" class="btn btn-primary"><?= $_SESSION['user']['lang_text']['send'] ?></button>
+    <?php
+        if($account['top'] == 1 && $account['start_monthly_subscr'] != '0000-00-00') {
+            echo "<button class='btn btn-danger disabled'>" . $_SESSION['user']['lang_text']['top_user'] . "</button>";
+        } else {
+            echo "<button class='btn btn-dark disabled'>" . $account['amount'] . "💎" . "</button>";
+        }
+    ?>
     <br>
 </form>
 

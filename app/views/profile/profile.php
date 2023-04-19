@@ -141,7 +141,20 @@
         <button type="submit" class="btn btn-primary"><?= $_SESSION['user']['lang_text']['change'] ?></button>
     </form>
 
-    <a href="/profile/refill">On your account: 10 coins</a>
+    <a href="/profile/refill">On your account:</a> <b><?= $account['amount'] ?></b>💎
+
+    <span class="badge text-bg-danger"><?php if ($account['top'] == 1) echo $_SESSION['user']['lang_text']['top_user'] ?></span>
+
+    <p align="center">
+        <?php
+        if (isset($_SESSION['message'])) {
+            echo $_SESSION['message'];
+            unset($_SESSION['message']);
+        }
+        ?>
+    </p>
+
+    <br>
 
     <?php
         require_once ('app/views/profile/contacts.php')

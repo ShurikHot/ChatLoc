@@ -53,4 +53,10 @@ return [
     "click_see" => "(Click to see)",
     "click_hide" => "(Click to hide)",
     "click_unblock" => "Click on user to unblock",
+    "account_fill" => "Your account refilled",
+    "payment_failed" => "!!!Payment failed!!!",
+    "set_monthly" => "Now you have a monthly subscription! Congratulations!",
+    "unset_monthly" => "Now you have a simple subscription",
+    "top_user" => "TOP-user",
+
 ];

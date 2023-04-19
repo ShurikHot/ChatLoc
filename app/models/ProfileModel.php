@@ -116,4 +116,29 @@ class ProfileModel extends Model
         $result = $this->query("SELECT * FROM `account` WHERE `user_id` = '$id'");
         return $result;
     }
+
+    public function fillAccount($id, $amount)
+    {
+        $result = $this->query("SELECT * FROM `account` WHERE `user_id` = '$id'");
+        if (mysqli_num_rows($result) > 0) {
+            $this->query("UPDATE `account` SET `amount` = `amount` + '$amount' WHERE `user_id` = '$id'");
+        } else {
+            $this->query("INSERT INTO `account`(`user_id`, `amount`) VALUES ('$id', '$amount')");
+        }
+    }
+
+    public function minusCoin($id, $coins)
+    {
+        $this->query("UPDATE `account` SET `amount` = `amount` - '$coins' WHERE `user_id` = '$id'");
+    }
+
+    public function setMonthly($id)
+    {
+        $this->query("UPDATE `account` SET `start_monthly_subscr` = NOW(),`end_monthly_subscr`= DATE_ADD(NOW(), INTERVAL 1 MONTH) WHERE `user_id` = '$id'");
+    }
+
+    public function unsetMonthly($id)
+    {
+        $this->query("UPDATE `account` SET `start_monthly_subscr` = '0000-00-00',`end_monthly_subscr`= '0000-00-00' WHERE `user_id` = '$id'");
+    }
 }

@@ -13,8 +13,19 @@ class ChatController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $model = new ChatModel();
             if (isset($_POST['chat_id']) && isset($_POST['message']) && $_POST['message'] != '') {
-                $message = trim(htmlspecialchars($_POST['message']));
-                $model->messageAdd($_SESSION['user']['id'], $message, $_POST['chat_id']);
+                $model_acc = new ProfileModel();
+                $account_info = $model_acc->accountInfo($_SESSION['user']['id']);
+                if (mysqli_num_rows($account_info) > 0) {
+                    $account = mysqli_fetch_assoc($account_info);
+                        if ($account['top'] == 1 && $account['start_monthly_subscr'] != '0000-00-00') {
+                            $message = trim(htmlspecialchars($_POST['message']));
+                            $model->messageAdd($_SESSION['user']['id'], $message, $_POST['chat_id']);
+                        } elseif ($account['amount'] > 0) {
+                            $model_acc->minusCoin($_SESSION['user']['id'], 1);
+                            $message = trim(htmlspecialchars($_POST['message']));
+                            $model->messageAdd($_SESSION['user']['id'], $message, $_POST['chat_id']);
+                        }
+                    }
             } elseif (isset($_POST['personal_message']) && $_POST['personal_message'] != '') {
                 $message = trim(htmlspecialchars($_POST['personal_message']));
                 $model->messagePersonalAdd($_SESSION['user']['id'], $_POST['contact_id'], $message);
@@ -147,8 +158,13 @@ class ChatController extends Controller
             header('Location: /chat/chatlist');
         }
 
+        $account_info = $model_profile->accountInfo($_SESSION['user']['id']);
+        if (mysqli_num_rows($account_info) > 0) {
+            $account = mysqli_fetch_assoc($account_info);
+        }
+
         $view = new View();
-        $view->render('chats/chatpage.php', ['chat_name' => $chat_name, 'chat_id' => $get_value, 'contacts_arr' => $contacts_arr]);
+        $view->render('chats/chatpage.php', ['chat_name' => $chat_name, 'chat_id' => $get_value, 'contacts_arr' => $contacts_arr, 'account' => $account]);
     }
 
     public function messageLoad()

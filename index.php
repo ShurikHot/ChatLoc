@@ -93,6 +93,10 @@ if ($controller_if == 'profile') {
         case 'stripe':
             $controller->stripe();
             break;
+        case 'changesubscr':
+            $controller->changeSubscribe();
+            break;
+
 
         default:
             header('Location: /public/404.html');

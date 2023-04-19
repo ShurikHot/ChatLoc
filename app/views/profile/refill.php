@@ -74,16 +74,39 @@ require_once('vendor/stripe/stripe-php/init.php');
 <h4>Умови</h4>
 Ціна одного повідомлення - 1 монета, ціна 1 монети - 1 у.о.<br>
 Місячна підписка доступна для користувачів, які мають повідомлення мінімум у 10 чатах.<br>
-Ціна місячної підписки - 100 у.о. Кількість повідомлень - необмежена.<br>
+Ціна місячної підписки - 100 у.о. Кількість повідомлень - необмежена.<br><br>
 
+Ваша поточна підписка - <?= (isset($acc_info) && $acc_info['top'] == 1 && $acc_info['start_monthly_subscr'] != "0000-00-00") ? "<b>місячна</b>" : "<b>звичайна</b>"?>
+<br>
+
+<?= (isset($acc_info) && $acc_info['top'] == 1 && $acc_info['start_monthly_subscr'] == "0000-00-00") ? "Вам доступна <b>МІСЯЧНА</b> підписка" : ""?>
+
+<p align="center">
+    <?php
+    if (isset($_SESSION['message'])) {
+        echo $_SESSION['message'];
+        unset($_SESSION['message']);
+    }
+    ?>
+</p>
+<br>
+
+<div>
+    <form action="/profile/changesubscr" method="POST">
+        <label for="card-holder-name">Види підписок (звичайна чи місячна)</label>
+        <select name="subscription" id="subscription">
+            <option value="simple">Звичайна (для більшості користувачів)</option>
+            <option value="top" <?= !(isset($acc_info) && $acc_info['top'] == 1) ? "disabled" : "selected"?> >Місячна (для тoпових користувачів)</option>
+        </select>
+        <input type="submit" value="Змінити">
+    </form>
+</div>
+
+
+<br>
 <h3>Оплата картою</h3>
 <div>
     <form action="/profile/stripe" method="POST">
-        <label for="card-holder-name">Вид підписки</label>
-        <select name="subscription" id="subscription">
-            <option value="simple">Звичайна (для більшості користувачів)</option>
-            <option value="top">Місячна (для тoпових користувачів)</option>
-        </select>
 
         <label for="card-holder-name">Ім'я власника карти</label>
         <input type="text" id="card-holder-name" name="card-holder-name" required>
