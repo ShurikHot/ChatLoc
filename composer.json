@@ -1,8 +1,10 @@
 {
   "require": {
-    "fzaninotto/faker": "^1.5",
     "phpmailer/phpmailer": "^6.8",
     "stripe/stripe-php": "^10.12"
+  },
+  "require-dev": {
+    "fzaninotto/faker": "^1.5"
   },
   "autoload": {
     "psr-4": {

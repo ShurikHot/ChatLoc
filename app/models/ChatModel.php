@@ -94,4 +94,10 @@ class ChatModel extends Model
     {
         $this->query("UPDATE `messages` SET `message`= '$new_message' WHERE `id` = '$id_for_edit'");
     }
+
+    public function countChat($id)
+    {
+        $result = $this->query("SELECT COUNT(`chat_id`) FROM `messages` WHERE `user_id` = '$id' GROUP BY `chat_id`");
+        return $result;
+    }
 }

@@ -4,15 +4,13 @@ if(!isset($_SESSION['user']['id'])) {
     header('Location: /');
 }
 
-require_once('vendor/stripe/stripe-php/init.php');
-
 ?>
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Refill Page</title>
+    <title><?= $_SESSION['user']['lang_text']['refill_page'] ?></title>
     <link href="/public/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <script src="/public/assets/js/jquery3.6.3.min.js"></script>
     <script src="/public/assets/js/bootstrap.min.js"></script>
@@ -20,7 +18,6 @@ require_once('vendor/stripe/stripe-php/init.php');
     <script src="https://js.stripe.com/v3/"></script>
 
     <meta charset="UTF-8">
-    <title>Оплата картой</title>
     <style>
         label {
             display: block;
@@ -58,7 +55,7 @@ require_once('vendor/stripe/stripe-php/init.php');
         <?php if (isset($_SESSION['user']['blocked']) && !$_SESSION['user']['blocked']): ?>
             <a class="btn btn-info" aria-current="page" href="/chat/chatlist"><?= $_SESSION['user']['lang_text']['go_to_chatlist'] ?></a>
         <?php elseif (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']): ?>
-            <a class="btn btn-warning" aria-current="page"href=""><b><?= $_SESSION['user']['lang_text']['your_account_blocked'] ?></b></a>
+            <a class="btn btn-warning" aria-current="page" href=""><b><?= $_SESSION['user']['lang_text']['your_account_blocked'] ?></b></a>
         <?php endif; ?>
     </li>
     <?php if (isset($_SESSION['user']['email']) && $_SESSION['user']['email'] === 'admin@admin.com'): ?>
@@ -71,15 +68,14 @@ require_once('vendor/stripe/stripe-php/init.php');
     </li>
 </ul>
 <br>
-<h4>Умови</h4>
-Ціна одного повідомлення - 1 монета, ціна 1 монети - 1 у.о.<br>
-Місячна підписка доступна для користувачів, які мають повідомлення мінімум у 10 чатах.<br>
-Ціна місячної підписки - 100 у.о. Кількість повідомлень - необмежена.<br><br>
 
-Ваша поточна підписка - <?= (isset($acc_info) && $acc_info['top'] == 1 && $acc_info['start_monthly_subscr'] != "0000-00-00") ? "<b>місячна</b>" : "<b>звичайна</b>"?>
+<?= $_SESSION['user']['lang_text']['terms_subscr']?><br><br>
+
+<?= $_SESSION['user']['lang_text']['your_subscr']?>
+<?= ($acc_info != 0 && $acc_info['top'] == 1 && $acc_info['start_monthly_subscr'] != "0000-00-00") ? $_SESSION['user']['lang_text']['monthly'] : $_SESSION['user']['lang_text']['regular']?>
 <br>
 
-<?= (isset($acc_info) && $acc_info['top'] == 1 && $acc_info['start_monthly_subscr'] == "0000-00-00") ? "Вам доступна <b>МІСЯЧНА</b> підписка" : ""?>
+<?= ($acc_info != 0 && $acc_info['top'] == 1 && $acc_info['start_monthly_subscr'] == "0000-00-00") ? $_SESSION['user']['lang_text']['monthly_avail'] : ""?>
 
 <p align="center">
     <?php
@@ -89,32 +85,31 @@ require_once('vendor/stripe/stripe-php/init.php');
     }
     ?>
 </p>
-<br>
 
 <div>
     <form action="/profile/changesubscr" method="POST">
-        <label for="card-holder-name">Види підписок (звичайна чи місячна)</label>
+        <label for="card-holder-name"><?= $_SESSION['user']['lang_text']['type_subscr']?></label>
         <select name="subscription" id="subscription">
-            <option value="simple">Звичайна (для більшості користувачів)</option>
-            <option value="top" <?= !(isset($acc_info) && $acc_info['top'] == 1) ? "disabled" : "selected"?> >Місячна (для тoпових користувачів)</option>
+            <option value="simple"><?= $_SESSION['user']['lang_text']['regular_select']?></option>
+            <option value="top" <?= !($acc_info != 0 && $acc_info['top'] == 1) ? "disabled" : "selected"?> ><?= $_SESSION['user']['lang_text']['monthly_select']?></option>
         </select>
-        <input type="submit" value="Змінити">
+        <input type="submit" value="<?= $_SESSION['user']['lang_text']['change']?>">
     </form>
 </div>
 
 
 <br>
-<h3>Оплата картою</h3>
+<h3><?= $_SESSION['user']['lang_text']['card_pay']?></h3>
 <div>
     <form action="/profile/stripe" method="POST">
 
-        <label for="card-holder-name">Ім'я власника карти</label>
+        <label for="card-holder-name"><?= $_SESSION['user']['lang_text']['card_holder']?></label>
         <input type="text" id="card-holder-name" name="card-holder-name" required>
 
-        <label for="card-number">Номер карти</label>
+        <label for="card-number"><?= $_SESSION['user']['lang_text']['card_number']?></label>
         <input type="text" id="card-number" name="card-number" maxlength="16" required>
 
-        <label for="expiry-month">Місяць закінчення терміну дії</label>
+        <label for="expiry-month"><?= $_SESSION['user']['lang_text']['expiry_month']?></label>
         <select id="expiry-month" name="expiry-month" required>
             <option value=""></option>
             <option value="01">01</option>
@@ -131,7 +126,7 @@ require_once('vendor/stripe/stripe-php/init.php');
             <option value="12">12</option>
         </select>
 
-        <label for="expiry-year">Рік закінчення терміну дії</label>
+        <label for="expiry-year"><?= $_SESSION['user']['lang_text']['expiry_year']?></label>
         <select id="expiry-year" name="expiry-year" required>
             <option value=""></option>
             <option value="22">2022</option>
@@ -146,12 +141,12 @@ require_once('vendor/stripe/stripe-php/init.php');
         </select>
 
         <label for="cvv">CVV</label>
-        <input type="number" id="cvv" name="cvv" maxlength="3" required>
+        <input type="text" id="cvv" name="cvv" maxlength="3" required>
 
-        <label for="card-holder-name">Сума</label>
+        <label for="card-holder-name"><?= $_SESSION['user']['lang_text']['amount']?></label>
         <input type="number" id="amount" name="amount" required>
 
-        <input type="submit" value="Оплатити">
+        <input type="submit" value="<?= $_SESSION['user']['lang_text']['pay']?>">
     </form>
 </div>
 </body>

@@ -96,8 +96,6 @@ if ($controller_if == 'profile') {
         case 'changesubscr':
             $controller->changeSubscribe();
             break;
-
-
         default:
             header('Location: /public/404.html');
             die('Page not found!');

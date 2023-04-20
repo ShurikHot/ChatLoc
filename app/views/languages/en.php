@@ -54,9 +54,30 @@ return [
     "click_hide" => "(Click to hide)",
     "click_unblock" => "Click on user to unblock",
     "account_fill" => "Your account refilled",
-    "payment_failed" => "!!!Payment failed!!!",
+    "payment_failed" => "!!!Payment failed!!! ",
     "set_monthly" => "Now you have a monthly subscription! Congratulations!",
     "unset_monthly" => "Now you have a simple subscription",
     "top_user" => "TOP-user",
-
+    "you_top" => "!!Now you are TOP-user!! Monthly subscription is now available to you. For more information go to account page",
+    "refill_page" => "Refill Page",
+    "terms_subscr" => "<h4>Terms</h4>
+                       The price of one message is 1 coin, the price of 1 coin is 1$<br>
+                       Monthly subscription is available for users who have messages in at least 10 chats.<br>
+                       The price of a monthly subscription is 100$. The number of messages is unlimited.",
+    "your_subscr" => "Your current subscription is ",
+    "monthly" => "<b>monthly</b>",
+    "regular" => "<b>regular</b>",
+    "monthly_avail" => "A <b>MONTHLY</b> subscription is available to you",
+    "type_subscr" => "Types of subscriptions (regular or monthly):",
+    "regular_select" => "Regular (for most users)",
+    "monthly_select" => "Monthly (for TOP users)",
+    "card_pay" => "Payment by card",
+    "card_holder" => "Name of the cardholder",
+    "card_number" => "Card number",
+    "expiry_month" => "Expiry month",
+    "expiry_year" => "Expiry year",
+    "pay" => "Pay",
+    "amount" => "Amount",
+    "on_account" => "On your account:",
+    "blist_empty" => "No users in your blacklist",
 ];

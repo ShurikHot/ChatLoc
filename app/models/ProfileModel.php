@@ -141,4 +141,9 @@ class ProfileModel extends Model
     {
         $this->query("UPDATE `account` SET `start_monthly_subscr` = '0000-00-00',`end_monthly_subscr`= '0000-00-00' WHERE `user_id` = '$id'");
     }
+
+    public function makeTop($id)
+    {
+        $this->query("UPDATE `account` SET `top` = 1 WHERE `user_id` = '$id'");
+    }
 }

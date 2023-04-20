@@ -2,6 +2,7 @@
 
 namespace controllers;
 
+use models\ChatModel;
 use models\ProfileModel;
 use PHPMailer\PHPMailer\PHPMailer;
 use Stripe\Exception\ApiConnectionException;
@@ -110,6 +111,22 @@ class ProfileController extends Controller
             $account_info = $model->accountInfo($_SESSION['user']['id']);
             if (mysqli_num_rows($account_info) > 0) {
                 $account = mysqli_fetch_assoc($account_info);
+                if ($account['top'] == 1) {
+                    if (strtotime($account['end_monthly_subscr']) < time()) {
+                        $model->unsetMonthly();
+                        $_SESSION['message'] = '<h6 align="center">' . $_SESSION['user']['lang_text']['unset_monthly'] . '</h6>';
+                    }
+                } else {
+                    $model_chat = new ChatModel();
+                    $chat_count_info = $model_chat->countChat($_SESSION['user']['id']);
+                    if ((mysqli_num_rows($chat_count_info) >= 10)) {
+                        $model->makeTop($_SESSION['user']['id']);
+                        $_SESSION['message'] = "<script>alert('" . $_SESSION['user']['lang_text']['you_top'] . "');</script>";
+                        $account['top'] = 1;
+                    }
+                }
+            } else {
+                $account = 0;
             }
 
             $contacts = self::getContacts();
@@ -315,6 +332,8 @@ class ProfileController extends Controller
         $account = $model->accountInfo($_SESSION['user']['id']);
         if (mysqli_num_rows($account) > 0) {
             $acc_info = mysqli_fetch_assoc($account);
+        } else {
+            $acc_info = 0;
         }
 
         $view = new View();
@@ -331,7 +350,6 @@ class ProfileController extends Controller
         $expiryYear = $_POST['expiry-year'];
         $cvv = filter_var(trim($_POST['cvv']), FILTER_SANITIZE_NUMBER_INT);
         $amount = filter_var(trim($_POST['amount']), FILTER_SANITIZE_NUMBER_FLOAT);
-        $subscription = $_POST['subscription'];
 
         try {
             $payment = PaymentIntent::create([
@@ -363,8 +381,9 @@ class ProfileController extends Controller
             echo "Payment failed: " . $e->getMessage();
         }
 
-        $payment_intent = PaymentIntent::retrieve($payment->id);
-
+        if (isset($payment)) {
+            $payment_intent = PaymentIntent::retrieve($payment->id);
+        }
         if ($payment_intent->status == 'succeeded') {
             $model = new ProfileModel();
             $model->fillAccount($_SESSION['user']['id'], $amount);

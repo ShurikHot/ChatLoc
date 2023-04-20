@@ -323,7 +323,7 @@ class AdminMainController extends Controller
             $language = $model->escape($faker->randomElement($array = array ('ua', 'en')));
             $specialization = $model->escape($faker->randomElement($array = array ('c_science','inf_technology','c_architecture','t_communication')));
             $comment = $model->escape($faker->realText($maxNbChars = 50, $indexSize = 2));
-            $date = $model->escape($faker->dateTimeBetween('2023-01-01', '2023-03-10')->format('Y-m-d') . " " . $faker->time($format = 'H:i:s', $max = 'now'));
+            $date = $model->escape($faker->dateTimeBetween('2023-01-01', '2023-05-10')->format('Y-m-d') . " " . $faker->time($format = 'H:i:s', $max = 'now'));
 
             $model->faker($email, $name, $nickname, $password, $phone_num, $gender, $country, $language, $specialization, $comment, $date);
         }

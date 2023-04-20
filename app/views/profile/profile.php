@@ -121,7 +121,7 @@
     <h6><?= $_SESSION['user']['lang_text']['your_email'] ?><?= $_SESSION['user']['email'] ?></h6>
     <h6><?= $_SESSION['user']['lang_text']['your_language'] ?><b><?= strtoupper($_SESSION['user']['language']) ?></b> <a href="/profile/profileedit?lang"><i>
                 <?= $_SESSION['user']['lang_text']['change_q'] ?></i></a></h6>
-
+    <br>
     <p align="center">
         <?php
         if (isset($_SESSION['message'])) {
@@ -141,18 +141,18 @@
         <button type="submit" class="btn btn-primary"><?= $_SESSION['user']['lang_text']['change'] ?></button>
     </form>
 
-    <a href="/profile/refill">On your account:</a> <b><?= $account['amount'] ?></b>💎
+    <a href="/profile/refill"><?= $_SESSION['user']['lang_text']['on_account'] ?></a> <b><?= $account != 0 ? $account['amount'] : "0" ?></b>💎
 
-    <span class="badge text-bg-danger"><?php if ($account['top'] == 1) echo $_SESSION['user']['lang_text']['top_user'] ?></span>
+    <span class="badge text-bg-danger"><?= $account == 0 ? "" : (($account['top'] == 1) ? $_SESSION['user']['lang_text']['top_user'] : "") ?></span>
 
-    <p align="center">
+    <!--<p align="center">
         <?php
-        if (isset($_SESSION['message'])) {
+/*        if (isset($_SESSION['message'])) {
             echo $_SESSION['message'];
             unset($_SESSION['message']);
         }
-        ?>
-    </p>
+        */?>
+    </p>-->
 
     <br>
 
@@ -179,7 +179,7 @@
                     );
                 }
             } else {
-                echo ("No users in your blacklist");
+                echo $_SESSION['user']['lang_text']['blist_empty'];
             }
             ?>
         </ul>
