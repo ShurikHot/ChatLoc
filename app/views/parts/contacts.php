@@ -1,6 +1,5 @@
-
 <h4>
-    <b><?= $_SESSION['user']['lang_text']['my_contacts'] ?></b>
+    <b><?php __('my_contacts') ?></b>
 </h4>
 
 <ul class="list-group" style="list-style-type: none;">
@@ -21,7 +20,7 @@
                     foreach ($users as $key => $value) {
                         echo("<a href='/contact/profile?id=" . $key . "'>
                                         <li class='justify-content-between align-items-center'>" . $value['nickname'] .
-                            "</a><span class='badge bg-danger rounded-pill'> ?</span> " . $_SESSION['user']['lang_text']['added_you'] . " 
+                            "</a><span class='badge bg-danger rounded-pill'> ?</span> " . __('added_you') . " 
                                         </li>"
                         );
                     }

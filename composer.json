@@ -10,6 +10,7 @@
     "psr-4": {
       "controllers\\": "app/controllers",
       "models\\": "app/models"
-    }
+    },
+    "files": ["app/helpers/functions.php"]
   }
 }

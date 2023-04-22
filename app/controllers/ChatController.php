@@ -100,13 +100,13 @@ class ChatController extends Controller
                 $chat_name = filter_var(trim($_POST['create_chat']),FILTER_SANITIZE_STRING);
                 $model->createChat($chat_name, $_SESSION['user']['id']);
 
-                $_SESSION['message'] = $_SESSION['user']['lang_text']['create_chat_mess'];
+                $_SESSION['message'] = __('create_chat_mess');
                 unset($_POST['create_chat']);
             }
         }
 
         $view = new View();
-        $view->render('chats/chatlist.php', ['chat_arr' => $chat_arr]);
+        $view->render('chatlist.php', ['chat_arr' => $chat_arr]);
     }
 
     public function chatPage($get_key, $get_value)
@@ -149,7 +149,7 @@ class ChatController extends Controller
             }
 
             if (is_numeric($get_key) && is_numeric($get_value)) {
-                $invite_mess = $_SESSION['user']['lang_text']['join_chat'] . " <a href=\'/chat/page?chat_id=" . $get_value . "\'>" . $chat_name ."</a>";
+                $invite_mess = __('join_chat') . " <a href=\'/chat/page?chat_id=" . $get_value . "\'>" . $chat_name ."</a>";
                 $model->inviteToChat($_SESSION['user']['id'], $get_key, $invite_mess);
 
                 header('Location: /chat/page?chat_id=' . $get_value);
@@ -164,7 +164,7 @@ class ChatController extends Controller
         }
 
         $view = new View();
-        $view->render('chats/chatpage.php', ['chat_name' => $chat_name, 'chat_id' => $get_value, 'contacts_arr' => $contacts_arr, 'account' => $account]);
+        $view->render('chatpage.php', ['chat_name' => $chat_name, 'chat_id' => $get_value, 'contacts_arr' => $contacts_arr, 'account' => $account]);
     }
 
     public function messageLoad()
@@ -188,7 +188,7 @@ class ChatController extends Controller
                         echo ("<div class='container'>
                                     <img src=" . $name['avatar'] . " alt='' class='avatar'>
                                     <div class='mes_left'>
-                                       <p>" . $_SESSION['user']['lang_text']['user']);
+                                       <p>" . __('user'));
                         if ($messagearr['user_id'] == $_SESSION['user']['id']) {
                             echo ("<a href='/profile/info' target='_blank'>");
                         } elseif ($_SESSION['user']['id'] == '1') {
@@ -196,7 +196,7 @@ class ChatController extends Controller
                         } else {
                             echo("<a href='/contact/profile?id=" . $name['id'] . "' target='_blank'>");
                         }
-                        echo($name['nickname'] . "</a>" . $_SESSION['user']['lang_text']['says'] . $messagearr['message'] .
+                        echo($name['nickname'] . "</a>" . __('says') . $messagearr['message'] .
                                        "</p>
                                     </div>");
 
@@ -221,7 +221,7 @@ class ChatController extends Controller
     public function membersOnline()
     {
         $model = new ChatModel();
-        echo ("<div align='center'><b>" . $_SESSION['user']['lang_text']['online_users'] . "</b></div>");
+        echo ("<div align='center'><b>" . __('online_users') . "</b></div>");
         echo ("<ul class='' style='list-style-type: none;'>");
         $member_list = $model->memberOnline($_POST['chat_id']);
         if (mysqli_num_rows($member_list) > 0) {

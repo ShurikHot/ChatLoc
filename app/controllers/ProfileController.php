@@ -19,7 +19,7 @@ class ProfileController extends Controller
     public function login()
     {
         $view = new View();
-        $view->render('profile/registration.php', []);
+        $view->render('registration.php', []);
     }
 
     public function signUp()
@@ -99,39 +99,19 @@ class ProfileController extends Controller
                 "is_edit" => false,
             ];
             $lang_page = $_SESSION['user']['language'];
-            $lang_path = "app/views/languages/$lang_page.php";
+            $lang_path = "app/views/parts/languages/$lang_page.php";
             if (file_exists($lang_path)) {
                 $_SESSION['user']['lang_text'] = include($lang_path);
             }
+            $model->lastVisit($_SESSION['user']['id']);
         }
 
         if (isset($_SESSION['user'])) {
-            $model->lastVisit($_SESSION['user']['id']);
-
-            $account_info = $model->accountInfo($_SESSION['user']['id']);
-            if (mysqli_num_rows($account_info) > 0) {
-                $account = mysqli_fetch_assoc($account_info);
-                if ($account['top'] == 1) {
-                    if (strtotime($account['end_monthly_subscr']) < time()) {
-                        $model->unsetMonthly();
-                        $_SESSION['message'] = '<h6 align="center">' . $_SESSION['user']['lang_text']['unset_monthly'] . '</h6>';
-                    }
-                } else {
-                    $model_chat = new ChatModel();
-                    $chat_count_info = $model_chat->countChat($_SESSION['user']['id']);
-                    if ((mysqli_num_rows($chat_count_info) >= 10)) {
-                        $model->makeTop($_SESSION['user']['id']);
-                        $_SESSION['message'] = "<script>alert('" . $_SESSION['user']['lang_text']['you_top'] . "');</script>";
-                        $account['top'] = 1;
-                    }
-                }
-            } else {
-                $account = 0;
-            }
-
-            $contacts = self::getContacts();
+            $account = self::getAccount($_SESSION['user']['id']);
+            $contacts = self::getContacts($_SESSION['user']['id']);
             $view = new View();
-                $view->render('profile/profile.php', ['contacts' => $contacts, 'account' => $account]);
+            $view->render('profile.php', ['contacts' => $contacts, 'account' => $account]);
+            $model->lastVisit($_SESSION['user']['id']);
         } else {
             header('Location: /');
         }
@@ -181,8 +161,11 @@ class ProfileController extends Controller
                 $lang_list[] = $lang['language'];
             }
 
+            $account = self::getAccount($_SESSION['user']['id']);
+            $contacts = self::getContacts($_SESSION['user']['id']);
+
             $view = new View();
-            $view->render('profile/profile.php', ['lang_list' => $lang_list]);
+            $view->render('profile.php', ['lang_list' => $lang_list, 'account' => $account, 'contacts' => $contacts]);
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['lang'])) {
@@ -191,7 +174,7 @@ class ProfileController extends Controller
             $model->editLang($new_lang, $_SESSION['user']['id']);
 
             $_SESSION['user']['language'] = $_POST['lang'];
-            $_SESSION['message'] = '<h6 align="center">' . $_SESSION['user']['lang_text']['change_language'] . '</h6>';
+            $_SESSION['message'] = '<h6 align="center">' . __('change_language') . '</h6>';
             $_SESSION['user']['change_language'] = false;
             header('Location: /');
         }
@@ -220,9 +203,9 @@ class ProfileController extends Controller
                 $contact_black = [];
             }
 
-            $contacts = self::getContacts();
+            $contacts = self::getContacts($_SESSION['user']['id']);
             $view = new View();
-            $view->render('profile/profile.php', ['contact_black' => $contact_black, 'contacts' => $contacts]);
+            $view->render('profile.php', ['contact_black' => $contact_black, 'contacts' => $contacts]);
         }
 
         if ($get_param == 'closeblack') {
@@ -273,21 +256,21 @@ class ProfileController extends Controller
         } else {
             $find_arr = [];
         }
-        $contacts = self::getContacts();
+        $contacts = self::getContacts($_SESSION['user']['id']);
         $view = new View();
-        $view->render('profile/profile.php', ['find_arr' => $find_arr, 'contacts' => $contacts]);
+        $view->render('profile.php', ['find_arr' => $find_arr, 'contacts' => $contacts]);
     }
 
-    public function getContacts()
+    public function getContacts($id)
     {
         $model = new ProfileModel();
-        $contact_q = $model->contactList($_SESSION['user']['id']);
+        $contact_q = $model->contactList($id);
 
         if (mysqli_num_rows($contact_q) > 0) {
             while ($user = mysqli_fetch_assoc($contact_q)) {
                 $contact_id = $user['contact_id'];
 
-                $message_arr = $model->persMessage($contact_id, $_SESSION['user']['id']);
+                $message_arr = $model->persMessage($contact_id, $id);
 
                 $count_unread = mysqli_num_rows($message_arr) > 0 ? "<span class='badge rounded-pill text-bg-success'>" . mysqli_num_rows($message_arr) . " </span>" : '';
 
@@ -307,7 +290,7 @@ class ProfileController extends Controller
             $contact_arr = [];
         }
 
-        $contacts_appr_q = $model->contactApprList($_SESSION['user']['id']);
+        $contacts_appr_q = $model->contactApprList($id);
 
         if (mysqli_num_rows($contacts_appr_q) > 0) {
             while ($contact_appr = mysqli_fetch_assoc($contacts_appr_q)) {
@@ -326,6 +309,33 @@ class ProfileController extends Controller
         return ['contact_arr' => $contact_arr, 'contact_appr_arr' => $contact_appr_arr];
     }
 
+    public function getAccount($id)
+    {
+        $model = new ProfileModel();
+        $account_info = $model->accountInfo($id);
+        if (mysqli_num_rows($account_info) > 0) {
+            $account = mysqli_fetch_assoc($account_info);
+            if ($account['top'] == 1) {
+                if (strtotime($account['end_monthly_subscr']) < time()) {
+                    $model->unsetMonthly($id);
+                    $_SESSION['message'] = '<h6 align="center">' . __('unset_monthly') . '</h6>';
+                }
+            } else {
+                $model_chat = new ChatModel();
+                $chat_count_info = $model_chat->countChat($id);
+                if ((mysqli_num_rows($chat_count_info) >= 10)) {
+                    $model->makeTop($id);
+                    $_SESSION['message'] = "<script>alert('" . __('you_top') . "');</script>";
+                    $account['top'] = 1;
+                }
+            }
+        } else {
+            $account = 0;
+        }
+
+        return $account;
+    }
+
     public function refill()
     {
         $model = new ProfileModel();
@@ -337,7 +347,7 @@ class ProfileController extends Controller
         }
 
         $view = new View();
-        $view->render('profile/refill.php', ['acc_info' => $acc_info]);
+        $view->render('refill.php', ['acc_info' => $acc_info]);
     }
 
     public function stripe()
@@ -387,9 +397,9 @@ class ProfileController extends Controller
         if ($payment_intent->status == 'succeeded') {
             $model = new ProfileModel();
             $model->fillAccount($_SESSION['user']['id'], $amount);
-            $_SESSION['message'] = '<h6 align="center">' . $_SESSION['user']['lang_text']['account_fill'] . '</h6>';
+            $_SESSION['message'] = '<h6 align="center">' . __('account_fill') . '</h6>';
         } else {
-            $_SESSION['message'] = '<h6 align="center">' . $_SESSION['user']['lang_text']['payment_failed'] . '</h6>';
+            $_SESSION['message'] = '<h6 align="center">' . __('payment_failed') . '</h6>';
         }
         header('Location: /profile/info');
     }
@@ -404,10 +414,10 @@ class ProfileController extends Controller
                 if ($account['top'] == 1 && $_POST['subscription'] == 'top' && $account['amount'] > 99) {
                     $model->minusCoin($_SESSION['user']['id'], 100);
                     $model->setMonthly($_SESSION['user']['id']);
-                    $_SESSION['message'] = '<h6 align="center">' . $_SESSION['user']['lang_text']['set_monthly'] . '</h6>';
+                    $_SESSION['message'] = '<h6 align="center">' . __('set_monthly') . '</h6>';
                 } elseif ($account['top'] == 1 && $_POST['subscription'] == 'simple') {
                     $model->unsetMonthly($_SESSION['user']['id']);
-                    $_SESSION['message'] = '<h6 align="center">' . $_SESSION['user']['lang_text']['unset_monthly'] . '</h6>';
+                    $_SESSION['message'] = '<h6 align="center">' . __('unset_monthly') . '</h6>';
                 }
             }
         }

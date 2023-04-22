@@ -40,7 +40,7 @@ class ContactController extends Controller
             }
 
             $view = new View();
-            $view->render('contact/contactprofile.php', ['contact_arr' => $contact_arr]);
+            $view->render('contactprofile.php', ['contact_arr' => $contact_arr]);
         }
     }
 
@@ -53,7 +53,7 @@ class ContactController extends Controller
         if ($key == 'id' & is_numeric($value)) {
             $contact = $contact_q->contactIs($_SESSION['user']['id'], $value);
             if (mysqli_num_rows($contact) == 0) {
-                $mess = $_SESSION['user']['lang_text']['user'] . $_SESSION['user']['nickname'] . $_SESSION['user']['lang_text']['added_you'];
+                $mess = __('user') . $_SESSION['user']['nickname'] . __('added_you');
                 $contact_q->contactAdd($_SESSION['user']['id'], $value, $mess);
             }
         }

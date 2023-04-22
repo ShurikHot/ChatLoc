@@ -1,21 +1,12 @@
 <?php
-
-    if(!isset($_SESSION['user']['id'])) {
-        header('Location: /');
-    }
-
+    require_once ('app/views/parts/header.php')
 ?>
-<!doctype html>
-<html lang="en">
+
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= $_SESSION['user']['lang_text']['your_chatloc_profile'] ?></title>
-    <link href="/public/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="/public/assets/js/jquery3.6.3.min.js"></script>
+    <title><?php __('your_chatloc_profile') ?></title>
     <link href="/public/assets/css/cropper.min.css" rel="stylesheet">
     <script src="/public/assets/js/cropper.min.js"></script>
-    <script src="/public/assets/js/bootstrap.min.js"></script>
+
     <style type="text/css">
         img {
             display: block;
@@ -29,28 +20,10 @@
             border: 1px solid red;
         }
     </style>
-
 </head>
 <body class="text-center">
-    <ul class="nav justify-content-center">
-        <li class="nav-item">
-            <?php if (isset($_SESSION['user']['blocked']) && !$_SESSION['user']['blocked']): ?>
-                <a class="btn btn-info" aria-current="page" href="/chat/chatlist"><?= $_SESSION['user']['lang_text']['go_to_chatlist'] ?></a>
-            <?php elseif (isset($_SESSION['user']['blocked']) && $_SESSION['user']['blocked']): ?>
-                <a class="btn btn-warning" aria-current="page"href=""><b><?= $_SESSION['user']['lang_text']['your_account_blocked'] ?></b></a>
-            <?php endif; ?>
-        </li>
-        <?php if (isset($_SESSION['user']['email']) && $_SESSION['user']['email'] === 'admin@admin.com'): ?>
-        <li class="nav-item">
-            <a class="btn btn-success" href="/admin/content?members"><?= $_SESSION['user']['lang_text']['admin_area']?></a>
-        </li>
-        <?php endif; ?>
-        <li class="nav-item">
-            <a class="btn btn-danger" href="/profile/logout"><?= $_SESSION['user']['lang_text']['logout']?></a>
-        </li>
-    </ul>
 
-    <h1 align="center" class=""><?= $_SESSION['user']['lang_text']['your_chatloc_profile'] ?></h1>
+    <h1 align="center" class=""><?php __('your_chatloc_profile') ?></h1>
     <?php
         if(isset($_SESSION['user']['avatar'])) :
     ?>
@@ -64,7 +37,7 @@
     ?>
     <br><br>
             <div class="container">
-                <h6><?= isset($_SESSION['user']['avatar']) ? $_SESSION['user']['lang_text']['change_avatar'] : $_SESSION['user']['lang_text']['add_avatar']?></h6>
+                <h6><?= isset($_SESSION['user']['avatar']) ? __('change_avatar') : __('add_avatar') ?></h6>
                 <form method="post">
                     <input type="file" name="image" class="image">
                 </form>
@@ -74,7 +47,7 @@
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalLabel"><?= $_SESSION['user']['lang_text']['crop_avatar'] ?></h5>
+                            <h5 class="modal-title" id="modalLabel"><?php __('crop_avatar') ?></h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span>
                             </button>
@@ -92,8 +65,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= $_SESSION['user']['lang_text']['cancel'] ?></button>
-                            <button type="button" class="btn btn-primary" id="crop"><?= $_SESSION['user']['lang_text']['crop'] ?></button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php __('cancel') ?></button>
+                            <button type="button" class="btn btn-primary" id="crop"><?php __('crop') ?></button>
                         </div>
                     </div>
                 </div>
@@ -102,7 +75,7 @@
     <br>
 
     <form action="/profile/profileedit" method="post">
-        <h6><?= $_SESSION['user']['lang_text']['your_nickname'] ?><b>
+        <h6><?php __('your_nickname') ?><b>
 
             <?php
                 if (isset($_SESSION['user']['edit_nickname'])) : ?>
@@ -115,21 +88,28 @@
                         echo($_SESSION['user']['nickname']); }
             endif; ?>
 
-            </b>&nbsp;<input type="submit" name="edit_nickname" value="<?= $_SESSION['user']['lang_text']['click_change'] ?>"></h6>
+            </b>&nbsp;<input type="submit" name="edit_nickname" value="<?php __('click_change') ?>"></h6>
     </form>
 
-    <h6><?= $_SESSION['user']['lang_text']['your_email'] ?><?= $_SESSION['user']['email'] ?></h6>
-    <h6><?= $_SESSION['user']['lang_text']['your_language'] ?><b><?= strtoupper($_SESSION['user']['language']) ?></b> <a href="/profile/profileedit?lang"><i>
-                <?= $_SESSION['user']['lang_text']['change_q'] ?></i></a></h6>
+    <h6><?php __('your_email') ?><?= $_SESSION['user']['email'] ?></h6>
+    <h6><?php __('your_language') ?><b><?= strtoupper($_SESSION['user']['language']) ?></b> <a href="/profile/profileedit?lang"><i>
+                <?php __('change_q') ?></i></a></h6>
     <br>
-    <p align="center">
-        <?php
-        if (isset($_SESSION['message'])) {
-            echo $_SESSION['message'];
-            unset($_SESSION['message']);
-        }
-        ?>
-    </p>
+
+
+    <?php
+        if (isset($_SESSION['message'])) :
+    ?>
+            <div class="alert alert-info">
+            <?php
+                echo $_SESSION['message'];
+                unset($_SESSION['message']);
+            ?>
+            </div>
+   <?php
+        endif;
+   ?>
+
 
     <form action="/profile/profileedit" method="post" <?php if($_SESSION['user']['change_language'] == false) echo "hidden";?> >
         <select name="lang" id="lang">
@@ -138,33 +118,24 @@
                 <option value="<?= $lang ?>" <?php if (($lang) == $_SESSION['user']['language']) echo "selected"?>> <?= $lang ?> </option>
             <?php endforeach; ?>
         </select>
-        <button type="submit" class="btn btn-primary"><?= $_SESSION['user']['lang_text']['change'] ?></button>
+        <button type="submit" class="btn btn-primary"><?php __('change') ?></button>
     </form>
 
-    <a href="/profile/refill"><?= $_SESSION['user']['lang_text']['on_account'] ?></a> <b><?= $account != 0 ? $account['amount'] : "0" ?></b>💎
+    <a href="/profile/refill"><?php __('on_account') ?></a> <b><?= $account != 0 ? $account['amount'] : "0" ?></b>💎
 
-    <span class="badge text-bg-danger"><?= $account == 0 ? "" : (($account['top'] == 1) ? $_SESSION['user']['lang_text']['top_user'] : "") ?></span>
-
-    <!--<p align="center">
-        <?php
-/*        if (isset($_SESSION['message'])) {
-            echo $_SESSION['message'];
-            unset($_SESSION['message']);
-        }
-        */?>
-    </p>-->
+    <span class="badge text-bg-danger"><?= $account == 0 ? "" : (($account['top'] == 1) ? __('top_user') : "") ?></span>
 
     <br>
 
     <?php
-        require_once ('app/views/profile/contacts.php')
+        require_once ('app/views/parts/contacts.php')
     ?>
 
     <?php if($_SESSION['user']['black_list'] == false) : ?>
-        <a href="/profile/blacklist?black">&#9660; <?= $_SESSION['user']['lang_text']['bl_list'] ?> &#9660;</a> <?= $_SESSION['user']['lang_text']['click_see'] ?>
+        <a href="/profile/blacklist?black">&#9660; <?php __('bl_list') ?> &#9660;</a> <?php __('click_see') ?>
     <?php else: ?>
-        <a href="/profile/blacklist?closeblack"> &#9650; <?= $_SESSION['user']['lang_text']['bl_list'] ?> &#9650; </a> <?= $_SESSION['user']['lang_text']['click_hide'] ?> <br>
-        <?= $_SESSION['user']['lang_text']['click_unblock'] ?>
+        <a href="/profile/blacklist?closeblack"> &#9650; <?php __('bl_list') ?> &#9650; </a> <?php __('click_hide') ?> <br>
+        <?php __('click_unblock') ?>
     <?php endif; ?>
 
     <form action="#" method="post" <?php if($_SESSION['user']['black_list'] == false) echo "hidden";?> >
@@ -174,20 +145,20 @@
                 foreach ($contact_black as $key => $user) {
                     echo ("<a href='/profile/deblockid?deblockid=" . $key . "'>
                                 <li class='justify-content-between align-items-center'>" . $user .
-                        "</a><span class='badge bg-danger rounded-pill'>" . $_SESSION['user']['lang_text']['block'] . "</span>   
+                        "</a><span class='badge bg-danger rounded-pill'>" . __('block') . "</span>   
                                 </li>"
                     );
                 }
             } else {
-                echo $_SESSION['user']['lang_text']['blist_empty'];
+                echo __('blist_empty');
             }
             ?>
         </ul>
     </form>
 
     <form method="post" id="find" action="/profile/searchmember">
-        <input type="text" style="width: 505px;" id="find_member" name="find_member" placeholder="<?= $_SESSION['user']['lang_text']['find_somebody'] ?>">
-        <button type="submit" class="btn btn-primary"><?= $_SESSION['user']['lang_text']['find'] ?></button>
+        <input type="text" style="width: 505px;" id="find_member" name="find_member" placeholder="<?php __('find_somebody') ?>">
+        <button type="submit" class="btn btn-primary"><?php __('find') ?></button>
     </form>
 
     <ul class="list-group" style="list-style-type: none;">

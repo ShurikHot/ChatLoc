@@ -21,6 +21,12 @@ class ProfileModel extends Model
         $this->query("UPDATE `members` SET `last_visit` = NOW() WHERE `id` = '$id'");
     }
 
+    public function getLastVisit($id)
+    {
+        $result = $this->query("SELECT `last_visit` FROM `members` WHERE `id` = '$id'");
+        return $result;
+    }
+
     public function changeAvatar($file, $userid)
     {
         $file_db = '/' . $file;
