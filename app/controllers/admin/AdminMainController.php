@@ -261,7 +261,7 @@ class AdminMainController extends Controller
 
         if (key_exists('add_id', $_POST) && is_numeric($_POST['add_id'])) {
             $contact = $contact_q->contactIs($_SESSION['user']['id'], $_POST['add_id']);
-            if (mysqli_num_rows($contact) == 0) {
+            if (empty($contact)) {
                 $mess = __('user') . $_SESSION['user']['nickname'] . __('added_you') ;
                 $contact_q->contactAdd($_SESSION['user']['id'], $_POST['add_id'], $mess);
             }

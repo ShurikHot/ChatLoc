@@ -39,19 +39,23 @@
     <?php __('terms_subscr') ?><br><br>
 
     <?php __('your_subscr') ?>
-    <?= ($acc_info != 0 && $acc_info['top'] == 1 && $acc_info['start_monthly_subscr'] != "0000-00-00") ? __('monthly') : __('regular') ?>
+    <?php ($acc_info != 0 && $acc_info['top'] == 1 && $acc_info['start_monthly_subscr'] != "0000-00-00") ? __('monthly') : __('regular') ?>
     <br>
 
-    <?= ($acc_info != 0 && $acc_info['top'] == 1 && $acc_info['start_monthly_subscr'] == "0000-00-00") ? __('monthly_avail') : ""?>
+    <?php ($acc_info != 0 && $acc_info['top'] == 1 && $acc_info['start_monthly_subscr'] == "0000-00-00") ? __('monthly_avail') : ""?>
 
-    <p align="center" >
+    <?php
+        if (isset($_SESSION['message'])) :
+            ?>
+            <div class="alert alert-info" style="width: 400px; margin: 0 auto;">
+                <?php
+                echo $_SESSION['message'];
+                unset($_SESSION['message']);
+                ?>
+            </div>
         <?php
-        if (isset($_SESSION['message'])) {
-            echo $_SESSION['message'];
-            unset($_SESSION['message']);
-        }
-        ?>
-    </p>
+        endif;
+    ?>
 
     <div>
         <form action="/profile/changesubscr" method="POST">

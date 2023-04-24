@@ -1,5 +1,4 @@
 <?php
-
     if(isset($_SESSION['user'])) {
         header('Location: /profile/info');
     }
@@ -11,10 +10,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Signin ChatLoc</title>
     <link href="/public/assets/css/style.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
-<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
 
 <div class="container">
     <div class="frame">
@@ -33,16 +32,19 @@
                 <input class="form-styling" type="password" name="password" placeholder="Password"/>
 
                 <button class="btn-animate btn-signin" type="submit">Sign in</button>
-                <p align="center">
+                <?php
+                    if (isset($_SESSION['message'])) :
+                        ?>
+                        <div class="alert alert-info" style="width: 400px; margin: 0 auto;">
+                            <?php
+                            echo $_SESSION['message'];
+                            unset($_SESSION['message']);
+                            ?>
+                        </div>
                     <?php
-                    if (isset($_SESSION['message'])) {
-                        echo $_SESSION['message'];
-                        unset($_SESSION['message']);
-                    }
-                    ?>
-                </p>
+                    endif;
+                ?>
             </form>
-
 
             <form class="form-signup" action="/profile/registration" method="post" name="form" enctype="multipart/form-data">
                 <label for="fullname">Full name</label>
@@ -102,10 +104,16 @@
                 <button class="btn-signup" type="submit">Sign up</button>
 
                 <?php
-                if (isset($_SESSION['message'])) {
-                    echo $_SESSION['message'];
-                    unset($_SESSION['message']);
-                }
+                    if (isset($_SESSION['message'])) :
+                        ?>
+                        <div class="alert alert-info" style="width: 400px; margin: 0 auto;">
+                            <?php
+                                echo $_SESSION['message'];
+                                unset($_SESSION['message']);
+                            ?>
+                        </div>
+                    <?php
+                    endif;
                 ?>
             </form>
         </div>
@@ -127,8 +135,6 @@
 </div>
 <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 <script src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.14/angular.min.js'></script>
-
 <script src="/public/assets/js/index.js"></script>
-
 </body>
 </html>

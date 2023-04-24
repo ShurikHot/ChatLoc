@@ -37,7 +37,7 @@
     ?>
     <br><br>
             <div class="container">
-                <h6><?= isset($_SESSION['user']['avatar']) ? __('change_avatar') : __('add_avatar') ?></h6>
+                <h6><?php isset($_SESSION['user']['avatar']) ? __('change_avatar') : __('add_avatar') ?></h6>
                 <form method="post">
                     <input type="file" name="image" class="image">
                 </form>
@@ -94,13 +94,11 @@
     <h6><?php __('your_email') ?><?= $_SESSION['user']['email'] ?></h6>
     <h6><?php __('your_language') ?><b><?= strtoupper($_SESSION['user']['language']) ?></b> <a href="/profile/profileedit?lang"><i>
                 <?php __('change_q') ?></i></a></h6>
-    <br>
-
 
     <?php
         if (isset($_SESSION['message'])) :
     ?>
-            <div class="alert alert-info">
+            <div class="alert alert-info" style="width: 400px; margin: 0 auto;">
             <?php
                 echo $_SESSION['message'];
                 unset($_SESSION['message']);
@@ -123,7 +121,7 @@
 
     <a href="/profile/refill"><?php __('on_account') ?></a> <b><?= $account != 0 ? $account['amount'] : "0" ?></b>💎
 
-    <span class="badge text-bg-danger"><?= $account == 0 ? "" : (($account['top'] == 1) ? __('top_user') : "") ?></span>
+    <span class="badge text-bg-danger"><?php $account == 0 ? "" : (($account['top'] == 1) ? __('top_user') : "") ?></span>
 
     <br>
 
@@ -144,8 +142,10 @@
             if (isset($contact_black)) {
                 foreach ($contact_black as $key => $user) {
                     echo ("<a href='/profile/deblockid?deblockid=" . $key . "'>
-                                <li class='justify-content-between align-items-center'>" . $user .
-                        "</a><span class='badge bg-danger rounded-pill'>" . __('block') . "</span>   
+                                <li class='justify-content-between align-items-center'>" . $user . "</a>
+                           <span class='badge bg-danger rounded-pill'>");
+                    __('block');
+                    echo ("</span>
                                 </li>"
                     );
                 }

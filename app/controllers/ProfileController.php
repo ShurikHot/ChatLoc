@@ -46,7 +46,7 @@ class ProfileController extends Controller
 
             if (mysqli_num_rows($email_uniq) > 1) {
                 $_SESSION['message'] = '<h6 align="center">This email is in use by another user</h6>';
-                header('Location: /');
+                header('Location: /profile/login');
             } elseif ($password === $confirm_password && $name != "" && $email != "" && $nickname != "" && $password != "") {
                 $password = md5($password);
                 $date = date('Y-m-d H:i:s');
@@ -70,10 +70,10 @@ class ProfileController extends Controller
                     echo 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo;
                 }
                 $_SESSION['message'] = '<h6 align="center">Registration completed successfully <br> Please Check your email!</h6>';
-                header('Location: /');
+                header('Location: /profile/login');
             } else {
                 $_SESSION['message'] = '<h6 align="center">Some fields do not fill, </br>or the password and confirm password fields do not match</h6>';
-                header('Location: /');
+                header('Location: /profile/login');
             }
         }
     }
@@ -155,6 +155,8 @@ class ProfileController extends Controller
 
         if ($get_param == 'lang') {
             $_SESSION['user']['change_language'] = true;
+            $_SESSION['user']['black_list'] = false;
+
 
             $languages = $model->langList();
             while ($lang = mysqli_fetch_assoc($languages)) {
@@ -176,7 +178,13 @@ class ProfileController extends Controller
             $_SESSION['user']['language'] = $_POST['lang'];
             $_SESSION['message'] = '<h6 align="center">' . __('change_language') . '</h6>';
             $_SESSION['user']['change_language'] = false;
-            header('Location: /');
+
+            $lang_page = $_SESSION['user']['language'];
+            $lang_path = "app/views/parts/languages/$lang_page.php";
+            if (file_exists($lang_path)) {
+                $_SESSION['user']['lang_text'] = include($lang_path);
+            }
+            header('Location: /profile/info');
         }
     }
 
@@ -185,6 +193,7 @@ class ProfileController extends Controller
         $model = new ProfileModel();
         if ($get_param == 'black') {
             $_SESSION['user']['black_list'] = true;
+            $_SESSION['user']['change_language'] = false;
 
             $contacts_blk = $model->blackList($_SESSION['user']['id']);
 
@@ -203,14 +212,16 @@ class ProfileController extends Controller
                 $contact_black = [];
             }
 
+            $account = self::getAccount($_SESSION['user']['id']);
             $contacts = self::getContacts($_SESSION['user']['id']);
+
             $view = new View();
-            $view->render('profile.php', ['contact_black' => $contact_black, 'contacts' => $contacts]);
+            $view->render('profile.php', ['contact_black' => $contact_black, 'account' => $account, 'contacts' => $contacts]);
         }
 
         if ($get_param == 'closeblack') {
             $_SESSION['user']['black_list'] = false;
-            header('Location: /');
+            header('Location: /profile/info');
         }
     }
 

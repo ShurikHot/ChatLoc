@@ -34,7 +34,7 @@
         if (key_exists('blocked', $value) && $value['blocked'] == 0) :
     ?>
             <?php __('user_already') ?> <a href="/contact/action?delid=<?= $key ?>"><?php __('delete_it') ?></a>
-            <a href="/contact/action?blockid=<?= $key ?>" style="color: red">Or Block?</a>
+            <a href="/contact/action?blockid=<?= $key ?>" style="color: red"><?php __('block_it') ?></a>
             <br><br>
             <form method="post" id="sendmess" onsubmit="return false">
                 <textarea class="enter_mess" type="text" name="personal_message" id="personal_message" placeholder="<?php __('enter_message') ?>" rows="1"></textarea>
@@ -47,7 +47,7 @@
     <?php
         elseif (key_exists('blocked', $value) && $value['blocked'] == 1) :
     ?>
-            <?php __('contact_is_bl') ?> <a href="/contact/action?deblockid=<?= $key ?>" style="color: red">Deblock?</a>
+            <?php __('contact_is_bl') ?> <a href="/contact/action?deblockid=<?= $key ?>" style="color: red"><?php __('delete_it') ?></a>
     <?php
         else :
     ?>

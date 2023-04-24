@@ -22,4 +22,5 @@ function lastVisit($id) {
 
 function __($text) {
     echo $_SESSION['user']['lang_text'][$text];
+    return $_SESSION['user']['lang_text'][$text];
 }

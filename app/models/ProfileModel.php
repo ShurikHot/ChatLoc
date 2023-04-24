@@ -11,7 +11,7 @@ class ProfileModel extends Model
             $result = mysqli_fetch_assoc($result);
         } else {
             $_SESSION['message'] = '<h6 align="center">Incorrect username or password</h6>';
-            header('Location: /');
+            header('Location: /profile/login');
         }
         return $result;
     }

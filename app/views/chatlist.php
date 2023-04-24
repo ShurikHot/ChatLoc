@@ -37,14 +37,18 @@
         <button type="submit" class="btn btn-primary"><?php __('create') ?></button>
     </form>
 
-    <p align="center">
-        <?php
-        if (isset($_SESSION['message'])) {
-            echo $_SESSION['message'];
-            unset($_SESSION['message']);
-        }
-        ?>
-    </p>
+            <?php
+                if (isset($_SESSION['message'])) :
+                    ?>
+                    <div class="alert alert-info" style="width: 400px; margin: 0 auto;">
+                        <?php
+                            echo $_SESSION['message'];
+                            unset($_SESSION['message']);
+                        ?>
+                    </div>
+                <?php
+                endif;
+            ?>
 
         <?php
             else :

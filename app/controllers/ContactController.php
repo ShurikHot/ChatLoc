@@ -52,7 +52,7 @@ class ContactController extends Controller
         }
         if ($key == 'id' & is_numeric($value)) {
             $contact = $contact_q->contactIs($_SESSION['user']['id'], $value);
-            if (mysqli_num_rows($contact) == 0) {
+            if (empty($contact)) {
                 $mess = __('user') . $_SESSION['user']['nickname'] . __('added_you');
                 $contact_q->contactAdd($_SESSION['user']['id'], $value, $mess);
             }
